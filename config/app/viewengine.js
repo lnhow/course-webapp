@@ -9,7 +9,7 @@ module.exports = function(app) {
     defaultLayout: 'main.hbs',
     extname: 'hbs',
     helpers: {
-      section: exphbs_section();
+      section: exphbs_section(),
     },
   }));
 
