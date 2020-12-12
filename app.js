@@ -2,7 +2,6 @@ const config = require('./config/config.json')
 
 //Dependencies
 const express = require('express');
-const exphbs = require('express-handlebars');
 
 require('express-async-errors');    //Async error handling
 
@@ -11,7 +10,7 @@ require('express-async-errors');    //Async error handling
 const app = express();
 
 app.get('/', function(req, res) {
-  res.send('Hallo!');
+  res.render()
 })
 
 app.listen(config.app.PORT, _ => {
