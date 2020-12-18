@@ -11,8 +11,10 @@ const app = express();
 require('./config/app/viewengine')(app);
 
 app.get('/', function(req, res) {
-  res.render('home.hbs')
+  res.render('home.hbs');
 });
+
+app.use('/p', express.static('./public'));
 
 app.listen(config.app.PORT, _ => {
   console.log(`App listening on PORT ${config.app.PORT}`)
