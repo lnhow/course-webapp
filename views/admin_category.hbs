@@ -1,0 +1,129 @@
+{{#section 'title'}}
+<title>Admin: Categories</title>
+{{/section}}
+{{#section 'css'}}
+{{/section}}
+
+<div class="card mt-4">
+  <div class="card-header bg-primary text-light d-flex justify-content-between align-items-center">
+    Categories
+  </div>
+  <div class="card-body">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col" style="width: 3%">&nbsp;</th>
+          <th scope="col" style="width: 5%">#</th>
+          <th scope="col">Category</th>
+          <th scope="col" style="width: 10%">&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <form class="form-inline" action="/admin/categories/add" method="post">
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td class="p-1">
+              <div class="form-group mb-1">
+                <input type="text" class="form-control" id="txtCatName" name="CatName" placeholder="Add Category">
+              </div>             
+            </td>
+            <td class="p-1 text-center">
+              <button class="btn btn-outline-success w-100" type="submit">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Add
+              </button>
+            </td>
+          </form>
+        </tr>
+
+        {{#each this.categories}}
+        <tr>
+          <td class="text-center">
+            <a class="btn-sm btn-primary" href="#row{{CatID}}" role="button" data-toggle="collapse" data-target="#row{{CatID}}" aria-expanded="false">
+              <i class="fa fa-chevron-down" aria-hidden="true"></i>
+            </a>
+          </td>
+          <td>{{CatID}}</td>
+          <th>{{CatName}}</th>
+          {{!-- Button edit --}}
+          <td class="text-right">
+            <a class="btn-sm btn-primary" href="/admin/categories/cat" role="button" title="Edit Category">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+            </a>
+          </td>
+        </tr>
+
+        <tr class="bg-light collapse ease-anim" id="row{{CatID}}">
+          <td>&nbsp;</td>
+          <td colspan="3">
+          <div class="card">
+            <div class="card-body p-0">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col" style="width: 5%">#</th>
+                    <th scope="col">Sub Category</th>
+                    <th scope="col" style="width: 10%">&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr>
+                    <form class="form-inline" action="/admin/categories/add" method="post">
+                      <td>&nbsp;</td>
+                      <td class="p-1">
+                          <input type="hidden" class="form-control" id="txtCatID" name="CatParent" value="{{CatID}}" readonly>
+                        <div class="form-group mb-1">
+                          <input type="text" class="form-control" id="txtSubCatName" name="CatName" placeholder="Add Category">
+                        </div>             
+                      </td>
+                      <td class="p-1 text-center">
+                        <button class="btn btn-outline-success w-100" type="submit">
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                          Add
+                        </button>
+                      </td>
+                    </form>
+                  </tr>
+                  {{#each SubCats}}
+                  <tr>
+                    <td scope="row">{{CatID}}</td>
+                    <th>{{CatName}}</th>
+                    {{!-- Button edit --}}
+                    <td class="text-right">
+                      <a class="btn-sm btn-primary" href="/admin/categories/add" role="button" title="Edit Category">
+                          <i class="fa fa-pencil" aria-hidden="true"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  {{else}}
+                  <tr class="bg-light">
+                    <td colspan="3" class="text-center">
+                      Không có dữ liệu
+                    </td>
+                  </tr>
+                  {{/each}}
+
+                </tbody>
+              </table>
+            </div>{{!-- card-body --}}
+          </div>{{!-- card --}}
+          </td>
+        </tr>
+        {{else}}
+        <tr class="bg-light">
+          <td colspan="4" class="text-center">
+            Không có dữ liệu
+          </td>
+        </tr>
+        {{/each}}
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{{#section 'js'}}
+  
+{{/section}}

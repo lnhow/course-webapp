@@ -6,7 +6,7 @@ const exphbs_section = require('express-handlebars-sections');
 module.exports = function(app) {
   app.engine('hbs', exphbs({
     //Options
-    defaultLayout: 'main.hbs',
+    defaultLayout: 'main.layout.hbs',
     extname: 'hbs',
     helpers: {
       section: exphbs_section(),
