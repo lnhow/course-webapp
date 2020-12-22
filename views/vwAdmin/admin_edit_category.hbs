@@ -1,0 +1,121 @@
+{{#section 'title'}}
+<title>Admin: Category {{this.category.CatName}}</title>
+{{/section}}
+{{#section 'css'}}
+{{/section}}
+
+<div class="card mt-4">
+  <div class="card-header bg-primary text-light">
+    Edit Category
+  </div>
+  <div class="card-body p-0">
+    {{#if this.category}}
+    <form method="POST" class="p-2 container-fluid" action="">
+      <div class="row">
+        <div class="form-group col-md-3 d-flex align-items-center mb-0">
+          <label class="mr-2 my-auto" for="txtCatID">ID</label>
+          <input type="text" class="form-control" id="txtCatID" name="CatID" value="{{this.category.CatID}}" readonly>
+        </div>
+        <div class="form-group col-md-7 d-flex align-items-center mb-0">
+          <label class="mr-2 my-auto" for="txtCatName">Name</label>
+          <input type="text" class="form-control hidden{{this.category.CatID}}" id="txtCatName" name="CatName" value="{{this.category.CatName}}" readonly>
+        </div>
+        <div class="col-sm-2">
+          <a class="btn btn-outline-primary toggler{{this.category.CatID}}" href="javascript:enableEdit('{{this.category.CatID}}')" role="button" title="Edit Category">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+          </a>
+          <button class="btn btn-outline-success hidden{{this.category.CatID}}" type="submit" formaction="/admin/categories/patch" hidden>
+            <i class="fa fa-check" aria-hidden="true"></i>
+          </button>
+          {{!-- if there are subcat in main category, can't delete --}}
+          
+          <button class="btn btn-outline-danger hidden{{this.category.CatID}}" type="submit" formaction="/admin/categories/del"
+            {{#if this.category.SubCats.length}}
+            disabled title="Can't delete ,there are subcats in this main category"
+            {{/if}}
+            hidden>
+            <i class="fa fa-trash" aria-hidden="true"></i>
+          </button>
+          
+        </div>
+      </div>
+      </div>
+    </form>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col" style="width: 10%">ID</th>
+          <th scope="col">Sub Category</th>
+          <th scope="col" style="width: 10%">&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <form class="form-inline" action="/admin/categories/add" method="post">
+            <td>&nbsp;</td>
+            <td class="p-1">
+              <input type="hidden" class="form-control" id="txtCatID" name="CatParent" value="{{this.category.CatID}}" readonly>
+              <div class="form-group mb-1">
+                <input type="text" class="form-control" id="txtSubCatName" name="CatName" placeholder="Add Category">
+              </div>             
+            </td>
+            <td class="p-1 text-center">
+              <button class="btn btn-outline-success w-100" type="submit">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Add
+              </button>
+            </td>
+          </form>
+        </tr>
+        {{#each this.category.SubCats}}
+        <tr>
+          <form class="formEdit" method="POST" action="">
+          <td scope="row" class="#{{CatID}}"><input type="text" class="form-control" id="txtCatID" name="CatID" value="{{CatID}}" readonly></td>
+          <td><input type="text" class="form-control hidden{{CatID}}" id="txtCatName" name="CatName" value="{{CatName}}" readonly></td>
+          {{!-- Button edit --}}
+          <td class="text-right">
+            <a class="btn btn-outline-primary toggler{{CatID}}" href="javascript:enableEdit('{{CatID}}')" role="button" title="Edit Category">
+              <i class="fa fa-pencil" aria-hidden="true"></i>
+            </a>
+            <button class="btn btn-outline-success hidden{{CatID}}" type="submit" formaction="/admin/categories/patch" hidden>
+              <i class="fa fa-check" aria-hidden="true"></i>
+            </button>
+            <button class="btn btn-outline-danger hidden{{CatID}}" type="submit" formaction="/admin/categories/del" hidden>
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
+          </td>
+          </form>
+        </tr>
+        {{else}}
+        <tr class="bg-light">
+          <td colspan="3" class="text-center">
+            Không có dữ liệu
+          </td>
+        </tr>
+        {{/each}}
+
+      </tbody>
+    </table>
+    {{else}}
+    <div class="text-center p-4">
+      Không có dữ liệu
+    </div>
+    {{/if}}
+  </div>
+  <div class="card-footer text-muted">
+    <a class="btn btn-primary" href="/admin/categories" role="button">
+      <i class="fa fa-backward" aria-hidden="true"></i>
+      Back to List
+    </a>
+  </div>
+</div>
+
+{{#section 'js'}}
+<script>
+  function enableEdit(id) {
+    $(`.btn.toggler${id}`).attr('hidden', true);
+    $(`.btn.hidden${id}`).removeAttr('hidden');
+    $(`input.hidden${id}`).removeAttr('readonly');
+  }
+</script>
+{{/section}}

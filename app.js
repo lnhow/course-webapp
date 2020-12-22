@@ -34,8 +34,11 @@ app.get('/', function(req, res) {
   res.render('home.hbs');
 });
 
-app.use('/admin/categories', require('./routes/admin/category.route'));
 app.use('/p', express.static('./public'));
+app.use('/admin/categories', require('./routes/admin/category.route'));
+
+//Error handling: LAST
+require('./config/app/errorhandler')(app);
 
 app.listen(config.app.PORT, _ => {
   console.log(`App listening on PORT ${config.app.PORT}`)

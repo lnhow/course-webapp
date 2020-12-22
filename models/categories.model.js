@@ -8,16 +8,6 @@ const catSchema = new mongoose.Schema({
   CatName: { type: String, required: true }
 });
 
-catSchema.method('toClient', function() {
-  var obj = this.toObject();
-
-  //Rename fields
-  obj.CatID = obj._id;
-  delete obj._id;
-
-  return obj;
-});
-
 const Category = mongoose.model('categories', catSchema);
 
 module.exports = {
@@ -53,12 +43,73 @@ module.exports = {
       }
     ]);
   },
+  singleMainCategory: async function(catID) {
+    return await Category.aggregate([
+      {
+        $match:{
+          CatParent: null,
+          _id: mongoose.Types.ObjectId(catID)
+        }
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "_id",
+          foreignField: "CatParent",
+          as: 'SubCats'
+        }
+      },
+      {
+        $project: {
+          'CatID': '$_id',
+          'CatName': '$CatName',
+          'SubCats': {
+            '$map': {
+              'input': '$SubCats',
+              'in': {
+                'CatID': '$$this._id',
+                'CatName': '$$this.CatName'
+              }
+            }
+          }
+        }
+      }
+    ]);
+  },
 
   add: async function(entity) {
     return await new Category({
       CatParent: entity.CatParent,
       CatName: entity.CatName
     }).save((err)=>{
+      if (err) {
+        console.log(err);
+      }
+    });
+  },
+  del: async function(entity) {
+    const condition = entity.CatID;
+
+    //Block delete those which have reference to it
+    const numSubcats = await Category.countDocuments({
+      CatParent: condition
+    });
+    if (numSubcats !== 0) {
+      console.log('Attempted to delete cat that have ref to it')
+      return;
+    }
+
+    return await Category.deleteOne({
+      '_id': condition,
+    }, function(err){
+      if (err) {
+        console.log(err);
+      }
+    });
+  },
+  patch: async function(entity) {
+    const condition = entity.CatID;
+    return await Category.updateOne({'_id': condition}, {'CatName': entity.CatName}, function(err){
       if (err) {
         console.log(err);
       }

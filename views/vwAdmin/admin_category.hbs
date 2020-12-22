@@ -5,15 +5,15 @@
 {{/section}}
 
 <div class="card mt-4">
-  <div class="card-header bg-primary text-light d-flex justify-content-between align-items-center">
+  <div class="card-header bg-primary text-light">
     Categories
   </div>
-  <div class="card-body">
-    <table class="table table-hover">
+  <div class="card-body p-0 overflow-auto">
+    <table class="table table-hover" style="min-width: 35rem;">
       <thead>
         <tr>
           <th scope="col" style="width: 3%">&nbsp;</th>
-          <th scope="col" style="width: 5%">#</th>
+          <th scope="col" style="width: 5%">ID</th>
           <th scope="col">Category</th>
           <th scope="col" style="width: 10%">&nbsp;</th>
         </tr>
@@ -48,13 +48,13 @@
           <th>{{CatName}}</th>
           {{!-- Button edit --}}
           <td class="text-right">
-            <a class="btn-sm btn-primary" href="/admin/categories/cat" role="button" title="Edit Category">
+            <a class="btn-sm btn-primary" href="/admin/categories/{{CatID}}" role="button" title="Edit Category">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
             </a>
           </td>
         </tr>
 
-        <tr class="bg-light collapse ease-anim" id="row{{CatID}}">
+        <tr class="bg-light collapse" id="row{{CatID}}">
           <td>&nbsp;</td>
           <td colspan="3">
           <div class="card">
@@ -62,7 +62,7 @@
               <table class="table table-sm">
                 <thead>
                   <tr>
-                    <th scope="col" style="width: 5%">#</th>
+                    <th scope="col" style="width: 5%">ID</th>
                     <th scope="col">Sub Category</th>
                     <th scope="col" style="width: 10%">&nbsp;</th>
                   </tr>
@@ -92,7 +92,7 @@
                     <th>{{CatName}}</th>
                     {{!-- Button edit --}}
                     <td class="text-right">
-                      <a class="btn-sm btn-primary" href="/admin/categories/add" role="button" title="Edit Category">
+                      <a class="btn-sm btn-primary" href="/admin/categories/{{../CatID}}#{{CatID}}" role="button" title="Edit Category">
                           <i class="fa fa-pencil" aria-hidden="true"></i>
                       </a>
                     </td>
