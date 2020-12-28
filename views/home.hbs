@@ -226,8 +226,7 @@
           <small>Teacher</small>
           <div class="d-flex justify-content-between">
             <small>
-              4/5
-              <i class="fa fa-star" aria-hidden="true"></i>
+              <span class="rating" data-rating="0"></span>
               (000,000)
             </small>
           </div>
@@ -348,5 +347,11 @@
 </div>
 
 {{#section 'js'}}
-
+<script>
+$(".rating").starRating({
+  totalStars: 5,
+  readOnly: true,
+  starSize: 15
+});
+</script>
 {{/section}}

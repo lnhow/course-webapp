@@ -11,6 +11,7 @@ const catSchema = new mongoose.Schema({
 const Category = mongoose.model('categories', catSchema);
 
 module.exports = {
+  collectionName: Category.collection.name,
   all: async function() {
     return await Category.aggregate([
       {
@@ -98,6 +99,7 @@ module.exports = {
       console.log('Attempted to delete cat that have ref to it')
       return;
     }
+    //TODO: Block category which has courses
 
     return await Category.deleteOne({
       '_id': condition,

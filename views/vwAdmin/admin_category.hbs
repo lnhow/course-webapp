@@ -25,7 +25,7 @@
             <td>&nbsp;</td>
             <td class="p-1">
               <div class="form-group mb-1">
-                <input type="text" class="form-control" id="txtCatName" name="CatName" placeholder="Add Category">
+                <input type="text" class="form-control" id="txtCatName" name="CatName" placeholder="Add Category" required>
               </div>             
             </td>
             <td class="p-1 text-center">
@@ -40,7 +40,7 @@
         {{#each this.categories}}
         <tr>
           <td class="text-center">
-            <a class="btn-sm btn-primary" href="#row{{CatID}}" role="button" data-toggle="collapse" data-target="#row{{CatID}}" aria-expanded="false">
+            <a class="btn-sm btn-primary" data-toggle="collapse" href="#row{{CatID}}" role="button" aria-expanded="false" aria-controls="row{{CatID}}">
               <i class="fa fa-chevron-down" aria-hidden="true"></i>
             </a>
           </td>

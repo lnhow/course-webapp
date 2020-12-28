@@ -30,12 +30,7 @@ mongoose.connect(keys.mongodb.dbURI, {
   console.log('Connected to DB successfully');
 });
 
-app.get('/', function(req, res) {
-  res.render('home.hbs');
-});
-
-app.use('/p', express.static('./public'));
-app.use('/admin/categories', require('./routes/admin/category.route'));
+require('./config/app/routes')(app);
 
 //Error handling: LAST
 require('./config/app/errorhandler')(app);
