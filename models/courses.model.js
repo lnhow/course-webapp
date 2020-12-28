@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const datetime = require('../utils/datetime');
-const path = require('path');
-const file = require('../../utils/file');
 
 const categoryModel = require('./categories.model');
 
@@ -57,16 +55,7 @@ module.exports = {
       LastUpdate: datetime.DBNowString(),
       Category: mongoose.Types.ObjectId(entity.CatID),
       Teacher: null
-    }).save((err, course)=>{
-      console.log(course);
-      if (err) {
-        console.log(err);
-        return null;
-      }
-      file.move(
-        `${config.app.tmpImgPath}/${filename}`,
-        `${config.app.coursesImgPath}${course._id}/thumbnail${path.extname(filename)}`);
-    });
+    }).save();
   },
   del: async function(entity) {
     const condition = entity.CatID;

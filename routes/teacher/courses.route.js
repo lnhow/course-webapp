@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const multer = require('multer');
 
+const path = require('path');
+const fileUtils = require('../../utils/file');
+
 const categoryModel = require('../../models/categories.model');
 const courseModel = require('../../models/courses.model');
 
@@ -19,7 +22,7 @@ router.post('/add', async function(req, res) {
 
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, config.app.tmpImgPath);
+      cb(null, fileUtils.tmpImgPath);
     },
     filename: function (req, file, cb) {
       filename = file.originalname;
@@ -37,8 +40,14 @@ router.post('/add', async function(req, res) {
     else {
       console.log('img upload success');
       const ret = await courseModel.add(req.body);
-      if (ret !== null) {
-        
+      if (ret) {
+        const oldPath = `${fileUtils.tmpImgPath}${filename}`;
+        const newPath = `${fileUtils.coursesImgPath}${ret._id}/`;
+        fileUtils.newdir(newPath);
+        fileUtils.move(
+          oldPath,
+          path.join(newPath, `thumbnail${path.extname(filename)}`)
+        );
       }
     }
   })

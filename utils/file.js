@@ -10,5 +10,10 @@ module.exports ={
         console.log(err);
       }
     })
+  },
+  newdir: function(path) {
+    if(!fs.existsSync(path)) {
+      fs.mkdirSync(path);
+    }
   }
 }
