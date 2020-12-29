@@ -16,7 +16,7 @@ require('./config/app/viewengine')(app);
 app.use(express.urlencoded({
   extended: true
 }));
-app.use('/account', require('./account/account.route'))
+app.use('/account', require('./routes/account/account.route.js'))
 
 //Connect to DB
 mongoose.connect(keys.mongodb.dbURI, { 
