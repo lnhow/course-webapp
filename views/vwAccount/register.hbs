@@ -2,36 +2,51 @@
 <title>Register</title>
 {{/section}}
 
+{{#section 'css'}}
+<style>
+  .form-group{
+    width: 55%;
+    margin: auto;
+    margin-bottom: 20px;
+  }
+.main-form{
+  width: 500px;
+  margin: 10px auto;
+  background: mintcream;
+  border-radius: 20px;
+}
+</style>
+{{/section}}
 
 <div class="card">
-  <h5 class="card-header text-center" >Register</h5>
+  <h5 class="card-header text-center" ><b>Register</b></h5>
   <div class="card-body">
-    <form action="" method="post">
+    <form class ="main-form" action="" method="post">
       <div class="form-group">
-        <label for="txtUsername">Username</label>
-        <input type="text" class="form-control" id="txtUsername" name="username" autofocus>
+        <label for="txtUsername"><b>Username</b></label>
+        <input type="text" class="form-control" id="txtUsername" name="username" placeholder="Enter your username" autofocus>
       </div>
       <div class="form-group">
-        <label for="txtPassword">Password</label>
-        <input type="password" class="form-control" id="txtPassword" name="password">
+        <label for="txtPassword"><b>Password</b></label>
+        <input type="password" class="form-control" id="txtPassword" name="password" placeholder="Enter your password">
       </div>
       <div class="form-group">
-        <label for="txtPassword">Confirm password</label>
-        <input type="password" class="form-control" id="txtConfirm">
+        <label for="txtPassword"><b>Confirm password</b></label>
+        <input type="password" class="form-control" id="txtConfirm" placeholder="Enter your password again">
       </div>
       <div class="form-group">
-        <label for="txtName">Name</label>
-        <input type="text" class="form-control" id="txtName" name="name">
+        <label for="txtName"><b>Name</b></label>
+        <input type="text" class="form-control" id="txtName" name="name" placeholder="Enter your name">
       </div>
       <div class="form-group">
-        <label for="txtEmail">Email</label>
-        <input type="text" class="form-control" id="txtEmail" name="email">
+        <label for="txtEmail"><b>Email</b></label>
+        <input type="text" class="form-control" id="txtEmail" name="email" placeholder="Enter your email">
       </div>
       <div class="form-group">
-        <label for="txtDOB">Date of birth</label>
-        <input type="text" class="form-control" id="txtDOB" name="dob">
+        <label for="txtDOB"><b>Date of birth</b></label>
+        <input type="text" class="form-control" id="txtDOB" name="dob" placeholder="dd/mm/yyyy">
       </div>
-      <button type="submit" class="btn btn-outline-sucess">
+      <button type="submit" class="btn btn-outline-sucess text-center" style="width:100%; text-align:center">
         <a name="" id="" class="btn btn-primary mt-3" href="#" role="button">Register</a>
       </button>
     </form>
