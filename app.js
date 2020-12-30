@@ -3,6 +3,7 @@ const keys = require('./config/keys.json');
 
 //Dependencies
 const express = require('express');
+const hbs_sections =require('express-handlebars-sections');
 const mongoose = require('mongoose');
 require('express-async-errors');    //Async error handling
 
@@ -16,6 +17,7 @@ require('./config/app/viewengine')(app);
 app.use(express.urlencoded({
   extended: true
 }));
+
 app.use('/account', require('./routes/account/account.route.js'))
 
 //Connect to DB

@@ -3,6 +3,7 @@
 {{/section}}
 
 {{#section 'css'}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
 <style>
   .form-group{
     width: 55%;
@@ -18,10 +19,54 @@
 </style>
 {{/section}}
 
+{{#section 'js'}}
+<script 
+src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+<script>
+  $('#frmRegister').on('submit', function(e){
+    const username=$('#txtUsername').val();
+    if(username.length===0){
+      alert('Please fill in  your username.');
+      e.preventDefault();
+    }
+  });
+
+  $('#frmRegister').on('submit', function(e){
+    const password=$('#txtPassword').val();
+    const confirm=$('txtPasswordConfirm').val();
+    if(password!== confirm){
+      alert('Check out your password.');
+      e.preventDefault();
+    }
+  });
+
+  $('#frmRegister').on('submit', function(e){
+    const name=$('#txtName').val();
+    if(name.length===0){
+      alert('Please fill in your name.');
+      e.preventDefault();
+    }
+  });
+
+  $('#frmRegister').on('submit', function(e){
+    const email=$('#txtEmail').val();
+    if(email.length===0){
+      alert('Please fill in your email.');
+      e.preventDefault();
+    }
+  });
+  $('#txtDOB').datetimepicker({
+    format: 'd/m/Y',
+    timepicker:false,
+    mask:true
+  })
+</script>
+{{/section}}
+
 <div class="card">
   <h5 class="card-header text-center" ><b>Register</b></h5>
   <div class="card-body">
-    <form class ="main-form" action="" method="post">
+    <form class ="main-form" action="" method="post" id="frmRegister">
       <div class="form-group">
         <label for="txtUsername"><b>Username</b></label>
         <input type="text" class="form-control" id="txtUsername" name="username" placeholder="Enter your username" autofocus>
@@ -31,7 +76,7 @@
         <input type="password" class="form-control" id="txtPassword" name="password" placeholder="Enter your password">
       </div>
       <div class="form-group">
-        <label for="txtPassword"><b>Confirm password</b></label>
+        <label for="txtPasswordConfirm"><b>Confirm password</b></label>
         <input type="password" class="form-control" id="txtConfirm" placeholder="Enter your password again">
       </div>
       <div class="form-group">
@@ -44,7 +89,7 @@
       </div>
       <div class="form-group">
         <label for="txtDOB"><b>Date of birth</b></label>
-        <input type="text" class="form-control" id="txtDOB" name="dob" placeholder="dd/mm/yyyy">
+        <input type="text" class="form-control" id="txtDOB" name="dob">
       </div>
       <button type="submit" class="btn btn-outline-sucess text-center" style="width:100%; text-align:center">
         <a name="" id="" class="btn btn-primary mt-3" href="#" role="button">Register</a>
