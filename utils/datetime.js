@@ -1,10 +1,14 @@
 module.exports = {
-  DBNowString: () => {
-    const now = new Date();
-    return `${now.getFullYear()}/${now.getMonth()}/${now.getDate()} ${now.toTimeString()}`;
+  ISODateNow: () => {
+    return (new Date()).toISOString();
   },
-  FormatString: (dateString) => {
+  //Format ISO date string to hh:mm dd:MM:YYYY
+  FormatDate: (dateString) => {
     const datetime = new Date(dateString);
-    return `${datetime.getHours}:${datetime.getMinutes} ${datetime.getDate()}/${datetime.getMonth()}/${datetime.getFullYear()}`
+    return ('0' + datetime.getHours()).slice(-2)
+      + ':' + ('0' + datetime.getMinutes()).slice(-2)
+      + ' ' + ('0' + datetime.getDate()).slice(-2) 
+      + '/' + ('0' +  (datetime.getMonth() + 1)).slice(-2)
+      + '/' + datetime.getFullYear();
   }
 }

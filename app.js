@@ -3,7 +3,6 @@ const keys = require('./config/keys.json');
 
 //Dependencies
 const express = require('express');
-const hbs_sections =require('express-handlebars-sections');
 const mongoose = require('mongoose');
 require('express-async-errors');    //Async error handling
 

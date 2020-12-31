@@ -4,6 +4,8 @@ const config = require('../config/config.json');
 module.exports ={
   tmpImgPath: config.app.tmpImgPath,
   coursesImgPath: config.app.coursesImgPath,
+
+  //Move a file from oldPath to newPath
   move: function(oldPath, newPath) {
     fs.rename(oldPath, newPath, (err)=>{
       if(err) {

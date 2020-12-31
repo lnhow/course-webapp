@@ -22,7 +22,7 @@ const courseSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "users"
   },
-  Status: Boolean,  //0: Incomplete, 1: Completed
+  Completed: Boolean,
 });
 
 //courseSchema.index({CourseName: 'text'});
@@ -30,17 +30,23 @@ const Course = mongoose.model('courses', courseSchema);
 
 module.exports = {
   all: async function() {
-    return await Course.aggregate([
+    let result = await Course.aggregate([
       {
         $lookup: {
           from: categoryModel.collectionName,
           localField: 'Category',
           foreignField: '_id',
           as: 'Category'
-        },
-      }      
-      
+        }
+      },  
     ]).unwind('$Category');
+
+    //Format day time from DB's ISO string
+    result.forEach(row => {
+      row.LastUpdate = (datetime.FormatDate(row.LastUpdate));
+    });
+
+    return result;
   },
   add: async function(entity) {
     return await new Course({
@@ -52,9 +58,10 @@ module.exports = {
       RegisterCount: 0,
       Price: parseInt(entity.Price),
       Discount: 0,
-      LastUpdate: datetime.DBNowString(),
+      LastUpdate: datetime.ISODateNow(), //Save to db as ISO String
       Category: mongoose.Types.ObjectId(entity.CatID),
-      Teacher: null
+      Teacher: null,
+      Status: false
     }).save();
   },
   del: async function(entity) {
