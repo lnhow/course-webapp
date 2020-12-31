@@ -17,8 +17,6 @@ app.use(express.urlencoded({
   extended: true
 }));
 
-app.use('/account', require('./routes/account/account.route.js'))
-
 //Connect to DB
 mongoose.connect(keys.mongodb.dbURI, { 
   useNewUrlParser: true, 
@@ -32,6 +30,9 @@ mongoose.connect(keys.mongodb.dbURI, {
   console.log('Connected to DB successfully');
 });
 
+require('./middlewares/locals.mdw')(app); //IMPORTANT: Routes after locals
+
+app.use('/account', require('./routes/account/account.route.js'))
 require('./config/app/routes')(app);
 
 //Error handling: LAST

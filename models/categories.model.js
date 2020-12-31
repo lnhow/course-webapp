@@ -44,6 +44,11 @@ module.exports = {
       }
     ]);
   },
+  singleCategory: async function(catID) {
+    return await Category.find({
+      _id: mongoose.Types.ObjectId(catID)
+    });
+  },
   singleMainCategory: async function(catID) {
     return await Category.aggregate([
       {
@@ -76,6 +81,11 @@ module.exports = {
         }
       }
     ]);
+  },
+  subcatsOfCategory: async function(catID) {
+    return await Category.find({
+      CatParent: mongoose.Types.ObjectId(catID)
+    });
   },
 
   add: async function(entity) {

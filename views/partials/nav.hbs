@@ -15,49 +15,18 @@
       </a>
       <div class="dropdown-menu my-2" aria-labelledby="categoryDropdown">
         <div class="d-lg-flex align-items-start justify-content-start">
-          <div> 
-          <div class="dropdown-header" href="#">IT</div>
-          <a class="dropdown-item" href="#">Lập trình Web</a>
-          <a class="dropdown-item" href="#">Lập trình thiết bị di động</a>
-          <a class="dropdown-item" href="#">Mobile apps</a>
-          <a class="dropdown-item" href="#">Websites</a>
-          </div>
+          {{#each lcCategories}}
           <div>
-          <div class="dropdown-header">Professional Services</div>
-          <a class="dropdown-item" href="#">Project rescue</a>
-          <a class="dropdown-item" href="#">Source code recovery</a>
-          <a class="dropdown-item" href="#">Application support &amp; maintenance</a>
+            <div class="dropdown-header">
+              <a class="font-weight-bold" href="/courses/{{CatID}}">{{CatName}}</a>
+            </div>
+            {{#each SubCats}}
+            <a class="dropdown-item" href="/courses/{{CatID}}">{{CatName}}</a>
+            {{/each}}
           </div>
-          <div>
-          <div class="dropdown-header">Fixed Price Services</div>
-          <a class="dropdown-item" href="#">Add cookie consent</a>
-          <a class="dropdown-item" href="#">Add captcha</a>
-          <a class="dropdown-item" href="#">Add core data</a>
-          <a class="dropdown-item" href="#">Custom error pages</a>
-          <a class="dropdown-item" href="#">Contact form creation</a>
-          <a class="dropdown-item" href="#">Automated backups</a>
-          <a class="dropdown-item" href="#">Image to HTML</a>
-          </div>
-          <div>
-          <div class="dropdown-header">Fixed Price Services</div>
-          <a class="dropdown-item" href="#">Add cookie consent</a>
-          <a class="dropdown-item" href="#">Add captcha</a>
-          <a class="dropdown-item" href="#">Add core data</a>
-          <a class="dropdown-item" href="#">Custom error pages</a>
-          <a class="dropdown-item" href="#">Contact form creation</a>
-          <a class="dropdown-item" href="#">Automated backups</a>
-          <a class="dropdown-item" href="#">Image to HTML</a>
-          </div>
-          <div>
-          <div class="dropdown-header">Fixed Price Services</div>
-          <a class="dropdown-item" href="#">Add cookie consent</a>
-          <a class="dropdown-item" href="#">Add captcha</a>
-          <a class="dropdown-item" href="#">Add core data</a>
-          <a class="dropdown-item" href="#">Custom error pages</a>
-          <a class="dropdown-item" href="#">Contact form creation</a>
-          <a class="dropdown-item" href="#">Automated backups</a>
-          <a class="dropdown-item" href="#">Image to HTML</a>
-          </div>   
+          {{else}}
+          Không có dữ liệu
+          {{/each}}
         </div>
       </div>
     </li>
