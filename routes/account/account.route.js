@@ -7,6 +7,14 @@ const router = express.Router();
 
 module.exports = router;
 
+router.get('/login', async function (req, res){
+    res.render('vwAccount/login');
+})
+
+router.post('/login', async function (req, res){
+
+})
+
 router.get('/register', async function (req, res){
     res.render('vwAccount/register');
 })
