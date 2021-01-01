@@ -1,0 +1,97 @@
+{{#section 'title'}}
+<title>Login</title>
+{{/section}}
+
+{{#section 'css'}}
+<style>
+body {font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";}
+
+.main-form {
+    border: 3px solid #f1f1f1;
+    width: 50%;
+    margin: auto;}
+
+.form-group{
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.form-group-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 5px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+    margin: auto;
+    text-align: center;
+    border-radius: 7px;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.cancelbtn {
+  width: auto;
+  padding: 6px 18px;
+  background-color: #f44336;
+  border-radius: 10px;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.password {
+  float: right;
+  padding-top: 16px;
+}
+
+@media screen and (max-width: 300px) {
+  span.password {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+</style>
+{{/section}}
+
+<form class="main-form" action="" method="post">
+
+<h2 style="padding-left:45%"><b>Login</b></h2>
+    <div class="form-group">
+        <label for="userName"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="username" required autofocus>
+    </div>
+    <div class="form-group">
+        <label for="password"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="password" required>
+    </div>
+    <div class="form-group-button">   
+        <button class="form-group-button" type="submit">Login</button>
+    </div>
+    <label>
+      <input type="checkbox" checked="checked" name="remember"> Remember me
+    </label>
+  </div>
+
+  <div class="container" style="background-color:#f1f1f1">
+    <button type="button" class="cancelbtn">Cancel</button>
+    <span class="password">Forgot <a href="#">password?</a></span>
+  </div>
+</form>
