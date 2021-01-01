@@ -1,0 +1,50 @@
+{{#section 'css'}}
+<style>
+.card.overflow-hidden{
+  border-radius: 10px;
+}
+.card.overflow-hidden:hover{
+  transform: scale(1.05);
+}
+</style>
+{{/section}}
+
+<div class="card-deck">
+  <div class="card text-dark m-2 overflow-hidden">
+    <div class="card-body d-flex flex-row">
+      <div class="d-flex">
+        <i class="fa fa-list fa-5x align-self-center" aria-hidden="true"></i>
+      </div>
+      <div class="p-3">
+        <h3 class="card-title m-0">Categories</h3>
+        <p class="card-text">Add, Edit, Remove categories and Sub-categories</p>
+      </div>
+      <a class="stretched-link" href="/admin/categories"></a>
+    </div>
+  </div>
+  <div class="card text-dark m-2">
+    <div class="card-body d-flex flex-row">
+      <div class="d-flex">
+        <i class="fa fa-book fa-5x align-self-center" aria-hidden="true"></i>
+      </div>
+      <div class="p-3">
+        <h3 class="card-title m-0">Courses</h3>
+        <p class="card-text">Remove courses</p>
+      </div>
+      <a class="stretched-link" href="/admin/courses"></a>
+    </div>
+  </div>
+  <div class="card text-dark m-2">
+    <div class="card-body d-flex flex-row">
+      <div class="d-flex">
+        <i class="fa fa-user fa-5x align-self-center" aria-hidden="true"></i>
+      </div>
+      <div class="p-3">
+        <h3 class="card-title m-0">Accounts</h3>
+        <p class="card-text">Add, Edit, Remove user accounts</p>
+      </div>
+      <a class="stretched-link" href="/admin/users"></a>
+    </div>
+  </div>
+  
+</div>

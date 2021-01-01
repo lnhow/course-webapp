@@ -5,7 +5,7 @@ router.get('/', async function(req, res) {
   const result = await categoriesModel.all();
 
   res.render('vwAdmin/admin_category', {
-    layout: 'special_user.layout.hbs',
+    layout: 'admin.layout.hbs',
     categories: result,
   });
 });
@@ -40,7 +40,7 @@ router.get('/:catid', async function(req, res) {
   const result = await categoriesModel.singleMainCategory(req.params.catid);
 
   res.render('vwAdmin/admin_edit_category', {
-    layout: 'special_user.layout.hbs',
+    layout: 'admin.layout.hbs',
     category: result[0]
   });
 });

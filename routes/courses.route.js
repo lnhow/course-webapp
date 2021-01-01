@@ -11,7 +11,6 @@ router.get('/:catID', async function(req, res) {
   const skip = config.app.pagination.limit * (page - 1);
   const result = await courseModel.byCat(CatID, skip);
   const totalResult = await courseModel.countByCat(CatID);
-  console.log(totalResult);
 
   const numPages = Math.ceil(totalResult / config.app.pagination.limit);   //Number type is not int
   const pageItems = [];

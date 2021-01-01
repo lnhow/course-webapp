@@ -6,7 +6,7 @@ router.get('/', async function(req, res) {
   console.log(ret);
   
   res.render('vwCourses/admin_courses', {
-    layout: 'special_user.layout.hbs',
+    layout: 'admin.layout.hbs',
     courses: ret,
   });
 });

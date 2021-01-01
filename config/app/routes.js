@@ -8,6 +8,5 @@ module.exports = function(app) {
   app.use('/p', express.static('./public'));
   app.use('/courses', require('../../routes/courses.route'));
   app.use('/teacher', require('../../routes/teacher/teacher.route'))
-  app.use('/admin/categories', require('../../routes/admin/category.route'));
-  app.use('/admin/courses', require('../../routes/admin/courses.route'));
+  app.use('/admin', require('../../routes/admin/admin.route'));
 }
