@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const monent =  require('moment');
 
-const userModel = require('../../models/user.model')
+const userModel = require('../../models/users.model')
 const router = express.Router();
 
 module.exports = router;

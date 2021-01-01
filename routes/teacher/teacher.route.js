@@ -6,6 +6,6 @@ router.get('/', function(req, res) {
   });
 })
 
-router.use('/course', require('./courses.route'));
+router.use('/course', require('./course.route'));
 
 module.exports = router;

@@ -6,6 +6,7 @@ module.exports = function(app) {
   });
 
   app.use('/p', express.static('./public'));
+  app.use('/course', require('../../routes/course.route')); //Single course
   app.use('/courses', require('../../routes/courses.route'));
   app.use('/teacher', require('../../routes/teacher/teacher.route'))
   app.use('/admin', require('../../routes/admin/admin.route'));

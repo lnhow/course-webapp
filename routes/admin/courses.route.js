@@ -3,7 +3,7 @@ const courseModel = require('../../models/courses.model');
 
 router.get('/', async function(req, res) {
   const ret = await courseModel.all();
-  console.log(ret);
+  //console.log(ret);
   
   res.render('vwCourses/admin_courses', {
     layout: 'admin.layout.hbs',

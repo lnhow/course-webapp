@@ -1,0 +1,245 @@
+{{#section 'title'}}
+<title>Courses: {{course.CourseName}}</title>
+{{/section}}
+{{#section "css"}}
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<style>
+#editor-container {
+  height: 300px;
+}
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/css/fileinput.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+
+{{/section}}
+
+
+{{#section "js"}}
+{{!-- Bootstrap fileinput --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/js/fileinput.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/themes/fa/theme.min.js"></script>
+<script>
+$('#imgTitle').fileinput({
+  theme: 'fa',
+  dropZoneEnabled: false,
+  showUpload: false,
+  required: true,
+  maxFileSize: 512,
+  allowedFileExtensions: ['jpg'],
+});
+</script>
+
+{{!-- KaTex for formula formating --}}
+{{!--The loading of KaTeX is deferred to speed up page rendering--}}
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+{{!-- To automatically render math in text elements, include the auto-render extension: --}}
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+{{!-- Quilljs WYSIWYG editor--}}
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>  {{!-- Init --}}
+let quill = new Quill('#editor-container', {
+  theme: 'snow',
+  placeholder: 'Put your description here in its full glory',
+  modules: {
+    toolbar: [
+      [
+        { 'font': [] }, 
+        { 'header': [false, 1, 2, 3, 4, 5, 6] }, 
+      ],
+      [{ 'align': [] }],
+
+      ['bold', 'italic', 'underline', 'strike'],    //Text style
+      [{ 'script': 'sub'}, { 'script': 'super' }],  //Superscript/Subscript
+
+      [{ 'color': [] }, { 'background': [] }],      //Text color & background color
+      ['blockquote', 'code-block', 'formula'],
+      ['link', 'image', 'video'],
+
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],      //Outdent/Indent
+
+    ],
+  }
+});
+
+
+{{!-- Form validation --}}
+$('#form').on('submit', function(e) {
+  e.preventDefault();
+
+  const courseName = $('#txtCourseName').val();
+  if (courseName.length === 0) {
+    alert('Course name is required');
+    return;
+  }
+
+  const coursePrice = parseInt($('#numPrice').val());
+  if (!Number.isInteger(coursePrice)) {
+    console.log(coursePrice);
+    alert('Please enter price correctly');
+    return;
+  }
+
+  // Populate hidden form on submit
+  $('#txtFullDes').val(quill.root.innerHTML);
+
+  $('#form').off('submit').submit();
+});
+</script>
+{{/section}}
+<div class="d-flex flex-row align-items-center my-2">
+  <a href="/teacher" class="mr-4" role="button">
+    <i class="fa fa-backward" aria-hidden="true"></i>
+    Back
+  </a>
+  <h3> Course: {{course.CourseName}} </h3>
+</div>
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-details-tab" data-toggle="tab" href="#nav-details" role="tab" aria-controls="nav-details" aria-selected="true">Details</a>
+    <a class="nav-item nav-link" id="nav-chapters-tab" data-toggle="tab" href="#nav-chapters" role="tab" aria-controls="nav-chapters" aria-selected="false">Chapters</a>
+  </div>
+</nav>
+<div class="tab-content p-2" id="nav-tabContent" style="background: white;">
+  <div class="tab-pane fade show active" id="nav-details" role="tabpanel" aria-labelledby="nav-details-tab">
+      <div class="pb-2 px-2 d-flex flex-row align-content-center justify-content-between">
+        <h5 class="m-0">Course Details</h5>
+      </div>
+      <div class="container-fluid">
+        
+        <form id="form" method="POST" action="/teacher/course/patch">
+          <div class="row">
+            <div class="col-lg-9">
+              <input type="hidden" value="{{course._id}}" id="txtCourseID" name="_id">
+              <div class="form-group">
+                <label for="txtCourseName">Course Name</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    value="{{course.CourseName}}" 
+                    id="txtCourseName" 
+                    name="CourseName" 
+                    autofocus required>
+              </div>
+              <div class="form-group">
+                <label for="txtTinyDes">Course Short Description</label>
+                <textarea rows="2"
+                    type="text" 
+                    class="form-control"
+                    id="txtTinyDes" 
+                    name="TinyDes" 
+                    placeholder="1 or 2 sentences to summarize this course">{{course.TinyDes}}</textarea>
+              </div>
+              <div class="form-group">
+                <label for="txtFullDes">Course Full Description</label>
+                <div id="editor-container">
+                  {{!-- where the user enter the description --}}
+                  {{{course.FullDes}}}
+                </div>
+                {{!-- where the description is actually put to send to server --}}
+                <input type="hidden" class="form-control" id="txtFullDes" name="FullDes">
+              </div>
+            </div>
+
+            <div class="col-lg-3">
+              <div class="card">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="courseStatus">Status</label>
+                    <select class="form-control" id="courseStatus" name="Status" required>
+                      <option value="0" {{#unless course.Status}}selected{{/unless}}>Course Incompleted</option>
+                      <option value="1" {{#if course.Status}}selected{{/if}}>Course Completed</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="Category">Category</label>
+                    <select class="form-control" id="Category" name="CatID" required>
+                      {{#each this.categories}}
+                      <optgroup label="{{CatName}}">
+                        {{#each SubCats}}
+                        <option value="{{CatID}}" {{#if selected}}selected{{/if}}>{{CatName}}</option>
+                        {{/each}}
+                      </optgroup>
+                      {{/each}}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card mt-4">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="numPrice">Price</label>
+                    <input type="number" class="form-control" id="numPrice" name="Price" value="{{course.Price}}" min="0" step="1" autofocus required>
+                  </div>
+                  <div class="form-group">
+                    <label for="numPrice">Discount (%)</label>
+                    <input type="number" class="form-control" id="numPrice" name="Price" value="{{course.Discount}}" min="0" max='100' step="10" autofocus required>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-success w-100 mt-4">
+                <i class="fa fa-check" aria-hidden="true"></i>
+                Save
+              </button>
+            </div>
+
+          </div>
+        </form>
+        <div class="card">
+          <div class="card-body">
+            <form action="/img" method="post">
+              <input type="hidden" value="{{course._id}}" id="txtCourseID" name="_id"> 
+              <div class="form-group">
+                <label for="imgTitle">Update Feature Image</label>
+                <input id="imgTitle" name="imgTitle" type="file" class="file" accept=".jpg">
+              </div> 
+            </form>
+          </div>
+        </div>
+      </div>
+    
+  </div>
+
+  <div class="tab-pane fade" id="nav-chapters" role="tabpanel" aria-labelledby="nav-chapters-tab">
+    
+    <div class="pb-2 px-2 d-flex flex-row align-content-center">
+      <h5 class="m-0">Course Chapters</h5>
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <form class="form" id="formNewChapter" method="POST" action="/teacher/course/{{course._id}}/chapters/add">
+            <input type="hidden" value="{{course._id}}" id="txtCourseID" name="_id">
+            <div class="form-group w-100">
+              <input type="text" class="form-control" id="txtChapterName" name="ChapterName" placeholder="New chapter name" required>
+            </div>
+            <button class="btn btn-outline-success" type="submit">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+              Add
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="card mt-3">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <a href="" class="btn btn-primary">
+              <i class="fa fa-pencil" aria-hidden="true"></i>
+            </a>
+            Cras justo odio
+          </li>
+        </ul>
+      </div>
+       
+    </div>
+
+  </div>
+  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+</div>

@@ -30,6 +30,39 @@ const courseSchema = new mongoose.Schema({
 const Course = mongoose.model('courses', courseSchema);
 
 module.exports = {
+  singleByID: async function(id) {
+    let result = null;
+
+    if (! mongoose.Types.ObjectId.isValid(id)) {
+      return result;
+    }
+
+    result = await Course.aggregate([
+      {
+        $match: {
+          _id: mongoose.Types.ObjectId(id)
+        }
+      },
+      {
+        $lookup: {
+          from: categoryModel.collectionName,
+          localField: 'Category',
+          foreignField: '_id',
+          as: 'Category'
+        }
+      }
+    ]).unwind('$Category');
+
+    if (!result) { //err
+      return null;
+    }
+
+    result = result[0];
+    result.LastUpdate = datetime.FormatDate(result.LastUpdate);
+
+    return result;
+  },
+
   all: async function() {
     let result = await Course.aggregate([
       {
@@ -121,6 +154,16 @@ module.exports = {
       Teacher: null,
       Status: false
     }).save();
+  },
+  patch: async function(entity) {
+    const condition = entity._id;
+    delete entity._id;
+    entity.LastUpdate = datetime.ISODateNow();
+    return await Course.updateOne({'_id': condition}, entity, function(err){
+      if (err) {
+        console.log(err);
+      }
+    });
   },
   del: async function(entity) {
     const condition = entity.CatID;

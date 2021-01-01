@@ -12,35 +12,51 @@
 
     {{#each this.courses}}
     <div class="card flex-row flex-wrap p-2">
+      <a class="stretched-link" href="/course/{{_id}}"></a>
       <div class="card-header p-0">
         <img width="240" height="120" class="img" src="/p/imgs/courses/{{_id}}/thumbnail.jpg" alt="">
       </div>
 
-      <div class="card-body p-2">
+      <div class="card-body px-2 py-0">
         <h5 class="card-title mb-1">{{CourseName}}</h5>
-        <div>{{TinyDes}}</div>
-        <div class="d-flex flex-row flex-wrap">
-          <small class="mr-1 font-weight-bold">
-            <a href="/courses/{{Category._id}}">{{Category.CatName}}</a></small>
-          <small class="mr-1 font-weight-bold">
-            <i class="fa fa-user" aria-hidden="true"></i>
-            <a href="/admin/user/{{Teacher._id}}">{{Teacher.Name}}</a>
-          </small>
-
-          <small class="ml-auto mx-1">
-            <i class="fa fa-users" aria-hidden="true"></i>
-            {{RegisterCount}}
-          </small>
-          <small class="mx-1">
+        <div>
+          <small>
             <span class="rating" data-rating="{{RatingAverage}}"></span>
             ({{RatingCount}})
           </small>
-          <small class="mx-2">
+          <p class="mb-0" style="max-lines: 2;">{{TinyDes}}</p>
+        </div>
+      </div>
+
+      <div class="d-flex flex-column justify-content-center">
+        <p class="mb-0 text-dark font-weight-bold">
+            {{#if Discount}}
+              {{Price}}
+            {{else}}
+              {{#if Price}}
+              {{Price}}
+              {{else}}
+              Free
+              {{/if}}
+            {{/if}}
+          </p>
+          <small class="mr-1 font-weight-bold">
+            <a style="z-index: 90000;position: relative;" href="/courses/{{Category._id}}">{{Category.CatName}}</a>
+          </small>
+          <small class="font-weight-bold">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            {{Teacher.Name}}
+          </small>
+          <small>
+            <i class="fa fa-users" aria-hidden="true"></i>
+            {{RegisterCount}}
+          </small>
+          <small>
             <i class="fa fa-refresh" aria-hidden="true"></i>
             {{LastUpdate}}
           </small>
         </div>
-      </div>
+      
     </div>
     {{else}}
     <p class="text-center">Không có dữ liệu</p>

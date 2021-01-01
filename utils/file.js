@@ -17,5 +17,8 @@ module.exports ={
     if(!fs.existsSync(path)) {
       fs.mkdirSync(path);
     }
+  },
+  exists: function(path) {
+    return fs.existsSync(path);
   }
 }

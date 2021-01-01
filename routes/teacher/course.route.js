@@ -6,6 +6,7 @@ const fileUtils = require('../../utils/file');
 
 const categoryModel = require('../../models/categories.model');
 const courseModel = require('../../models/courses.model');
+const file = require('../../utils/file');
 
 
 router.get('/add', async function(req, res) {
@@ -17,7 +18,7 @@ router.get('/add', async function(req, res) {
   });
 });
 
-router.post('/add', async function(req, res) {
+router.post('/img', async function(req, res) {
   let filename = null;
 
   const storage = multer.diskStorage({
@@ -50,8 +51,50 @@ router.post('/add', async function(req, res) {
         );
       }
     }
-  })
+  });
+});
+
+router.post('/add', async function(req, res) {
+  const ret = await courseModel.add(req.body);
+  console.log(ret)  
+  res.redirect(`/teacher/course/${ret._id}`);
+})
+
+
+router.get('/:id', async function (req, res) {
+  const id = req.params.id;
+  const result = await courseModel.singleByID(id);
+  const resultCategory = await categoryModel.all();
+
+  if (result === null || resultCategory === null) {
+    res.status(404).render('error', {
+      layout: false,
+      error: {
+        code: 404,
+        status: 'Course requested not found'
+      },
+    })
+  }
+  else {
+    //Set the current category to default in page
+    resultCategory.forEach(mainCat => {
+      mainCat.SubCats.forEach(subcat => {
+        subcat.selected = subcat.CatID.toString() === result.Category._id.toString();
+      });
+    });
+
+    res.render('vwCourses/teacher_courses_detail', {
+      layout: 'special_user.layout.hbs',
+      course: result,
+      categories: resultCategory,
+    });
+  }
+});
+
+router.post('/patch', async function(req, res) {
+  const ret = await courseModel.patch(req.body);
   res.redirect(req.headers.referer);
 })
+
 
 module.exports = router;
