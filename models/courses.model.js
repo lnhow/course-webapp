@@ -23,7 +23,7 @@ const courseSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "users"
   },
-  Stauts: Boolean,
+  Status: Boolean,
 });
 
 //courseSchema.index({CourseName: 'text'});
@@ -161,6 +161,7 @@ module.exports = {
     entity.LastUpdate = datetime.ISODateNow();
     entity.Price = parseInt(entity.Price);
     entity.Discount = parseInt(entity.Discount);
+    entity.Status = (entity.Status === 'true');
 
     return await Course.updateOne({'_id': condition}, entity, function(err){
       if (err) {
