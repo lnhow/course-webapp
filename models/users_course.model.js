@@ -11,7 +11,8 @@ const User_CourseSchema =  new mongoose.schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
     },
-    chapter: int,
+    chapter: Number,
+    favorite: Boolean,
 })
 
 const users_course = mongoose.model('users_course', User_CourseSchema);
