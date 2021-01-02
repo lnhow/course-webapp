@@ -100,16 +100,49 @@ $('#form').on('submit', function(e) {
 </div>
 <nav>
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <a class="nav-item nav-link active" id="nav-details-tab" data-toggle="tab" href="#nav-details" role="tab" aria-controls="nav-details" aria-selected="true">Details</a>
-    <a class="nav-item nav-link" id="nav-chapters-tab" data-toggle="tab" href="#nav-chapters" role="tab" aria-controls="nav-chapters" aria-selected="false">Chapters</a>
+    <a 
+      class="nav-item nav-link {{#unless show_chapter}}active{{/unless}}"
+      id="nav-details-tab" 
+      data-toggle="tab" 
+      href="#nav-details" 
+      role="tab" 
+      aria-controls="nav-details" 
+      aria-selected="true">Details</a>
+    <a class="nav-item nav-link {{#if show_chapter}}active{{/if}}"
+      id="nav-chapters-tab"
+      data-toggle="tab"
+      href="#nav-chapters"
+      role="tab"
+      aria-controls="nav-chapters"
+      aria-selected="false">Chapters</a>
   </div>
 </nav>
 <div class="tab-content p-2" id="nav-tabContent" style="background: white;">
-  <div class="tab-pane fade show active" id="nav-details" role="tabpanel" aria-labelledby="nav-details-tab">
+  <div 
+    class="tab-pane fade {{#unless show_chapter}}show active{{/unless}}" 
+    id="nav-details" 
+    role="tabpanel" 
+    aria-labelledby="nav-details-tab">
       <div class="pb-2 px-2 d-flex flex-row align-content-center justify-content-between">
         <h5 class="m-0">Course Details</h5>
       </div>
       <div class="container-fluid">
+        {{#if err_message}}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {{err_message}}
+        </div>
+        {{/if}}
+        {{#if message}}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {{message}}
+        </div>
+        {{/if}}
         
         <form id="form" method="POST" action="/teacher/course/patch">
           <div class="row">
@@ -177,8 +210,8 @@ $('#form').on('submit', function(e) {
                     <input type="number" class="form-control" id="numPrice" name="Price" value="{{course.Price}}" min="0" step="1" autofocus required>
                   </div>
                   <div class="form-group">
-                    <label for="numPrice">Discount (%)</label>
-                    <input type="number" class="form-control" id="numPrice" name="Price" value="{{course.Discount}}" min="0" max='100' step="10" autofocus required>
+                    <label for="numDiscount">Discount (%)</label>
+                    <input type="number" class="form-control" id="numDiscount" name="Discount" value="{{course.Discount}}" min="0" max="100" step="10" autofocus required>
                   </div>
                 </div>
               </div>
@@ -193,12 +226,16 @@ $('#form').on('submit', function(e) {
         </form>
         <div class="card">
           <div class="card-body">
-            <form action="/img" method="post">
+            <form action="/teacher/course/img" method="post" enctype="multipart/form-data">
               <input type="hidden" value="{{course._id}}" id="txtCourseID" name="_id"> 
               <div class="form-group">
                 <label for="imgTitle">Update Feature Image</label>
                 <input id="imgTitle" name="imgTitle" type="file" class="file" accept=".jpg">
-              </div> 
+              </div>
+              <button type="submit" class="btn btn-success w-100 mt-4">
+                <i class="fa fa-check" aria-hidden="true"></i>
+                Save
+              </button>
             </form>
           </div>
         </div>
@@ -206,7 +243,7 @@ $('#form').on('submit', function(e) {
     
   </div>
 
-  <div class="tab-pane fade" id="nav-chapters" role="tabpanel" aria-labelledby="nav-chapters-tab">
+  <div class="tab-pane fade {{#if show_chapter}}show active{{/if}}" id="nav-chapters" role="tabpanel" aria-labelledby="nav-chapters-tab">
     
     <div class="pb-2 px-2 d-flex flex-row align-content-center">
       <h5 class="m-0">Course Chapters</h5>
@@ -221,7 +258,7 @@ $('#form').on('submit', function(e) {
             </div>
             <button class="btn btn-outline-success" type="submit">
               <i class="fa fa-plus" aria-hidden="true"></i>
-              Add
+              Upload
             </button>
           </form>
         </div>

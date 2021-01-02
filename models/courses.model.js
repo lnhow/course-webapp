@@ -23,7 +23,7 @@ const courseSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "users"
   },
-  Completed: Boolean,
+  Stauts: Boolean,
 });
 
 //courseSchema.index({CourseName: 'text'});
@@ -159,6 +159,9 @@ module.exports = {
     const condition = entity._id;
     delete entity._id;
     entity.LastUpdate = datetime.ISODateNow();
+    entity.Price = parseInt(entity.Price);
+    entity.Discount = parseInt(entity.Discount);
+
     return await Course.updateOne({'_id': condition}, entity, function(err){
       if (err) {
         console.log(err);
