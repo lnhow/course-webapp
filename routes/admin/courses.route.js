@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const courseModel = require('../../models/courses.model');
+const fileUtils = require('../../utils/file')
 
 router.get('/', async function(req, res) {
   const ret = await courseModel.all();
@@ -11,9 +12,19 @@ router.get('/', async function(req, res) {
   });
 });
 
-router.post('/del', async function (req, res) {
-  const ret = await categoryModel.del(req.body);
-  res.redirect('/admin/categories');
+router.post('/delete', async function (req, res) {
+  const id = req.body._id;
+  const result = await courseModel.delete(id);
+  console.log(result.ok);
+  console.log(req.body);
+  
+  if (result.ok === 1) {
+    //Remove image
+    fileUtils.remove(`${fileUtils.coursesImgPath}${id}/`);
+    fileUtils.remove(`${fileUtils.coursesVidPath}${id}/`);
+  }
+  
+  res.redirect(req.headers.referer);
 })
 
 module.exports = router;

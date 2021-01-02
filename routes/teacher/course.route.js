@@ -89,7 +89,7 @@ router.post('/add', async function(req, res) {
   fileUtils.newdir(`${fileUtils.coursesImgPath}${ret._id}`)
   //console.log(ret);
   res.redirect(url.format({
-    pathname: `/teacher/course/${id}`,
+    pathname: `/teacher/course/${ret.id}`,
     query: {
       'chapter': false
     }

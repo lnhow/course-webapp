@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="d-flex p-1">
-        <a class="btn btn-danger my-auto" href="#" role="button">
+        <a class="btn btn-danger my-auto" href="javascript:ConfirmDelete('{{_id}}', '{{CourseName}}');" role="button">
           <i class="fa fa-trash" aria-hidden="true"></i>
         </a>
       </div>
@@ -51,6 +51,9 @@
     {{/each}}
   </div>
 </div>
+<form id="formDelete" action="/admin/courses/delete" method="POST">
+  <input id="deleteChapterId" name="_id" type="hidden">
+</form>
 
 {{#section 'js'}}
 <script>
@@ -60,4 +63,21 @@ $(".rating").starRating({
   starSize: 15
 });
 </script>
+<script>
+function ConfirmDelete(courseId, courseName) {
+  swal.fire({
+    title: `Are you sure?`,
+    text: `Delete ${courseName}?`,
+    showCancelButton: true,
+    confirmButtonText: `<i class="fa fa-trash" aria-hidden="true"></i> Delete`,
+    confirmButtonColor: '#DE001F',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $('#formDelete #deleteChapterId').val(courseId);
+        $('#formDelete').submit();
+      }
+    });
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.12.7/dist/sweetalert2.all.min.js"></script>
 {{/section}}

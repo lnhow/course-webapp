@@ -63,6 +63,13 @@ module.exports = {
 
     return result;
   },
+  exists: async function(id) {
+    let result = await Course.countDocuments({
+      '_id': mongoose.Types.ObjectId(id),
+    });
+
+    return result > 1;
+  },
 
   all: async function() {
     let result = await Course.aggregate([
@@ -206,10 +213,16 @@ module.exports = {
     });
   },
 
-  del: async function(entity) {
-    const condition = entity.CatID;
+  delete: async function(id) {
+    const condition = id;
 
     //TODO: Delete all chapter in this course
+    const ret = await require('./chapters.model').deleteAllInCourse(condition);
+    console.log(ret);
+
+    if (!ret.ok) {
+      return null;
+    }
 
     return await Course.deleteOne({
       '_id': condition,

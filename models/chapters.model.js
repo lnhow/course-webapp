@@ -42,12 +42,12 @@ module.exports = {
       Previewable: false,
       VideoLink: null,
       Course: mongoose.Types.ObjectId(entity.Course)
-    }).save(function(err) {
+    }).save(async function(err) {
       if (err) {
         console.log(err);
       }
       else {
-        CourseModel.patchLastUpdate(entity.Course);
+        await CourseModel.patchLastUpdate(entity.Course);
       }
     });
 
@@ -61,12 +61,12 @@ module.exports = {
         ChapterName: entity.ChapterName,
         Previewable: entity.Previewable,
       }
-    }, function(err) {
+    },async function(err) {
       if (err) {
         console.log(err);
       }
       else {
-        CourseModel.patchLastUpdate(entity.Course);
+        await CourseModel.patchLastUpdate(entity.Course);
       }
     });
 
@@ -78,12 +78,12 @@ module.exports = {
       $set: {
         VideoLink: link,
       }
-    }, function(err) {
+    },async function(err) {
       if (err) {
         console.log(err);
       }
       else {
-        CourseModel.patchLastUpdate(chapter.Course);
+        await CourseModel.patchLastUpdate(chapter.Course);
       }
     });
 
@@ -96,12 +96,12 @@ module.exports = {
       $set: {
         VideoLink: link,
       }
-    }, function(err) {
+    },async function(err) {
       if (err) {
         console.log(err);
       }
       else {
-        CourseModel.patchLastUpdate(chapter.Course);
+        await CourseModel.patchLastUpdate(chapter.Course);
       }
     });
 
@@ -111,16 +111,39 @@ module.exports = {
   delete: async function(chapter) {
     const condition = chapter._id;
     const courseId = chapter.Course;
-    let result = await Chapter.deleteOne({'_id': condition}, function(err) {
+    let result = await Chapter.deleteOne({'_id': condition}, async function(err) {
       if (err) {
         console.log(err);
       }
       else {
-        CourseModel.patchLastUpdate(courseId);
+        await CourseModel.patchLastUpdate(courseId);
       }
     });
 
     return result;
   },
+  delete: async function(chapter) {
+    const condition = chapter._id;
+    const courseId = chapter.Course;
+    let result = await Chapter.deleteOne({'_id': condition}, async function(err) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        await CourseModel.patchLastUpdate(courseId);
+      }
+    });
+
+    return result;
+  },
+  deleteAllInCourse: async function(courseId) {
+    let result = await Chapter.deleteMany({'Course': mongoose.Types.ObjectId(courseId)}, function(err) {
+      if (err) {
+        console.log(err);
+      }
+    });
+
+    return result;
+  }
 
 }

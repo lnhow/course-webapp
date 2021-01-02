@@ -24,7 +24,23 @@ module.exports ={
     return fs.existsSync(path);
   },
   unlink: function(path) {
+    
+    if(!fs.existsSync(path)) {
+      return false;
+    }
+
     console.log('Delete file ' + path);
     return fs.unlinkSync(path);
+  },
+  remove: function(path) {
+
+    if(!fs.existsSync(path)) {
+      return false;
+    }
+
+    console.log('Delete ' + path);
+    return fs.rmSync(path, {
+      recursive: true,
+    })
   }
 }
