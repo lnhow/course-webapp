@@ -12,7 +12,24 @@ router.get('/login', async function (req, res){
 })
 
 router.post('/login', async function (req, res){
+    const email = await userModel.singByEmail(req.body.email);
+    if(email === null)
+    {
+        return res.render('vwAccount/login', {
+            err_message: 'Invalid email or password!'
+        });
+    }
 
+    const ret = bcrypt.compareSync(req.body.password, user.password);
+    if(ret === false)
+    {
+        return res.render('vwAccount/login', {
+            err_message: 'Invalid email or password!'
+        });
+    }
+
+    let url='/';
+    res.redirect(url);
 })
 
 router.get('/register', async function (req, res){
@@ -21,13 +38,10 @@ router.get('/register', async function (req, res){
 
 router.post('/register', async function (req, res){
     const hash = bcrypt.hashSync(req.body.password, 10);
-    const dob = moment(req.body.dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
     const user = {
-        username: res.body.username,
+        email: req.body.email,
         password: hash,
-        dob: dob,
-        name: req.body.name,
-        email: req.body.email
+        name: req.body.name
     }
 
     await userModel.add(user);
