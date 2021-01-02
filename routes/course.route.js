@@ -19,7 +19,7 @@ router.get('/:id', async function (req, res) {
     })
   }
   else {
-    res.render('vwCourses/teacher_courses_detail', {
+    res.render('vwCourses/course_detail', {
       
     });
   }
