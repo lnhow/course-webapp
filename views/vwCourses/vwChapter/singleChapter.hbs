@@ -1,5 +1,5 @@
 {{#section 'title'}}
-<title>{{course.CourseName}}: {{chapter.ChapterName}}</title>
+<title>{{course.CourseName}} - {{chapter.ChapterName}}</title>
 {{/section}}
 {{#section "css"}}
 <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" /> {{!-- Videojs CDN --}}
@@ -19,9 +19,25 @@ $('#vidChapter').fileinput({
   dropZoneEnabled: false,
   showUpload: false,
   required: true,
-  maxFileSize: 100024,
+  maxFileSize: 100024,  //100MB
   allowedFileExtensions: ['mp4'],
 });
+</script>
+
+{{!-- Confirm chapter deletion --}}
+<script>
+$(document).ready(function(){
+  $('#toggleDelete').on('click', () => {
+    $('#toggleDelete').attr('hidden', true);
+    $('#backDelete').attr('hidden', false);
+    $('#submitDelete').attr('hidden', false);
+  });
+  $('#backDelete').on('click', () => {
+    $('#toggleDelete').attr('hidden', false);
+    $('#backDelete').attr('hidden', true);
+    $('#submitDelete').attr('hidden', true);
+  });
+})
 </script>
 
 {{/section}}
@@ -34,6 +50,21 @@ $('#vidChapter').fileinput({
     <h5 class="font-weight-bold">{{chapter.ChapterName}}</h5>
     <small>Course <span class="font-weight-bold">[{{course.CourseName}}]</span></small>
   </div>
+  <form id="formDel" class="ml-auto" action="/teacher/course/chapter/delete" method="post">
+    <input type="hidden" value="{{chapter._id}}" id="ChapterID" name="_id">
+    <a id="toggleDelete" class="btn btn-danger" href="#" role="button">
+      <i class="fa fa-trash" aria-hidden="true"></i>
+      Delete
+    </a>
+    <a id="backDelete" class="btn btn-outline-primary" href="#" role="button" hidden>
+      <i class="fa fa-arrow-left" aria-hidden="true"></i>
+      Back
+    </a>
+    <button id="submitDelete" class="btn btn-outline-danger" type="submit" hidden>
+      <i class="fa fa-trash" aria-hidden="true"></i>
+      Confirm Deletion
+    </button>
+  </form>
 </div>
 <div class="container-fluid p-2" style="background: white;">
   <div class="row">

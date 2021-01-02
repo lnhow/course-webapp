@@ -19,6 +19,26 @@ router.post('/patch', async function(req, res) {
   }));
 });
 
+router.post('/delete', async function(req, res) {
+  const chapterId = req.body._id;
+
+  //Get deleting chapter
+  const chapter = await chapterModel.singleByID(chapterId);
+  const courseId = chapter.Course;
+  let link = chapter.VideoLink;
+  const result = await chapterModel.delete(chapter);
+
+  //Deleting chapter video if exists && delete success
+  if (link !== null && result.ok === 1) {
+    link = link.replace('/p/', './public/');
+    fileUtils.unlink(link);
+  }
+
+  res.redirect(url.format({
+    pathname: `/teacher/course/${courseId}`
+  }));
+});
+
 router.post('/video', function(req, res) {
   let filename = null;
 

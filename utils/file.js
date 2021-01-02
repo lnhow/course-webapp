@@ -22,5 +22,9 @@ module.exports ={
   },
   exists: function(path) {
     return fs.existsSync(path);
+  },
+  unlink: function(path) {
+    console.log('Delete file ' + path);
+    return fs.unlinkSync(path);
   }
 }

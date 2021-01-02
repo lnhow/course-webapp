@@ -89,6 +89,38 @@ module.exports = {
 
     return result;
   },
-  
+
+  patchVideoLink: async function(chapter, link) {
+    const condition = chapter._id;
+    let result = await Chapter.updateOne({'_id': condition}, {
+      $set: {
+        VideoLink: link,
+      }
+    }, function(err) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        CourseModel.patchLastUpdate(chapter.Course);
+      }
+    });
+
+    return result;
+  },
+
+  delete: async function(chapter) {
+    const condition = chapter._id;
+    const courseId = chapter.Course;
+    let result = await Chapter.deleteOne({'_id': condition}, function(err) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        CourseModel.patchLastUpdate(courseId);
+      }
+    });
+
+    return result;
+  },
 
 }
