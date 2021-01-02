@@ -8,7 +8,6 @@ const fileUtils = require('../../utils/file');
 const categoryModel = require('../../models/categories.model');
 const courseModel = require('../../models/courses.model');
 const chapterModel = require('../../models/chapters.model');
-const file = require('../../utils/file');
 
 
 router.get('/add', async function(req, res) {
@@ -84,6 +83,7 @@ router.post('/img', async function(req, res) {
   });
 });
 router.post('/add', async function(req, res) {
+  console.log(req.body);
   const ret = await courseModel.add(req.body);
   //Create a new directory for imgs
   fileUtils.newdir(`${fileUtils.coursesImgPath}${ret._id}`)
@@ -95,8 +95,13 @@ router.post('/add', async function(req, res) {
     }
   }));
 });
+router.post('/patch', async function(req, res) {
+  const ret = await courseModel.patch(req.body);
+  res.redirect(req.headers.referer);
+});
 
 router.use('/chapter', require('./chapter.route'));
+
 
 //IMPORTANT: Last of /*
 router.get('/:id', async function (req, res) {
@@ -180,7 +185,6 @@ router.get('/:id/:chapterId', async function (req, res) {
     })
   }
   else {
-
     res.render('vwCourses/vwChapter/singleChapter', {
       layout: 'special_user.layout.hbs',
       course: resultCourse,
@@ -188,11 +192,6 @@ router.get('/:id/:chapterId', async function (req, res) {
     });
   }
 });
-
-router.post('/patch', async function(req, res) {
-  const ret = await courseModel.patch(req.body);
-  res.redirect(req.headers.referer);
-})
 
 
 module.exports = router;

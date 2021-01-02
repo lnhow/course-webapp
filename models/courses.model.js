@@ -5,10 +5,10 @@ const datetime = require('../utils/datetime');
 const categoryModel = require('./categories.model');
 
 const courseSchema = new mongoose.Schema({
-  ImgLink: String,
   CourseName: { type: String, required: true},
   TinyDes: String,
   FullDes: String,
+  Curriculum: String,
   RatingAverage: 0,
   RatingCount: 0,
   RegisterCount: 0,
@@ -30,6 +30,7 @@ const courseSchema = new mongoose.Schema({
 const Course = mongoose.model('courses', courseSchema);
 
 module.exports = {
+  //With detail
   singleByID: async function(id) {
     let result = null;
 
@@ -72,7 +73,22 @@ module.exports = {
           foreignField: '_id',
           as: 'Category'
         }
-      },  
+      },
+      {
+        $project: {
+          _id: '$_id',
+          CourseName: '$CourseName',
+          RatingAverage: '$RatingAverage',
+          RatingCount: '$RatingCount',
+          RegisterCount: '$RegisterCount',
+          Price: '$Price',
+          Discount: '$Discount',
+          Category: '$Category',
+          Teacher: '$Teacher',
+          LastUpdate: '$LastUpdate',
+          Status: '$Status',
+        }
+      }  
     ]).unwind('$Category');
 
     //Format day time from DB's ISO string
@@ -96,9 +112,7 @@ module.exports = {
 
     let result = await Course.aggregate([
       {
-        $match: {
-          'Category': { $in: category}
-        }
+        $match: {'Category': { $in: category}}
       },
       {
         $lookup: {
@@ -106,6 +120,18 @@ module.exports = {
           localField: 'Category',
           foreignField: '_id',
           as: 'Category'
+        }
+      },
+      {
+        $project: {
+          _id: '$_id',
+          CourseName: '$CourseName',
+          RatingAverage: '$RatingAverage',
+          RatingCount: '$RatingCount',
+          Price: '$Price',
+          Discount: '$Discount',
+          Category: '$Category',
+          Teacher: '$Teacher'
         }
       },
       { $skip: skip },
@@ -144,6 +170,7 @@ module.exports = {
       CourseName: entity.CourseName,
       TinyDes: entity.TinyDes,
       FullDes: entity.FullDes,
+      Curriculum: entity.Curriculum,
       RatingAverage: 0,
       RatingCount: 0,
       RegisterCount: 0,

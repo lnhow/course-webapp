@@ -4,7 +4,7 @@
 {{#section "css"}}
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <style>
-#editor-container {
+#editor-container, #editor-container-curriculum {
   height: 300px;
 }
 </style>
@@ -41,7 +41,32 @@ $('#imgTitle').fileinput({
 {{!-- Quilljs WYSIWYG editor--}}
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>  {{!-- Init --}}
-let quill = new Quill('#editor-container', {
+let quillFullDes = new Quill('#editor-container', {
+  theme: 'snow',
+  placeholder: 'Put your description here in its full glory',
+  modules: {
+    toolbar: [
+      [
+        { 'font': [] }, 
+        { 'header': [false, 1, 2, 3, 4, 5, 6] }, 
+      ],
+      [{ 'align': [] }],
+
+      ['bold', 'italic', 'underline', 'strike'],    //Text style
+      [{ 'script': 'sub'}, { 'script': 'super' }],  //Superscript/Subscript
+
+      [{ 'color': [] }, { 'background': [] }],      //Text color & background color
+      ['blockquote', 'code-block', 'formula'],
+      ['link', 'image', 'video'],
+
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],      //Outdent/Indent
+
+    ],
+  }
+});
+
+let quillCurriculum = new Quill('#editor-container-curriculum', {
   theme: 'snow',
   placeholder: 'Put your description here in its full glory',
   modules: {
@@ -67,6 +92,7 @@ let quill = new Quill('#editor-container', {
 });
 
 
+
 {{!-- Form validation --}}
 $('#form').on('submit', function(e) {
   e.preventDefault();
@@ -85,7 +111,8 @@ $('#form').on('submit', function(e) {
   }
 
   // Populate hidden form on submit
-  $('#txtFullDes').val(quill.root.innerHTML);
+  $('#txtFullDes').val(quillFullDes.root.innerHTML);
+  $('#txtCurriculum').val(quillCurriculum.root.innerHTML);
 
   $('#form').off('submit').submit();
 });
@@ -175,6 +202,15 @@ $('#form').on('submit', function(e) {
                 </div>
                 {{!-- where the description is actually put to send to server --}}
                 <input type="hidden" class="form-control" id="txtFullDes" name="FullDes">
+              </div>
+              <div class="form-group">
+                <label for="txtCurriculum">Course Curriculum</label>
+                <div id="editor-container-curriculum">
+                  {{!-- where the user enter the description --}}
+                  {{{course.Curriculum}}}
+                </div>
+                {{!-- where the description is actually put to send to server --}}
+                <input type="hidden" class="form-control" id="txtCurriculum" name="Curriculum">
               </div>
             </div>
 
