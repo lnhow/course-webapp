@@ -47,4 +47,5 @@ router.post('/register', async function (req, res){
     await userModel.add(user);
     res.render('vwAccount/register');
 })
+
 module.exports = router;
