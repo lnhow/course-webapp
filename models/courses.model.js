@@ -169,6 +169,16 @@ module.exports = {
       }
     });
   },
+  patchLastUpdate: async function(courseID) {
+    return await Course.updateOne({
+      _id: mongoose.Types.ObjectId(courseID)
+    }, {
+      $set: {
+        LastUpdate: datetime.ISODateNow()
+      }
+    });
+  },
+
   del: async function(entity) {
     const condition = entity.CatID;
 

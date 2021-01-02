@@ -7,6 +7,7 @@ const fileUtils = require('../../utils/file');
 
 const categoryModel = require('../../models/categories.model');
 const courseModel = require('../../models/courses.model');
+const chapterModel = require('../../models/chapters.model');
 const file = require('../../utils/file');
 
 
@@ -20,7 +21,7 @@ router.get('/add', async function(req, res) {
 });
 
 
-//Route for upload img
+//Route for upload course title image
 router.post('/img', async function(req, res) {
   let filename = null;
 
@@ -46,7 +47,8 @@ router.post('/img', async function(req, res) {
       res.redirect(url.format({
         pathname: `/teacher/course/${id}`,
         query: {
-           'err_upload': true
+           'err_upload': true,
+           'chapter': false,
          }
       }));
     }
@@ -63,7 +65,8 @@ router.post('/img', async function(req, res) {
         res.redirect(url.format({
           pathname: `/teacher/course/${id}`,
           query: {
-            'upload_success': true
+            'upload_success': true,
+            'chapter': false,
           }
         }));
       }
@@ -72,23 +75,30 @@ router.post('/img', async function(req, res) {
         res.redirect(url.format({
           pathname: `/teacher/course/${id}`,
           query: {
-             'err_upload': true
+             'err_upload': true,
+             'chapter': false,
            }
         }));
       }
     }
   });
 });
-
 router.post('/add', async function(req, res) {
   const ret = await courseModel.add(req.body);
   //Create a new directory for imgs
   fileUtils.newdir(`${fileUtils.coursesImgPath}${ret._id}`)
   //console.log(ret);
-  res.redirect(`/teacher/course/${ret._id}`);
-})
+  res.redirect(url.format({
+    pathname: `/teacher/course/${id}`,
+    query: {
+      'chapter': false
+    }
+  }));
+});
 
+router.use('/chapter', require('./chapter.route'));
 
+//IMPORTANT: Last of /*
 router.get('/:id', async function (req, res) {
   const id = req.params.id;
   const err_upload = req.query.err_upload;
@@ -106,6 +116,9 @@ router.get('/:id', async function (req, res) {
 
   const result = await courseModel.singleByID(id);
   const resultCategory = await categoryModel.all();
+  const resultChapter = await chapterModel.allInCourse(id);
+
+  //console.log(resultChapter);
 
   if (result === null || resultCategory === null) {
     res.status(404).render('error', {
@@ -128,9 +141,50 @@ router.get('/:id', async function (req, res) {
       layout: 'special_user.layout.hbs',
       course: result,
       categories: resultCategory,
+      chapters: resultChapter,
       err_message: err_message,
       message: upload_message,
       show_chapter: show_chapter
+    });
+  }
+});
+
+
+router.post('/:id/add', async function(req, res) {
+  const courseId = req.params.id;
+
+  const result = await chapterModel.add(req.body);
+  res.redirect(url.format({
+    pathname: `/teacher/course/${courseId}`,
+    query: {
+      'chapter': true
+    }
+  }));
+})
+
+//IMPORTANT: Last of /:id/*
+router.get('/:id/:chapterId', async function (req, res) {
+  const courseId = req.params.id;
+  const chapterId = req.params.chapterId;
+
+  const resultCourse = await courseModel.singleByID(courseId);
+  const resultChapter = await chapterModel.singleByID(chapterId);
+
+  if (resultCourse === null || resultChapter === null) {
+    res.status(404).render('error', {
+      layout: false,
+      error: {
+        code: 404,
+        status: 'Chapter requested not found'
+      },
+    })
+  }
+  else {
+
+    res.render('vwCourses/vwChapter/singleChapter', {
+      layout: 'special_user.layout.hbs',
+      course: resultCourse,
+      chapter: resultChapter
     });
   }
 });

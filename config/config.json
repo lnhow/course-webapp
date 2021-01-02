@@ -5,6 +5,8 @@
       "limit": 10
     },
     "tmpImgPath": "./public/imgs/tmp/",
-    "coursesImgPath": "./public/imgs/courses/"
+    "coursesImgPath": "./public/imgs/courses/",
+    "tmpVidPath": "./public/vids/tmp/",
+    "coursesVidPath": "./public/vids/courses/"
   }  
 }

@@ -251,14 +251,14 @@ $('#form').on('submit', function(e) {
     <div class="container-fluid">
       <div class="row">
         <div class="col">
-          <form class="form" id="formNewChapter" method="POST" action="/teacher/course/{{course._id}}/chapters/add">
-            <input type="hidden" value="{{course._id}}" id="txtCourseID" name="_id">
+          <form class="form" id="formNewChapter" method="POST" action="/teacher/course/{{course._id}}/add">
+            <input type="hidden" value="{{course._id}}" id="txtCourseID" name="Course">
             <div class="form-group w-100">
               <input type="text" class="form-control" id="txtChapterName" name="ChapterName" placeholder="New chapter name" required>
             </div>
             <button class="btn btn-outline-success" type="submit">
               <i class="fa fa-plus" aria-hidden="true"></i>
-              Upload
+              New Chapter
             </button>
           </form>
         </div>
@@ -266,17 +266,22 @@ $('#form').on('submit', function(e) {
 
       <div class="card mt-3">
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <a href="" class="btn btn-primary">
+          {{#each chapters}}
+          <li class="list-group-item d-flex flex-row align-items-center">
+            <a href="/teacher/course/{{../course._id}}/{{_id}}" class="btn btn-primary">
               <i class="fa fa-pencil" aria-hidden="true"></i>
             </a>
-            Cras justo odio
+            <p class="mb-0 mx-2 font-weight-bold">{{{ChapterName}}}</p>
+            <small class="ml-auto">{{#if VideoLink}}Uploaded{{else}}Not uploaded{{/if}}</small>
+            <small class="ml-2 font-weight-bold">{{#if Previewable}}Previewable{{else}}Not previewable{{/if}}</small>
           </li>
+          {{else}}
+          <p class="text-center">There aren't any chapters in this course yet</p>
+          {{/each}}
         </ul>
       </div>
        
     </div>
 
   </div>
-  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
 </div>
