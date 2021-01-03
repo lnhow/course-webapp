@@ -105,6 +105,47 @@ module.exports = {
 
     return result;
   },
+  byCatMinus: async function(catID, courseID, findlimit) {
+    let category = await categoryModel.singleCategory(catID);
+
+    if (category[0].CatParent === null) {
+      //The category requested is a main category
+      //then have to find courses in sub categories
+      category = await categoryModel.subcatsOfCategory(catID);
+    }
+    
+    //Convert category into array of _id only for $in
+    category = category.map((cat) => mongoose.Types.ObjectId(cat._id));
+
+    let result = await Course.aggregate([
+      { $match: {
+          'Category': { $in: category},
+          '_id': {$ne: mongoose.Types.ObjectId(courseID)}
+        }
+      },
+      { $lookup: {
+          from: categoryModel.collectionName,
+          localField: 'Category',
+          foreignField: '_id',
+          as: 'Category'
+        }
+      },
+      { $project: {
+          _id: '$_id',
+          CourseName: '$CourseName',
+          RatingAverage: '$RatingAverage',
+          RatingCount: '$RatingCount',
+          Price: '$Price',
+          Discount: '$Discount',
+          Category: '$Category',
+          Teacher: '$Teacher'
+        }
+      },
+      { $limit: findlimit}
+    ]).unwind('$Category');
+
+    return result;
+  },
   byCat: async function(catID, skip) {
     let category = await categoryModel.singleCategory(catID);
 
@@ -144,11 +185,6 @@ module.exports = {
       { $skip: skip },
       { $limit: config.app.pagination.limit}
     ]).unwind('$Category');
-
-    //Format day time from DB's ISO string
-    result.forEach(row => {
-      row.LastUpdate = (datetime.FormatDate(row.LastUpdate));
-    });
 
     return result;
   },

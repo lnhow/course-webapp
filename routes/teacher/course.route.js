@@ -185,7 +185,7 @@ router.get('/:id/:chapterId', async function (req, res) {
     })
   }
   else {
-    res.render('vwCourses/vwChapter/singleChapter', {
+    res.render('vwCourses/vwChapter/editSingleChapter', {
       layout: 'special_user.layout.hbs',
       course: resultCourse,
       chapter: resultChapter

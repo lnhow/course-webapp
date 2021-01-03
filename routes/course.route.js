@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const chaptersModel = require('../models/chapters.model');
 const coursesModel = require('../models/courses.model');
 
 router.get('/', function (req, res) {
@@ -7,9 +8,10 @@ router.get('/', function (req, res) {
 
 router.get('/:id', async function (req, res) {
   const id = req.params.id;
-  const result = await coursesModel.singleByID(id);
+  const resultCourse = await coursesModel.singleByID(id);
+  const resultChapter = await chaptersModel.allInCourse(id);
 
-  if (result === null) {
+  if (resultCourse === null) {
     res.status(404).render('error', {
       layout: false,
       error: {
@@ -19,8 +21,15 @@ router.get('/:id', async function (req, res) {
     })
   }
   else {
-    res.render('vwCourses/course_detail', {
-      
+    const resultSameCoursesInCat = await coursesModel.byCatMinus(
+        resultCourse.Category._id,
+        resultCourse._id, 
+        5
+      );
+    res.render('vwCourses/course_details', {
+      course: resultCourse,
+      chapters: resultChapter,
+      mores: resultSameCoursesInCat
     });
   }
 });
