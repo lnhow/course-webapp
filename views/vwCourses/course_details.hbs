@@ -15,6 +15,24 @@ $(".rating").starRating({
   starSize: 15
 });
 </script>
+<script>
+var player = videojs('previewVideo');
+function showPreview(chapterName, link) {
+  //Set player source
+  player.src({
+    type: 'video/mp4',
+    src: link
+  });
+  $('#previewLabel').html(`${chapterName}`);  //Set chapter name to modal title
+  $('#previewModal').modal('show');           //Show modal programatically
+}
+
+$('#previewModal').on('hidden.bs.modal', function (e) {
+  // stop playing & reset when close modal
+  player.pause();
+  player.reset();
+});
+</script>
 {{/section}}
 
 <div class="container-fluid min-vh-100">
@@ -119,7 +137,7 @@ $(".rating").starRating({
                 {{/unless}}
 
                 {{#if Previewable}}
-                <a {{#if VideoLink}}href="/course/{{../course._id}}/preview"{{/if}}>
+                <a role="button" {{#if VideoLink}}href="javascript:showPreview('{{ChapterName}}','{{VideoLink}}')"{{/if}}>
                   <span class="badge badge-primary badge-pill">Previewable</span>
                 </a>
                 {{/if}}
@@ -186,7 +204,7 @@ $(".rating").starRating({
                     </small>
                   </div>
                   <small class="font-weight-bold">
-                    <a style="z-index: 9000; position: relative;" href="/courses/{{Category._id}}">{{Category.CatName}}</a>
+                    <a style="z-index: 500; position: relative;" href="/courses/{{Category._id}}">{{Category.CatName}}</a>
                   </small>
                   <a class="stretched-link" href="/course/{{_id}}"></a>
                 </div>
@@ -195,6 +213,32 @@ $(".rating").starRating({
             {{/each}}
           </div>
         </section>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <small>Preview {{course.CourseName}}</small>
+          <h6 class="modal-title" id="previewLabel">&nbsp;</h6>
+        </div>        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <video
+          id="previewVideo"
+          class="video-js vjs-16-9"
+          controls
+          preload="none">
+        </video>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
