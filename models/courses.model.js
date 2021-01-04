@@ -248,10 +248,10 @@ module.exports = {
       { $group: {
           _id: '$Category._id',
           CatName: {$first: '$Category.CatName'},
-          registerCount: {$sum: '$registerCount'}
+          RegisterCount: {$sum: '$RegisterCount'}
         }
       },
-      { $sort: {registerCount: -1}},
+      { $sort: {RegisterCount: -1}},
       { $limit: findlimit}
     ]);
 

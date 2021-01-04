@@ -18,7 +18,6 @@ module.exports = function(app) {
     }, limit);
     // Most registered categories
     const highlightCats = await courseModel.registerCountByCat(5);
-    console.log(highlightCats)
 
     res.render('home.hbs', {
       mostViewed,
