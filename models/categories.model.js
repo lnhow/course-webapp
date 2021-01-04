@@ -107,9 +107,29 @@ module.exports = {
     });
     if (numSubcats !== 0) {
       console.log('Attempted to delete cat that have ref to it')
-      return;
+      return null;
     }
-    //TODO: Block category which has courses
+    //Block category which has courses
+    const dontHaveCourse = await Category.aggregate([
+      { '$lookup': {
+          'from': 'courses', 
+          'localField': '_id', 
+          'foreignField': 'Category', 
+          'as': 'Courses'
+        }
+      }, 
+      { '$match': {
+          _id: mongoose.Types.ObjectId(condition),
+          'Courses._id': {
+            '$exists': false
+          }
+        }
+      }
+    ]);
+    if (dontHaveCourse.length < 1) {
+      //Have courses in this category
+      return null;
+    }
 
     return await Category.deleteOne({
       '_id': condition,

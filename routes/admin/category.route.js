@@ -30,9 +30,13 @@ router.post('/patch', async function(req, res) {
 
 router.post('/del', async function(req, res) {
   const entity = req.body;
-  await categoriesModel.del(entity);
-
-  res.redirect('/admin/categories');
+  const result = await categoriesModel.del(entity);
+  if (result === null) {
+    res.redirect(req.headers.referer);
+  }
+  else {
+    res.redirect('/admin/categories');
+  }
 });
 
 //LAST
