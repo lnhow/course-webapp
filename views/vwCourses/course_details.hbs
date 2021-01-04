@@ -100,7 +100,7 @@ $('#previewModal').on('hidden.bs.modal', function (e) {
               </p>
               <p class="mb-0">
                 <small>
-                  <span class="rating" data-rating="{{course.RatingAverage}}"></span> ({{course.RatingCount}})
+                  <span class="rating" data-rating="{{course.RatingAverage}}"></span> ({{format course.RatingCount}})
                 </small>
               </p>
               <p class="mb-0 font-weight-bold">
@@ -230,7 +230,7 @@ $('#previewModal').on('hidden.bs.modal', function (e) {
                   <div class="d-flex justify-content-between">
                     <small>
                       <span class="rating" data-rating="{{RatingAverage}}"></span>
-                      ({{RatingCount}})
+                      ({{format RatingCount}})
                     </small>
                   </div>
                   <small class="font-weight-bold">

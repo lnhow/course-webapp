@@ -47,7 +47,6 @@ router.post('/img', async function(req, res) {
         pathname: `/teacher/course/${id}`,
         query: {
            'err_upload': true,
-           'chapter': false,
          }
       }));
     }
@@ -65,7 +64,6 @@ router.post('/img', async function(req, res) {
           pathname: `/teacher/course/${id}`,
           query: {
             'upload_success': true,
-            'chapter': false,
           }
         }));
       }
@@ -75,7 +73,6 @@ router.post('/img', async function(req, res) {
           pathname: `/teacher/course/${id}`,
           query: {
              'err_upload': true,
-             'chapter': false,
            }
         }));
       }
@@ -86,7 +83,11 @@ router.post('/add', async function(req, res) {
   console.log(req.body);
   const ret = await courseModel.add(req.body);
   //Create a new directory for imgs
-  fileUtils.newdir(`${fileUtils.coursesImgPath}${ret._id}`)
+  const imgPath = `${fileUtils.coursesImgPath}${ret._id}`;
+
+  fileUtils.newdir(imgPath);
+  fileUtils.copy('./public/imgs/tmp_thumbnail.jpg',imgPath+'/thumbnail.jpg');//Placeholder until update course img
+
   //console.log(ret);
   res.redirect(url.format({
     pathname: `/teacher/course/${ret.id}`,

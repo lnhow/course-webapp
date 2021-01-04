@@ -8,8 +8,6 @@
   background-color: rgba(0,0,0,0.7);
   margin-top: 1rem;
 }
-.card-img-top{
-}
 .bg-dark{ 
   background-color: black;
  }
@@ -30,39 +28,18 @@
   <div class="row">
     <div class="col-sm-12 p-0">
       <div id="carouselId" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-target="#carouselId" data-slide-to="0" class="active"></li>
-          <li data-target="#carouselId" data-slide-to="1"></li>
-          <li data-target="#carouselId" data-slide-to="2"></li>
-        </ol>
         <div class="carousel-inner" role="listbox">
-          <div class="carousel-item active">
-            <a href="">
-              <img class="w-100" src="https://via.placeholder.com/1000x500" alt="Third slide">
+          {{#each highlights}}
+          <div class="carousel-item {{#if @first }}active{{/if}}">
+            <a href="/course/{{_id}}">
+              <img class="w-100" src="/p/imgs/courses/{{_id}}/thumbnail.jpg" style="height: 60vh;width: 100%;object-fit: cover;">
               <div class="carousel-caption d-none d-md-block">
-                <h4>Title</h4>
-                <p class="mb-1">Description</p>
+                <h4>{{CourseName}}</h4>
+                <p class="mb-1"><span class="rating" data-rating="{{RatingAverage}}"></span> ({{format RatingCount}})</p>
               </div>
             </a>
           </div>
-          <div class="carousel-item">
-            <a href="">
-              <img class="w-100" src="https://via.placeholder.com/1000x500" alt="Third slide">
-              <div class="carousel-caption d-none d-md-block">
-                <h4>Title</h4>
-                <p class="mb-1">Description</p>
-              </div>
-            </a>
-          </div>
-          <div class="carousel-item">
-            <a href="google.com">
-              <img class="w-100" src="https://via.placeholder.com/1000x500" alt="Third slide">
-              <div class="carousel-caption d-none d-md-block">
-                <h4>Title</h4>
-                <p class="mb-1">Description</p>
-              </div>
-            </a>
-          </div>
+          {{/each}}
         </div>
         <a class="carousel-control-prev" href="#carouselId" role="button" data-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -84,10 +61,9 @@
   </div>
   <div class="row bg-dark mt-0">
     <div class="d-flex flex-nowrap mx-auto overflow-auto px-2 py-3">
-      <a class="btn btn-light mx-2 text-nowrap text-center" href="#" role="button">IT</a>
-      <a class="btn btn-light mx-2 text-nowrap text-center" href="#" role="button">Lập trình web</a>
-      <a class="btn btn-light mx-2 text-nowrap text-center" href="#" role="button">Lập trình thiết bị di động</a>
-      <a class="btn btn-light mx-2 text-nowrap text-center" href="#" role="button">Lập trình thiết bị di động</a>
+      {{#each highlightCats}}
+      <a class="btn btn-light mx-2 text-nowrap text-center" href="/courses/{{_id}}" role="button">{{CatName}}</a>
+      {{/each}}
     </div>
   </div>
 </div>
@@ -97,140 +73,45 @@
     <h5 class="mx-auto mb-0 py-2 px-4 text-light bg-dark">Xem nhiều nhất</h5>
   </div>
   <div class="row d-flex flex-row justify-content-center bg-dark mt-0 py-2">
-
-    <div class="card text-left m-2">
-      <img class="card-img-top" src="https://via.placeholder.com/240x120/" alt="">
-      <div class="card-body">
-        <h6 class="card-title">Title</h6>
+    {{#each mostViewed}}
+    <div class="card m-2" style="width: 270px;">
+      <img style="border-radius: 3px; height: 140px; object-fit: cover;" class="img w-100"
+        src="/p/imgs/courses/{{_id}}/thumbnail.jpg" 
+        alt="course image">
+      <div class="card-body p-3">
+        <h6 class="card-title mb-1">{{CourseName}}</h6>
         <div class="card-text d-flex flex-column">
-          <p class="mb-1 text-info">Price</p>
-          <small>Teacher</small>
+          <p class="mb-1 text-info font-weight-bold">
+          {{#if Discount}}
+            {{priceFormat (format (minus Price (div (multiply Price Discount) 100)))}}
+            <small>
+              <del>{{priceFormat (format Price)}}</del>
+              <span class="ml-1 badge badge-success">-{{Discount}}%</span>
+            </small>
+          {{else}}
+            {{#if course.Price}}
+            {{priceFormat (format Price)}}
+            {{else}}
+            Free
+            {{/if}}
+          {{/if}}
+          </p>
+          <small><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{Teacher}}</small>
           <div class="d-flex justify-content-between">
             <small>
-              <span class="rating" data-rating="0"></span>
-              (000,000)
+              <span class="rating" data-rating="{{RatingAverage}}"></span>
+              ({{format RatingCount}})
             </small>
           </div>
-          <small class="text-bold">Category</small>
-          <a class="stretched-link" href="#"></a>
+          <small class="font-weight-bold">
+            <a style="z-index: 500; position: relative;" href="/courses/{{Category._id}}">{{Category.CatName}}</a>
+          </small>
+          <a class="stretched-link" href="/course/{{_id}}"></a>
         </div>
       </div>
     </div>
+    {{/each}}
 
-    <div class="card text-left m-2">
-      <img class="card-img-top" src="https://via.placeholder.com/240x120/" alt="">
-      <div class="card-body">
-        <h6 class="card-title">Title</h6>
-        <div class="card-text d-flex flex-column">
-          <p class="mb-1 text-info">Price</p>
-          <small>Teacher</small>
-          <div class="d-flex justify-content-between">
-            <small>
-              <span class="rating" data-rating="0"></span>
-              (000,000)
-            </small>
-          </div>
-          <small class="text-bold">Category</small>
-          <a class="stretched-link" href="#"></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="card text-left m-2">
-      <img class="card-img-top" src="https://via.placeholder.com/240x120/" alt="">
-      <div class="card-body">
-        <h6 class="card-title">Title</h6>
-        <div class="card-text d-flex flex-column">
-          <p class="mb-1 text-info">Price</p>
-          <small>Teacher</small>
-          <div class="d-flex justify-content-between">
-            <small>
-              <span class="rating" data-rating="0"></span>
-              (000,000)
-            </small>
-          </div>
-          <small class="text-bold">Category</small>
-          <a class="stretched-link" href="#"></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="card text-left m-2">
-      <img class="card-img-top" src="https://via.placeholder.com/240x120/" alt="">
-      <div class="card-body">
-        <h6 class="card-title">Title</h6>
-        <div class="card-text d-flex flex-column">
-          <p class="mb-1 text-info">Price</p>
-          <small>Teacher</small>
-          <div class="d-flex justify-content-between">
-            <small>
-              <span class="rating" data-rating="0"></span>
-              (000,000)
-            </small>
-          </div>
-          <small class="text-bold">Category</small>
-          <a class="stretched-link" href="#"></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="card text-left m-2">
-      <img class="card-img-top" src="https://via.placeholder.com/240x120/" alt="">
-      <div class="card-body">
-        <h6 class="card-title">Title</h6>
-        <div class="card-text d-flex flex-column">
-          <p class="mb-1 text-info">Price</p>
-          <small>Teacher</small>
-          <div class="d-flex justify-content-between">
-            <small>
-              <span class="rating" data-rating="0"></span>
-              (000,000)
-            </small>
-          </div>
-          <small class="text-bold">Category</small>
-          <a class="stretched-link" href="#"></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="card text-left m-2">
-      <img class="card-img-top" src="https://via.placeholder.com/240x120/" alt="">
-      <div class="card-body">
-        <h6 class="card-title">Title</h6>
-        <div class="card-text d-flex flex-column">
-          <p class="mb-1 text-info">Price</p>
-          <small>Teacher</small>
-          <div class="d-flex justify-content-between">
-            <small>
-              <span class="rating" data-rating="0"></span>
-              (000,000)
-            </small>
-          </div>
-          <small class="text-bold">Category</small>
-          <a class="stretched-link" href="#"></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="card text-left m-2">
-      <img class="card-img-top" src="https://via.placeholder.com/240x120/" alt="">
-      <div class="card-body">
-        <h6 class="card-title">Title</h6>
-        <div class="card-text d-flex flex-column">
-          <p class="mb-1 text-info">Price</p>
-          <small>Teacher</small>
-          <div class="d-flex justify-content-between">
-            <small>
-              <span class="rating" data-rating="0"></span>
-              (000,000)
-            </small>
-          </div>
-          <small class="text-bold">Category</small>
-          <a class="stretched-link" href="#"></a>
-        </div>
-      </div>
-    </div>
-    
   </div>
 </div>
 <div class="container-fluid my-4">
@@ -239,24 +120,44 @@
   </div>
   <div class="row d-flex flex-row justify-content-center bg-dark mt-0 py-2">
 
-    <div class="card text-left m-2">
-      <img class="card-img-top" src="https://via.placeholder.com/240x120/" alt="">
-      <div class="card-body">
-        <h6 class="card-title">Title</h6>
+    {{#each newest}}
+    <div class="card m-2" style="width: 270px;">
+      <img style="border-radius: 3px; height: 140px; object-fit: cover;" class="img w-100"
+        src="/p/imgs/courses/{{_id}}/thumbnail.jpg" 
+        alt="course image">
+      <div class="card-body p-3">
+        <h6 class="card-title mb-1">{{CourseName}}</h6>
         <div class="card-text d-flex flex-column">
-          <p class="mb-1 text-info">Price</p>
-          <small>Teacher</small>
+          <p class="mb-1 text-info font-weight-bold">
+          {{#if Discount}}
+            {{priceFormat (format (minus Price (div (multiply Price Discount) 100)))}}
+            <small>
+              <del>{{priceFormat (format Price)}}</del>
+              <span class="ml-1 badge badge-success">-{{Discount}}%</span>
+            </small>
+          {{else}}
+            {{#if course.Price}}
+            {{priceFormat (format Price)}}
+            {{else}}
+            Free
+            {{/if}}
+          {{/if}}
+          </p>
+          <small><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{Teacher}}</small>
           <div class="d-flex justify-content-between">
             <small>
-              <span class="rating" data-rating="0"></span>
-              (000,000)
+              <span class="rating" data-rating="{{RatingAverage}}"></span>
+              ({{format RatingCount}})
             </small>
           </div>
-          <small class="text-bold">Category</small>
-          <a class="stretched-link" href="#"></a>
+          <small class="font-weight-bold">
+            <a style="z-index: 500; position: relative;" href="/courses/{{Category._id}}">{{Category.CatName}}</a>
+          </small>
+          <a class="stretched-link" href="/course/{{_id}}"></a>
         </div>
       </div>
     </div>
+    {{/each}}
 
   </div>
 </div>

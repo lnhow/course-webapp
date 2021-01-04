@@ -209,6 +209,55 @@ module.exports = {
     return result;
   },
 
+  get: async function(sortObject, findlimit) {
+    let result = await Course.aggregate([
+      { $lookup: {
+          from: categoryModel.collectionName,
+          localField: 'Category',
+          foreignField: '_id',
+          as: 'Category'
+        }
+      },
+      {$sort: sortObject},
+      {$limit: findlimit},
+      { $project: {
+          _id: '$_id',
+          CourseName: '$CourseName',
+          RatingAverage: '$RatingAverage',
+          RatingCount: '$RatingCount',
+          Price: '$Price',
+          Discount: '$Discount',
+          Category: '$Category',
+          Teacher: '$Teacher'
+        }
+      },
+    ]).unwind('$Category');
+
+    return result;
+  },
+  registerCountByCat: async function(findlimit) {
+    let result = await Course.aggregate([
+      { $lookup: {
+          from: categoryModel.collectionName,
+          localField: 'Category',
+          foreignField: '_id',
+          as: 'Category'
+        }
+      },
+      { $unwind: '$Category'},
+      { $group: {
+          _id: '$Category._id',
+          CatName: {$first: '$Category.CatName'},
+          registerCount: {$sum: '$registerCount'}
+        }
+      },
+      { $sort: {registerCount: -1}},
+      { $limit: findlimit}
+    ]);
+
+    return result;
+  },
+
   add: async function(entity) {
     return await new Course({
       CourseName: entity.CourseName,

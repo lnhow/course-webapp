@@ -42,5 +42,10 @@ module.exports ={
     return fs.rmSync(path, {
       recursive: true,
     })
+  },
+  copy: function(src, dest) {
+    fs.copyFile(src, dest, (err) => {
+      if (err) throw err;
+    });
   }
 }
