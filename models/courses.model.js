@@ -9,6 +9,7 @@ const courseSchema = new mongoose.Schema({
   TinyDes: String,
   FullDes: String,
   Curriculum: String,
+  ViewCount: Number,
   RatingAverage: 0,
   RatingCount: 0,
   RegisterCount: 0,
@@ -214,6 +215,7 @@ module.exports = {
       TinyDes: entity.TinyDes,
       FullDes: entity.FullDes,
       Curriculum: entity.Curriculum,
+      ViewCount: 0,
       RatingAverage: 0,
       RatingCount: 0,
       RegisterCount: 0,
@@ -245,6 +247,15 @@ module.exports = {
     }, {
       $set: {
         LastUpdate: datetime.ISODateNow()
+      }
+    });
+  },
+  incViewCount: async function(courseID) {
+    return await Course.updateOne({
+      _id: mongoose.Types.ObjectId(courseID)
+    }, {
+      $inc: {
+        ViewCount: 1
       }
     });
   },

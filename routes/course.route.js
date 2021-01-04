@@ -21,6 +21,9 @@ router.get('/:id', async function (req, res) {
     })
   }
   else {
+    //Update view counter
+    await coursesModel.incViewCount(resultCourse._id)
+    //Get 5 more in the same category
     const resultSameCoursesInCat = await coursesModel.byCatMinus(
         resultCourse.Category._id,
         resultCourse._id, 

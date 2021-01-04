@@ -18,6 +18,9 @@
       </div>
 
       <div class="card-body px-2 py-0">
+        <small class="mr-1 font-weight-bold">
+          <a style="z-index: 500;position: relative;" href="/courses/{{Category._id}}">{{Category.CatName}}</a>
+        </small>
         <h5 class="card-title mb-1">{{CourseName}}</h5>
         <div>
           <small>
@@ -28,34 +31,31 @@
         </div>
       </div>
 
-      <div class="d-flex flex-column justify-content-center">
-        <p class="mb-0 text-dark font-weight-bold">
-            {{#if Discount}}
-              {{Price}}
-            {{else}}
-              {{#if Price}}
-              {{Price}}
-              {{else}}
-              Free
-              {{/if}}
-            {{/if}}
-          </p>
-          <small class="mr-1 font-weight-bold">
-            <a style="z-index: 90000;position: relative;" href="/courses/{{Category._id}}">{{Category.CatName}}</a>
-          </small>
-          <small class="font-weight-bold">
-            <i class="fa fa-user" aria-hidden="true"></i>
-            {{Teacher.Name}}
-          </small>
-          <small>
-            <i class="fa fa-users" aria-hidden="true"></i>
-            {{RegisterCount}}
-          </small>
-          <small>
-            <i class="fa fa-refresh" aria-hidden="true"></i>
-            {{LastUpdate}}
-          </small>
-        </div>
+      <div class="d-flex text-right flex-column justify-content-center">
+        <h5 class="mb-0 text-dark font-weight-bold">
+        {{#if Discount}}
+          {{priceFormat (format (minus Price (div (multiply Price Discount) 100)))}}
+          <span class="ml-2 badge badge-success">-{{Discount}}%</span>
+        {{else}}
+          {{#if Price}}
+          {{priceFormat (format Price)}}
+          {{else}}
+          Free
+          {{/if}}
+        {{/if}}
+        </h5>
+        {{#if Discount}}
+        <h6><del>{{priceFormat (format Price)}}</del></h6>
+        {{/if}}
+        <small class="font-weight-bold">
+          <i class="fa fa-user" aria-hidden="true"></i>
+          {{Teacher.Name}}
+        </small>
+        <small>
+          <i class="fa fa-users" aria-hidden="true"></i>
+          {{RegisterCount}}
+        </small>
+      </div>
       
     </div>
     {{else}}
