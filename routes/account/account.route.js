@@ -37,15 +37,24 @@ router.get('/register', async function (req, res){
 })
 
 router.post('/register', async function (req, res){
-    const hash = bcrypt.hashSync(req.body.password, 10);
+    const hash = bcrypt.hashSync(req.body.Password, 10);
     const user = {
-        email: req.body.email,
-        password: hash,
-        name: req.body.name
+        Email: req.body.Email,
+        Password: hash,
+        Username: req.body.Username,
+        Permission: 2,
     }
 
     await userModel.add(user);
     res.render('vwAccount/register');
 })
 
+router.get('/is-available', async function(req, res){
+    const username = req.query.Username;
+    const user = await userModel.singleByUsername(username);
+    if(user == null){
+        return res.json(true);
+    }
+    res.json(false);
+})
 module.exports = router;
