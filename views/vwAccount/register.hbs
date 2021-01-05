@@ -24,23 +24,26 @@
 src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 <script>
 
-  {{!-- $('#frmRegister').on('submit', function(e){ //lỗi
-    e.preventDefault();
+  $('#frmRegister').on('submit', function(e){ //lỗi
 
-    const name=$('#txtUsername').val();
-    if(name.length===0){
-      alert('Please fill in your Username.');
+
+    const email=$('#txtEmail').val();
+    if(email.length===0){
+      alert('Please fill in your Email.');
       return;
     }
 
     $.getJSON(`/account/is-available?Email=${txtEmail}`, function(data){
+      console.log(data)
       if(data === true){
         $('#frmRegister').off('submit').submit();
       }else{
         alert('This Email has been chosen.');
       }
     })
-  }); --}}
+
+    e.preventDefault();
+  });
 
   $('#frmRegister').on('submit', function(e){
     const password=$('#txtPassword').val();

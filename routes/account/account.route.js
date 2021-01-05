@@ -14,14 +14,14 @@ router.get('/login', async function (req, res){
 router.post('/login', async function (req, res){
     const email = req.body.Email;
     const user = await userModel.singleByEmail(email);
-    if(user == null)
+    if(user === null)
     {
         return res.render('vwAccount/login', {
             err_message: 'Invalid Email or password!'
         });
     }
-
-    const ret = bcrypt.compareSync(req.body.Password, user.password);
+    console.log(user);
+    const ret = bcrypt.compare(req.body.Password, user.password);
     if(ret == false)
     {
         return res.render('vwAccount/login', {
