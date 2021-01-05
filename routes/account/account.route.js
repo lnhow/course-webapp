@@ -21,8 +21,10 @@ router.post('/login', async function (req, res){
         });
     }
     console.log(user);
-    const ret = bcrypt.compare(req.body.Password, user.password);
-    if(ret == false)
+    console.log(req.body.Password)
+    console.log(user[0].password)
+    const ret = bcrypt.compareSync(req.body.Password, user[0].Password);
+    if(ret === false)
     {
         return res.render('vwAccount/login', {
             err_message: 'Invalid Email or password!'
@@ -37,7 +39,7 @@ router.get('/register', async function (req, res){
 })
 
 router.post('/register', async function (req, res){
-    const hash = bcrypt.hashSync(req.body.Password, 10);
+    const hash = bcrypt.hashSync(req.body.Password,10, null);
     const user = {
         Email: req.body.Email,
         Password: hash,
