@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const e = require('express');
 const userSchema = new mongoose.Schema({
-    Username: {type: String, required : true},
+    Email: {type: String, required : true},
     Password: {type: String, required : true},
-    Email: String,
     Permission: Number,//0 là admin, 1 là giáo viên, 2 là học viên
+    Name: String,
 });
 
 userSchema.methods.encryptPassword = function(Password){
@@ -23,23 +23,23 @@ const User = mongoose.model('user', userSchema);
 module.exports = {
     add: async function(entity){
         return await new User({
-            Username: entity.Username,
             Password: entity.Password,
             Email: entity.Email,
             Permission: entity.Permission,
+            Name: entity.Name
         }).save()
     },
-    singleByUsername: async function(username){
+    singleByEmail: async function(email){
         let result = await User.aggregate([
             {
                 $match:{
-                    Username: username
+                    Email: email
                 }
             }
         ])
         if(result.length >= 1)
-            return result;
+            {return result;}
         else
-            return null;
+            {return null;}
     }
 }
