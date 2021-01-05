@@ -1,0 +1,31 @@
+{{#section 'title'}}
+<title>Student</title>
+{{/section}}
+{{#section 'css'}}
+{{/section}}
+
+<div class="card mt-4">
+  <div class="card-header bg-dark text-light font-weight-bold d-flex justify-content-between">
+      My courses
+    <a class="btn btn-success" href="/student/course/register" role="button">
+      <i class="fa fa-plus" aria-hidden="true"></i>
+      Register course
+    </a>
+  </div>
+  <div class="card-body p-0 overflow-auto my-1 p-1">
+
+    {{#each this.courses}}
+    <div class="card flex-row flex-wrap">
+      <div class="card-header p-0">
+        <img class="img-fluid" src="https://via.placeholder.com/120x60/" alt="">
+      </div>
+    {{else}}
+    <p class="text-center">Không có dữ liệu</p>
+    {{/each}}
+  </div>
+</div>
+
+{{#section 'js'}}
+<script>
+</script>
+{{/section}}
