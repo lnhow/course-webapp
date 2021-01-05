@@ -4,24 +4,54 @@
 {{#section 'css'}}
 {{/section}}
 
-<div class="card mt-4">
-  <div class="card-header bg-dark text-light font-weight-bold d-flex justify-content-between">
-      My courses
-    <a class="btn btn-success" href="/student/course/register" role="button">
-      <i class="fa fa-plus" aria-hidden="true"></i>
-      Register course
-    </a>
-  </div>
-  <div class="card-body p-0 overflow-auto my-1 p-1">
-
-    {{#each this.courses}}
-    <div class="card flex-row flex-wrap">
-      <div class="card-header p-0">
-        <img class="img-fluid" src="https://via.placeholder.com/120x60/" alt="">
+<div class="card-header bg-dark text-light font-weight-bold d-flex justify-content-between">
+<ul class="navbar-nav ml-auto">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" role="button" data-toggle="dropdown">
+        Student
+      </a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="#">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            Profile</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#">
+            Sign Out</a>
       </div>
-    {{else}}
-    <p class="text-center">Không có dữ liệu</p>
-    {{/each}}
+    </li>
+</ul>
+</div>
+<div class="card mt-4">
+  <a class="btn btn-success" href="/student/course/register" role="button">
+    <i class="fa fa-plus" aria-hidden="true"></i>
+    Register course
+  </a>
+  <div class="card-body p-0 overflow-auto my-1 p-1">
+    <div class="card flex-row flex-wrap">
+        <p class="text-center"><b>Các khóa học đã đăng kí</b></p>
+    </div>
+    <div class="content">
+    <div class= "row">
+      <div class ="col-12 col-sm-6 col-md-4 bg-success">
+          <img src="" alt="Chưa có khóa học">
+      </div>
+      <div class ="col-12 col-sm-6 col-md-4 bg-success">
+          <img src="" alt="Chưa có khóa học">
+      </div>
+      <div class ="col-12 col-sm-6 col-md-4 bg-success">
+          <img src="" alt="Chưa có khóa học">
+      </div>
+      <div class ="col-12 col-sm-6 col-md-4 bg-success">
+          <img src="" alt="Chưa có khóa học">
+      </div>
+      <div class ="col-12 col-sm-6 col-md-4 bg-success">
+          <img src="" alt="Chưa có khóa học">
+      </div>
+      <div class ="col-12 col-sm-6 col-md-4 bg-success">
+          <img src="" alt="Chưa có khóa học">
+      </div>
+   </div>
+    </div>
   </div>
 </div>
 
