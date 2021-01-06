@@ -115,4 +115,13 @@ router.post('/verify', async function (req, res){
 
     res.render('vwAccount/login');
 })
+
+router.get('/edit', async function (req, res){
+    res.render('vwAccount/edit');
+});
+
+
+router.post('/edit', async function (req, res){
+    
+});
 module.exports = router;
