@@ -9,7 +9,6 @@ module.exports = {
     const htmlContent = `<p>${otpcode}</p><p>If you didn't requested the OTP, please ignore this mail.</p>`
 
     await mailer.sendMail(destEmail, subject, htmlContent);
-    
     return otpcode;
   }
 }

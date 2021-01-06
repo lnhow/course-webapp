@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+  const mongoose = require('mongoose');
 //not done
 const bcrypt = require('bcryptjs');
 const e = require('express');
@@ -7,8 +7,8 @@ const userSchema = new mongoose.Schema({
   Password: {type: String, required : true},
   Permission: Number,//0 là admin, 1 là giáo viên, 2 là học viên
   Name: String,
-  SecretOTP: Number,   //For register
-  About: String  ,      //Teacher description
+  SecretOTP: {type: Number},   //For register
+  About: String,      //Teacher description
 });
 
 userSchema.methods.encryptPassword = function(Password){
@@ -29,7 +29,8 @@ module.exports = {
       Email: entity.Email,
       Permission: parseInt(entity.Permission),
       Name: entity.Name,
-      About: entity.About
+      About: entity.About,
+      SecretOTP: entity.SecretOTP
     }).save()
   },
   singleByEmail: async function(email){
@@ -40,9 +41,8 @@ module.exports = {
       }
     }
     ]);
-
     if(result.length >= 1)
-      {return result[0];}
+      {return result;}
     else
       {return null;}
   },

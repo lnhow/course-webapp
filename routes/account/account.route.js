@@ -1,8 +1,13 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const monent =  require('moment');
+const optmailer = require('../../utils/otpmailer');
 
-const userModel = require('../../models/users.model')
+const userModel = require('../../models/users.model');
+const otpmailer = require('../../utils/otpmailer');
+const { values } = require('mongoose/lib/helpers/specialProperties');
+const { value } = require('numeral');
+const { compile } = require('mongoose/lib/helpers/document/compile');
 const router = express.Router();
 
 module.exports = router;
@@ -52,15 +57,32 @@ router.get('/register', async function (req, res){
 
 router.post('/register', async function (req, res){
     const hash = bcrypt.hashSync(req.body.Password,10, null);
-    const user = {
-        Email: req.body.Email,
-        Password: hash,
-        Permission: 2,
-        Name: req.body.Name,
-    }
+    const temp = otpmailer.sendOTPMail(req.body.Email);//promise bị pending
+    console.log(temp);
+    const otp = temp.then((value)=>{
+        console.log(value);
+        const user = {
+            Email: req.body.Email,
+            Password: hash,
+            Permission: 2,
+            Name: req.body.Name,
+            SecretOTP: value,
+        }
+    
+        userModel.add(user);  
+        res.redirect('verify');
+    })
+    // console.log(otp);
+    // const user = {
+    //     Email: req.body.Email,
+    //     Password: hash,
+    //     Permission: 2,
+    //     Name: req.body.Name,
+    //     SecretOTP: otp,
+    // }
 
-    await userModel.add(user);
-    res.render('vwAccount/register');
+    // await userModel.add(user);  
+    // res.render('vwAccount/verify');
 })
 
 router.get('/is-available', async function(req, res){
@@ -71,5 +93,26 @@ router.get('/is-available', async function(req, res){
     }
     console.log(user);
     res.json(false);
+})
+
+router.get('/verify', async function (req, res){
+    res.render('vwAccount/verify');
+});
+
+router.post('/verify', async function (req, res){
+
+    console.log(1);
+    const secretToken = req.body.inputOTP;
+    console.log(req.body.otp);
+    const ok  = await userModel.findOne({'SecretOTP': secretToken});
+    if(!ok)
+    {
+        res.render('vwAccount/verify');
+        return;
+    }
+    ok.SecretOTP = null;
+    await ok.save();
+
+    res.render('vwAccount/login');
 })
 module.exports = router;
