@@ -2,7 +2,7 @@
   "app": {
     "PORT": 3050,
     "pagination": {
-      "limit": 10
+      "limit": 2
     },
     "tmpImgPath": "./public/imgs/tmp/",
     "coursesImgPath": "./public/imgs/courses/",

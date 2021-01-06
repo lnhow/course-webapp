@@ -6,11 +6,36 @@
 
 <div class="card container p-0 mt-4">
   <div class="card-header bg-dark text-light d-flex justify-content-between">
-    Courses
-  </div>
-  <div class="card-body p-0 overflow-auto my-1 p-1" style="min-height: 80vh;">
+    <form class="w-100 p-1">
+      <div class="row d-flex">
+        <div class="input-group flex-fill p-1" style="min-width: 300px">
+          <input class="form-control" type="text" placeholder="Search" aria-label="Search" name="keyword" value="{{keyword}}">
+        </div>
 
-    {{#each this.courses}}
+        <div class="input-group col-lg-3 p-1 text-nowrap">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="options"><i class="fa fa-sort" aria-hidden="true"></i></label>
+          </div>
+          <select class="custom-select" id="options" name="sort">  
+            <option value="default">Default</option>
+            <option value="review_Desc">Review: Decreasing</option>
+            <option value="review_Inc">Review: Increasing</option>
+            <option value="price_Inc">Price: Increasing</option>
+            <option value="price_Desc">Price: Decreasing</option>
+          </select>
+        </div>
+        <span class="input-group-btn col-lg-1 p-1 text-nowrap">
+            <button class="btn btn-success w-100" type="submit">Search</button>
+        </span>
+      </div>
+    </form>
+  </div>
+  <div class="card-body p-0 overflow-auto my-1" style="min-height: 80vh;">
+    <div class="mx-4 mt-1">
+      <h3 class="Card-title">Search results for "{{keyword}}"</h3>
+      <p>{{result.count}} result(s)</p>
+    </div>
+    {{#each this.result.results}}
     <div class="card flex-row flex-wrap p-2">
       <a class="stretched-link" href="/course/{{_id}}"></a>
       <div class="card-header p-0 col-sm-3">
@@ -31,10 +56,6 @@
             <small class="font-weight-bold">
               <i class="fa fa-user" aria-hidden="true"></i>
               {{Teacher.Name}}
-            </small>
-            <small>
-              <i class="fa fa-users" aria-hidden="true"></i>
-              {{RegisterCount}}
             </small>
           </div>
           <div class="d-flex text-right flex-row">
@@ -69,17 +90,17 @@
     <nav>
       <ul class="pagination">
         <li class="page-item {{#unless this.canGoPrev}}disabled{{/unless}}">
-          <a class="page-link" href="?page={{this.prevPage}}" tabindex="-1">
+          <a class="page-link" href="?{{currentQuery}}&page={{this.prevPage}}" tabindex="-1">
             <i class="fa fa-backward" aria-hidden="true"></i>
           </a>
         </li>
         {{#each this.pageItems}} 
         <li class="page-item {{#if isActive}}active{{/if}}">
-          <a class="page-link" href="?page={{value}}">{{value}}</a>
+          <a class="page-link" href="?{{../currentQuery}}&page={{value}}">{{value}}</a>
         </li>
         {{/each}}
         <li class="page-item {{#unless this.canGoNext}}disabled{{/unless}}">
-          <a class="page-link" href="?page={{this.nextPage}}">
+          <a class="page-link" href="?{{currentQuery}}&page={{this.nextPage}}">
             <i class="fa fa-forward" aria-hidden="true"></i>
           </a>
         </li>

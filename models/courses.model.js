@@ -160,19 +160,27 @@ module.exports = {
     category = category.map((cat) => mongoose.Types.ObjectId(cat._id));
 
     let result = await Course.aggregate([
-      {
-        $match: {'Category': { $in: category}}
-      },
-      {
-        $lookup: {
+      { $match: {'Category': { $in: category}} },
+      { $lookup: {
           from: categoryModel.collectionName,
           localField: 'Category',
           foreignField: '_id',
           as: 'Category'
         }
       },
-      {
-        $project: {
+      { $lookup: {  //JOIN TEACHER
+          from: 'users',
+          localField: 'Teacher',
+          foreignField: '_id',
+          as: 'Teacher'
+        }
+      },
+      { $unwind: '$Category'},
+      { $unwind: {
+          path:'$Teacher', preserveNullAndEmptyArrays: true
+        }
+      },
+      { $project: {
           _id: '$_id',
           CourseName: '$CourseName',
           RatingAverage: '$RatingAverage',
@@ -185,7 +193,9 @@ module.exports = {
       },
       { $skip: skip },
       { $limit: config.app.pagination.limit}
-    ]).unwind('$Category');
+    ]);
+
+    let resultCount = Course.countDocuments()
 
     return result;
   },
@@ -207,6 +217,74 @@ module.exports = {
     });
 
     return result;
+  },
+
+  search: async function(keyword, sortOption, skip) {
+    let sortObj = null;
+
+    switch(sortOption) {
+      case 'review_Inc':
+        sortObj = {'RatingAverage': 1};
+        break;
+      case 'review_Desc':
+        sortObj = {'RatingAverage': -1};
+        break;
+      case 'price_Inc':
+        sortObj = {'Price': 1};
+        break;
+      case 'price_Desc':
+        sortObj = {'Price': -1};
+        break;
+      default:
+        sortObj = {'_id': 1};
+    }
+
+    let result = await Course.aggregate([
+      { $match: {$text: { $search: keyword } } },
+      { $lookup: {  //JOIN CATEGORY
+          from: categoryModel.collectionName,
+          localField: 'Category',
+          foreignField: '_id',
+          as: 'Category'
+        }
+      },
+      { $lookup: {  //JOIN TEACHER
+          from: 'users',
+          localField: 'Teacher',
+          foreignField: '_id',
+          as: 'Teacher'
+        }
+      },
+      { $project: {   //Optimized for display in list
+          _id: '$_id',
+          CourseName: '$CourseName',
+          RatingAverage: '$RatingAverage',
+          RatingCount: '$RatingCount',
+          Price: '$Price',
+          Discount: '$Discount',
+          Category: '$Category',
+          Teacher: '$Teacher'
+        }
+      },
+      { $sort: sortObj},
+      { $facet:{  //Group count all result then skip limit
+        "stage1" : [ {"$group": {_id: null, count: {$sum: 1}}} ],
+        "stage2" : [ {"$skip": skip}, {"$limit": config.app.pagination.limit} ]
+      }},
+      { $unwind: "$stage1" },
+      { $project:{
+          count: "$stage1.count",
+          results: "$stage2"
+        }
+      }
+    ]);
+
+    //Output found: [{count: (num), results: [...]}] else []
+    if (result.length < 1) {
+      result.push({count: 0, result: []});
+    }
+
+    return result[0];
   },
 
   get: async function(sortObject, findlimit) {

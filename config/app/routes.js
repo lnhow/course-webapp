@@ -27,7 +27,11 @@ module.exports = function(app) {
     });
   });
 
-  app.use('/p', express.static('./public'));
+  //Block other static routes for security reason
+  app.use('/p/imgs/courses', express.static('./public/imgs/courses'));
+  app.use('/p/vids/courses', express.static('./public/vids/courses'));
+
+  app.use('/search', require('../../routes/search.route'));
   app.use('/course', require('../../routes/course.route')); //Single course
   app.use('/courses', require('../../routes/courses.route'));
   app.use('/teacher', require('../../routes/teacher/teacher.route'))
