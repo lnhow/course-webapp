@@ -30,10 +30,11 @@ mongoose.connect(keys.mongodb.dbURI, {
   console.log('Connected to DB successfully');
 });
 
+require('./config/app/session')(app);     //IMPORTANT: Init express session, before locals (locals uses session)
 require('./middlewares/locals.mdw')(app); //IMPORTANT: Routes after locals
 
 app.use('/account', require('./routes/account/account.route.js'))
-require('./config/app/routes')(app);
+require('./config/app/routes')(app);    //Where all routes are
 
 //Error handling: LAST
 require('./config/app/errorhandler')(app);

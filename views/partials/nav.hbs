@@ -35,24 +35,41 @@
     <form class="mx-auto my-auto w-100" action="/search">
         <div class="input-group">
           <input class="form-control" type="text" placeholder="Search" aria-label="Search" name="keyword">
-          <span class="input-group-btn">
+          <span class="input-group-append">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </span>
         </div>
     </form>
-    <ul class="navbar-nav align-self-right">
-    <li class="nav-item" style="width: 5.5em;">
-    <a class="nav-link" href="/account/login">
-        <i class="fa fa-sign-in" aria-hidden="true"></i>
-        Login
-    </a>
-    </li>
-    <li class="nav-item" style="width: 6em;">
-        <a class="nav-link" href="/account/register">
-            <i class="fa fa-user-plus" aria-hidden="true"></i>
-            Register
+    <ul class="navbar-nav ml-2 align-self-right">
+      {{#if isAuth}}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{authUser.Name}}
         </a>
-    </li>
+        <div class="dropdown-menu dropdown-menu-right my-2" aria-labelledby="userDropdown">
+          <a class="dropdown-item text-center p-1" href="/account/profile">
+            <i class="fa fa-user mr-2" aria-hidden="true"></i>Profile
+          </a>
+          <a class="dropdown-item text-center p-1" href="/account/logout">
+            <i class="fa fa-sign-out mr-2" aria-hidden="true"></i>Logout
+          </a>
+        </div>
+      </li>
+      {{else}}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Account
+        </a>
+        <div class="dropdown-menu dropdown-menu-right my-2" aria-labelledby="userDropdown">
+          <a class="dropdown-item text-center p-1" href="/account/login">
+            <i class="fa fa-sign-in mr-2" aria-hidden="true"></i>Login
+          </a>
+          <a class="dropdown-item text-center p-1" href="/account/register">
+            <i class="fa fa-user-plus mr-2" aria-hidden="true"></i>Register
+          </a>
+        </div>
+      </li>
+      {{/if}}
     </ul>
   </div>
 </nav>

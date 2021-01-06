@@ -135,6 +135,7 @@ $('#previewModal').on('hidden.bs.modal', function (e) {
                 {{/if}}
               {{/if}}
             </h4>
+            {{#if authUser}}
             <form id="formRegister" method="POST" action="">
               <button type="submit" class="btn btn-success w-100">Register Course</button>
             </form>

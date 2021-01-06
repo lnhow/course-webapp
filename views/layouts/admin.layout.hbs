@@ -31,15 +31,47 @@
           <a class="nav-link" href="/admin/accounts">Account</a>
         </li>
       </ul>
+
+      <ul class="navbar-nav ml-auto">
+        {{#if isAuth}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{authUser.Name}}
+          </a>
+          <div class="dropdown-menu dropdown-menu-right my-2" aria-labelledby="userDropdown">
+            <a class="dropdown-item text-center p-1" href="/account/profile">
+              <i class="fa fa-user mr-2" aria-hidden="true"></i>Profile
+            </a>
+            <a class="dropdown-item text-center p-1" href="/account/logout">
+              <i class="fa fa-sign-out mr-2" aria-hidden="true"></i>Logout
+            </a>
+          </div>
+        </li>
+        {{else}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Account
+          </a>
+          <div class="dropdown-menu dropdown-menu-right my-2" aria-labelledby="userDropdown">
+            <a class="dropdown-item text-center p-1" href="/account/login">
+              <i class="fa fa-sign-in mr-2" aria-hidden="true"></i>Login
+            </a>
+            <a class="dropdown-item text-center p-1" href="/account/register">
+              <i class="fa fa-user-plus mr-2" aria-hidden="true"></i>Register
+            </a>
+          </div>
+        </li>
+        {{/if}}
+      </ul>
     </div>
   </nav>
 
   <div class="container-fluid" style="min-height: 100vh; background: linear-gradient(rgb(233, 228, 246), rgb(255, 240, 244), 45);">
-    <div class="row">
-      <div class="col-lg-2">
-        <div class="card">
+    <div class="row min-vh-100">
+      <div class="col-lg-2 p-0">
+        <div class="card min-vh-100">
           <div class="card-body">
-            <h5 class="card-title">Admin</h5>
+            <h5 class="card-title">Welcome back, {{authUser.Name}}</h5>
             <p class="card-text">Text</p>
             <a href="#" class="card-link">Logout</a>
           </div>

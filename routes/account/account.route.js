@@ -9,10 +9,18 @@ module.exports = router;
 
 router.get('/login', async function (req, res){
     res.render('vwAccount/login');
+});
+
+router.get('/logout', function (req, res) {
+    req.session.isAuth = false;
+    req.session.authUser = null;
+    req.session.cart = [];
+    res.redirect('/');
 })
 
 router.post('/login', async function (req, res){
     const email = req.body.Email;
+    
     const user = await userModel.singleByEmail(email);
     if(user === null)
     {
@@ -22,15 +30,19 @@ router.post('/login', async function (req, res){
     }
     console.log(user);
     console.log(req.body.Password)
-    console.log(user[0].password)
-    const ret = bcrypt.compareSync(req.body.Password, user[0].Password);
+    console.log(user.password)
+    const ret = bcrypt.compareSync(req.body.Password, user.Password);
     if(ret === false)
     {
         return res.render('vwAccount/login', {
             err_message: 'Invalid Email or password!'
         });
     }
-    let url='/';
+
+    req.session.isAuth = true;
+    req.session.authUser = user;
+
+    let url = req.session.retUrl || '/';
     res.redirect(url);
 })
 
@@ -54,7 +66,7 @@ router.post('/register', async function (req, res){
 router.get('/is-available', async function(req, res){
     const email = req.query.Email;
     const user = await userModel.singleByEmail(email);
-    if(user == null){
+    if(user === null){
         return res.json(true);
     }
     console.log(user);

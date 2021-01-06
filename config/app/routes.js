@@ -1,6 +1,8 @@
 const express = require('express');
 const courseModel = require('../../models/courses.model');
 
+const authMdw = require('../../middlewares/auth.mdw');
+
 module.exports = function(app) {
   app.get('/', async function(req, res) {
     const limit = 10;
@@ -35,5 +37,5 @@ module.exports = function(app) {
   app.use('/course', require('../../routes/course.route')); //Single course
   app.use('/courses', require('../../routes/courses.route'));
   app.use('/teacher', require('../../routes/teacher/teacher.route'))
-  app.use('/admin', require('../../routes/admin/admin.route'));
+  app.use('/admin',authMdw.adminAuth, require('../../routes/admin/admin.route'));
 }
