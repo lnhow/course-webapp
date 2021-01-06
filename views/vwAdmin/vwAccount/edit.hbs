@@ -1,0 +1,123 @@
+{{#section 'title'}}
+<title>Accounts: New</title>
+{{/section}}
+
+{{#section "js"}}
+<script>
+{{!-- Form validation --}}
+$('#formReset').on('submit', function(e) {
+  e.preventDefault();
+
+  const txtPassword = $('#txtPassword').val();
+  const txtConfirm = $('#txtPasswordConfirm').val();
+  if (txtPassword !== txtConfirm) {
+    alert('Password does not match');
+  }
+  else {
+    $('#formReset').off('submit').submit();
+  }
+});
+</script>
+{{/section}}
+
+
+
+<div class="card">
+  
+  {{#if message}}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+      <span class="sr-only">Close</span>
+    </button>
+  </div>
+  {{/if}}
+  <form id="formEdit" method="POST">
+    <div class="card-header d-flex flex-row align-items-center">
+      <a class="btn btn-primary" href="/admin/accounts" role="button">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Back
+      </a>
+      <h5 class="mb-0 ml-4">Edit Account</h5>
+    </div>
+    
+    <div class="card-body">
+
+      <div class="container-fluid">
+        <h5 class="card-title">Account Info</h5>
+        <div class="row">
+
+          <div class="col-lg-9">
+            <input type="hidden" name="_id" value="{{account._id}}" required>
+            <div class="form-group">
+              <label for="txtEmail"><b>Email</b></label>
+              <input type="text" class="form-control" id="txtEmail" name="Email" placeholder="Email for this account" value="{{account.Email}}" autofocus required>
+            </div>
+            <div class="form-group">
+              <label for="txtName"><b>Name</b></label>
+              <input type="text" class="form-control" id="txtName" name="Name" placeholder="Fullname of this account" value="{{account.Name}}">
+            </div>
+            <div class="form-group">
+              <label for="txtAbout"><b>About</b></label>
+              <textarea type="text" class="form-control" id="txtAbout" rows="3" style="resize: none;" name="About" placeholder="About this user">{{{account.About}}}</textarea>
+            </div>
+          </div>
+
+          <div class="col-lg-3">
+            <div class="card bg-primary text-light">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="Permission" class="font-weight-bold">Permission</label>
+                  <select class="form-control" id="Permission" name="Permission" required>  
+                    <option value="0" {{#if (equals account.Permission 0)}}selected{{/if}}>Admin</option>
+                    <option value="1" {{#if (equals account.Permission 1)}}selected{{/if}}>Teacher</option>
+                    <option value="2" {{#if (equals account.Permission 2)}}selected{{/if}}>Student</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    
+    
+    <div class="card-footer text-muted">
+      <button type="submit" class="btn btn-outline-success" formaction="/admin/accounts/patch">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        Save
+      </button>
+
+      <button type="submit" class="btn btn-outline-danger" formaction="/admin/accounts/delete">
+        <i class="fa fa-trash" aria-hidden="true"></i>
+        Delete
+      </button>
+    </div>
+  </form>
+
+  <form id="formReset" method="POST" action="/admin/accounts/reset">
+    <div class="card-body">
+      <h5 class="card-title">Account Password reset</h5>
+      <input type="hidden" name="_id" value="{{account._id}}" required>
+      <div class="form-group">
+        <label for="txtPassword"><b>Password</b></label>
+        <input type="password" class="form-control" id="txtPassword" 
+                name="Password" placeholder="Enter Password for this account"
+                required>
+      </div>
+      <div class="form-group">
+        <label for="txtPasswordConfirm"><b>Confirm Password</b></label>
+        <input type="password" class="form-control" id="txtPasswordConfirm" 
+                placeholder="Reconfirm Password" 
+                required>
+      </div>
+      <button type="submit" class="btn btn-outline-danger">
+          <i class="fa fa-refresh" aria-hidden="true"></i>
+          Reset password
+      </button>
+    </div>
+  </form>
+</div>
+
+

@@ -25,6 +25,9 @@ module.exports = function(app) {
       div(val1, val2) {
         return Math.floor(val1 / val2);
       },
+      equals(val1, val2) {
+        return val1 === val2;
+      }
     },
   }));
 

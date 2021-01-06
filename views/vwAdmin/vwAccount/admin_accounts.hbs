@@ -1,0 +1,63 @@
+{{#section 'title'}}
+<title>Admin: Users</title>
+{{/section}}
+{{#section 'css'}}
+{{/section}}
+
+<div class="card mt-4">
+  <div class="card-header bg-primary text-light d-flex flex-row align-items-center">
+    Teachers - Students
+    <a class="ml-auto btn btn-success" href="accounts/add" role="button">
+      <i class="fa fa-plus mr-2" aria-hidden="true"></i>New account
+    </a>
+  </div>
+  <div class="card-body p-1 overflow-auto">
+    <table class="table table-hover" style="min-width: 35rem;">
+      <thead>
+        <tr>
+          <th scope="col">Email</th>
+          <th scope="col">Fullname</th>
+          <th scope="col">Actived</th>
+          <th scope="col">Permission</th>
+          <th scope="col">&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each accounts}}
+        <tr>
+          <td>{{Email}}</td>
+          <td>{{Name}}</td>
+          <td>
+            {{#if SecretOTP}}
+            <span class="badge badge-pill badge-danger"><i class="fa fa-times" aria-hidden="true"></i></span>
+            {{else}}
+            <span class="badge badge-pill badge-primary"><i class="fa fa-check" aria-hidden="true"></i></span>
+            {{/if}}
+          </td>
+          <td>
+            {{#if (equals Permission 2)}}
+            <span class="badge badge-pill badge-success">Student</span>
+            {{else}}
+            <span class="badge badge-pill badge-warning">Teacher</span>
+            {{/if}}
+          </td>
+          <td>
+            <a class="btn btn-primary" href="accounts/{{_id}}" role="button">
+              <i class="fa fa-pencil" aria-hidden="true"></i></a>
+          </td>
+        </tr>
+        {{else}}
+        <tr class="bg-light">
+          <td colspan="5" class="text-center">
+            There is no data
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{{#section 'js'}}
+  
+{{/section}}
