@@ -1,13 +1,14 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 
+const authMdws = require('../../middlewares/auth.mdw');
 const userModel = require('../../models/users.model');
 const otpmailer = require('../../utils/otpmailer');
 const router = express.Router();
 
 module.exports = router;
 
-router.get('/login', async function (req, res){
+router.get('/login', authMdws.filterAuthed, async function (req, res){
     res.render('vwAccount/login');
 });
 
@@ -18,43 +19,64 @@ router.get('/logout', function (req, res) {
     res.redirect('/');
 })
 
-router.post('/login', async function (req, res){
+router.post('/login', authMdws.filterAuthed, async function (req, res){
     const email = req.body.Email;
-    
+
     const user = await userModel.singleByEmail(email);
     if(user === null)
     {
-        return res.render('vwAccount/login', {
-            err_message: 'Invalid Email or password!'
+        res.render('vwAccount/login', {
+            err_message: 'Invalid Email'
         });
+        return;
     }
-    console.log(user);
-    console.log(req.body.Password)
-    console.log(user.Password)
+    //console.log(user);
+    //console.log(user.Password);
     const ret = bcrypt.compareSync(req.body.Password, user.Password);
     if(ret === false)
     {
-        return res.render('vwAccount/login', {
+        res.render('vwAccount/login', {
             err_message: 'Invalid Email or password!'
         });
+        return;
     }
 
+    delete user.Password;
     req.session.isAuth = true;
     req.session.authUser = user;
 
+    //console.log(user);
+
     let url = req.session.retUrl || '/';
-    res.redirect(url);
+
+    if (!user.Verified) {
+        res.redirect('/account/verify');
+    }
+    else {
+        res.redirect(url);
+    }
 })
 
-router.get('/register', async function (req, res){
-    res.render('vwAccount/register');
+router.get('/register', authMdws.filterAuthed, async function (req, res){
+    const err = req.query.existed === "true"? true : false;
+
+    res.render('vwAccount/register', {
+        message: err? 'There is already an account using this email' : null,
+    });
 })
 
-router.post('/register', async function (req, res){
+router.post('/register', authMdws.filterAuthed, async function (req, res){
+    const user = await userModel.singleByEmail(req.body.Email);
+
+    if (user !== null) {
+        res.redirect('/account/register?existed=true');
+        return;
+    }
+
     const hash = bcrypt.hashSync(req.body.Password,10, null);
-    const temp = otpmailer.sendOTPMail(req.body.Email);//promise bị pending
+    const temp = otpmailer.sendOTPMail(req.body.Email);   //Promise pending
     console.log(temp);
-    const otp = temp.then((value)=>{
+    const otp = temp.then(async (value)=>{
         console.log(value);
         const user = {
             Email: req.body.Email,
@@ -64,8 +86,20 @@ router.post('/register', async function (req, res){
             SecretOTP: value,
         }
     
-        userModel.add(user);  
-        res.redirect('verify');
+        const result = await userModel.add(user);
+
+        if (result) {
+            result.Verified = false;
+            delete result.SecretOTP;
+            delete result.Password;
+            
+            req.session.isAuth = true;
+            req.session.authUser = result;
+        }
+
+        console.log(result);
+        
+        res.redirect('/account/verify');
     })
     // console.log(otp);
     // const user = {
@@ -90,25 +124,40 @@ router.get('/is-available', async function(req, res){
     res.json(false);
 })
 
-router.get('/verify', async function (req, res){
+router.get('/verify', authMdws.auth, async function (req, res){
+    const account = await userModel.singleById(req.session.authUser._id);
+
+    //Block verified users
+    if (account.SecretOTP === null) {
+        res.redirect('/');
+        return;
+    }
     res.render('vwAccount/verify');
 });
 
-router.post('/verify', async function (req, res){
+router.post('/verify', authMdws.auth, async function (req, res){
 
-    console.log(1);
-    const secretToken = req.body.inputOTP;
-    console.log(req.body.otp);
-    const ok  = await userModel.findOne({'SecretOTP': secretToken});
-    if(!ok)
-    {
-        res.render('vwAccount/verify');
+    const secretToken = +req.body.inputOTP; //Cast to Number
+
+    const account = await userModel.singleById(req.session.authUser._id);
+    if(secretToken !== account.SecretOTP) {
+        console.log('false');
+        res.render('vwAccount/verify', {
+            message: 'Incorrect code',
+        });
         return;
     }
-    ok.SecretOTP = null;
-    await ok.save();
 
-    res.render('vwAccount/login');
+    console.log('true');
+    await userModel.patchOTP(account._id, null);
+    //Re-update session user
+    const update = await userModel.singleById(account._id);
+    update.Verified = (update.SecretOTP === null) ? true: false;
+    delete update.SecretOTP;
+    req.session.authUser = update;
+    console.log(req.session.authUser);
+
+    res.redirect(req.session.retUrl || '/');
 })
 
 router.get('/edit', authMdws.auth, async function (req, res){

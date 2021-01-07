@@ -38,7 +38,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.
       if(data === true){
         $('#frmRegister').off('submit').submit();
       }else{
-        alert('This Email has been chosen.');
+        alert('There is already an account using this email');
       }
     });
 
@@ -82,6 +82,14 @@ src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.
 {{/section}}
 
 <div class="card">
+  {{#if message}}
+  <div class="alert alert-warning alert-dismissible mb-0 fade show" role="alert">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {{/if}}
   <h5 class="card-header text-center" ><b>Register</b></h5>
   <div class="card-body">
     <form class ="main-form" action="" method="post" id="frmRegister">

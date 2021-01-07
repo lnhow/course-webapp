@@ -1,3 +1,5 @@
+const { use } = require("../routes/teacher/course.route");
+
 const Permission = {
   'Admin': 0,
   'Teacher': 1,
@@ -27,6 +29,7 @@ module.exports = {
         return res.redirect(userRoute['Teacher']);
       }
       else {
+        return res.redirect(userRoute['Else']);
       }
     }
   
@@ -49,7 +52,6 @@ module.exports = {
       }
       else {
         return res.redirect(userRoute['Else']);
-        return req.redirect(userRoute['Else']);
       }
     }
   

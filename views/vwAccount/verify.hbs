@@ -16,7 +16,7 @@ body {font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica
     border-radius: 10px;
 }
 
-input[type=text], input[type=password] {
+.form-group input[type=text], input[type=password] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -79,17 +79,18 @@ span.password {
     </button>
 </div>
 {{/if}}
-
-<form class="main-form" action="" method="post">
-
-<h2 style="padding-left:45%"><b>Verify</b></h2>
+<div class="min-vh-100 p-4">
+<form class="main-form px-2 py-4" action="" method="post">
+  
+  <h2 class="text-center"><b>Verify</b></h2>
     <div class="form-group">
         <label for="OTP"><b>OTP</b></label>
         <input type="text" placeholder="Enter OTP" name="inputOTP" required autofocus>
     </div>
     <div class="form-group-button">
-        <button class="form-group-button" type="submit">Commit</button>
+        <button class="form-group-button" type="submit">Submit</button>
     </div>
   </div>
 
 </form>
+</div>

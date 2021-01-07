@@ -50,9 +50,12 @@ module.exports = {
       }
     }
     ]);
+    if(result.length > 0) {
+      return result[0];
+    }
     else {
       return null;
-    if(result.length > 0)
+    }
   },
   singleById: async function(accountId){
     let result = await User.aggregate([
@@ -88,6 +91,7 @@ module.exports = {
       
     return result;
   },
+
   patchInfo: async function(account) {
     const condition = account._id;
 
@@ -160,9 +164,23 @@ module.exports = {
 
     return false;
   },
+  patchOTP: async function(accountId, newOTP) {
+    const condition = accountId;
 
     let result = await User.updateOne({
+      '_id': mongoose.Types.ObjectId(condition)
+    }, {
+      $set: {
+        SecretOTP: newOTP
+      }
+    });
+
     if (result.ok === 1) {
+      return true;
+    }
+
+    return false;
+  },
   del: async function(accountId) {
     const condition = accountId;
     
