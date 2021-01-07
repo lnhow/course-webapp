@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const UserModel = require('./users.model');
+
 const coursesModel = require('./courses.model');
-const { value } = require('numeral');
 
 const User_CourseSchema =  new mongoose.Schema({
   Course: {
@@ -41,16 +40,89 @@ module.exports = {
 
     return result;
   },
-  //Get all course this user registered
-  allByUserID: async function(userId){
+  //Get all non favorite course this user registered
+  allNonFavoriteWithUserID: async function(userId){
     let course = await users_course.aggregate([
       { $match: {
           User: mongoose.Types.ObjectId(userId),
+          favorite: false
+      }},
+      { $lookup: {
+        from: 'courses',
+        localField: 'Course',
+        foreignField: '_id',
+        as: 'Course'
+      }},
+      { $unwind: '$Course' },
+      { $project: {
+        _id: '$Course._id',
+        CourseName: '$Course.CourseName',
+        Teacher: '$Course.Teacher',
+        Category: '$Course.Category'
+      }},
+      { $lookup: {
+        from: 'categories',
+        localField: 'Category',
+        foreignField: '_id',
+        as: 'Category'
+      }},
+      { $lookup: {
+          from: 'users',
+          localField: 'Teacher',
+          foreignField: '_id',
+          as: 'Teacher'
         }
-      }
+      },
+      { $unwind: '$Category'},
+      { $unwind: {
+          path:'$Teacher', preserveNullAndEmptyArrays: true
+        }
+      },
     ]);
 
-    return result;
+    return course;
+  },
+  //Get all favorite course this user registered
+  allFavoriteWithUserID: async function(userId){
+    let course = await users_course.aggregate([
+      { $match: {
+          User: mongoose.Types.ObjectId(userId),
+          favorite: true
+      }},
+      { $lookup: {
+        from: 'courses',
+        localField: 'Course',
+        foreignField: '_id',
+        as: 'Course'
+      }},
+      { $unwind: '$Course' },
+      { $project: {
+        _id: '$Course._id',
+        CourseName: '$Course.CourseName',
+        Teacher: '$Course.Teacher',
+        Category: '$Course.Category'
+      }},
+      { $lookup: {
+        from: 'categories',
+        localField: 'Category',
+        foreignField: '_id',
+        as: 'Category'
+      }},
+      { $lookup: {
+          from: 'users',
+          localField: 'Teacher',
+          foreignField: '_id',
+          as: 'Teacher'
+        }
+      },
+      { $unwind: '$Category'},
+      { $unwind: {
+          path:'$Teacher', preserveNullAndEmptyArrays: true
+        }
+      },
+    ]);
+
+    return course;
   },
 
   //List all feedback for the course

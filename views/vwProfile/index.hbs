@@ -10,16 +10,16 @@
 {{/section}}
 {{#section 'js'}}
 <script>
-function unFavorite(id) {
-  $('#formUnFavoriteId').val(id);
-  console.log($('#formUnFavoriteId').val())
-  //$('#formUnFavorite').submit();
+function toggleFavorite(id) {
+  $('#formToggleFavoriteId').val(id);
+  console.log($('#formToggleFavoriteId').val())
+  $('#formToggleFavorite').submit();
 }
 </script>
 {{/section}}
 
-<form id="formUnFavorite" action="/profile/unfavor" method="post">
-  <input id="formUnFavoriteId" type="hidden" name="_id" required>
+<form id="formToggleFavorite" method="post">
+  <input id="formToggleFavoriteId" type="hidden" name="_id" required>
 </form>
 
 <div class="container-fluid min-vh-100">
@@ -35,15 +35,20 @@ function unFavorite(id) {
   </div>
 
   <div class="row m-2">
-    <div class="col-sm-12">
-      <h3>Watch list</h3>
+    <h2>Registered Courses</h2>
+  </div>
+
+  <div class="row m-2">
+    <div class="col-sm-12 mt-2">
+      <h3><b>Watch list</b></h3>
     </div>
     
-    <div class="col-sm-12 card-deck">
-      
-      <div class="col-sm-3 card m-2">
-        <img class="card-img-top"
-          style="object-fit: cover; height: 140px; width: 100%"
+    <div class="container-fluid my-4 mx-auto">
+    <div class="row d-flex flex-row justify-content-center mt-0 py-2">
+      {{#each favorites}}
+      <div class="card m-2" style='width: 270px'>
+        <img class="card-img-top w-100"
+          style="object-fit: cover; height: 140px;"
           src="/p/imgs/courses/{{_id}}/thumbnail.jpg" 
           alt="course image">
         <div class="card-body p-3">
@@ -53,15 +58,53 @@ function unFavorite(id) {
             <small class="font-weight-bold">
               <a style="z-index: 500; position: relative;" href="/courses/{{Category._id}}">{{Category.CatName}}</a>
             </small>
-            <a class="stretched-link" href="/course/{{_id}}/chapters"></a>
+            <a class="stretched-link" href="/course/{{_id}}"></a>
             <div class="d-flex flex-row justify-content-end">
-              <button style="z-index: 500; position: relative;" type="button" onclick="unFavorite({{_id}})" class="btn btn-outline-danger">
+              <button style="z-index: 500; position: relative;" type="button" onclick="toggleFavorite('{{_id}}')" class="btn btn-outline-danger">
               <i class="fa fa-minus" aria-hidden="true"></i></button>
             </div>
           </div>
         </div>
       </div>
+      {{else}}
+      <div><p></p></div>
+      {{/each}}
+    </div>
+    </div>
+  </div>
+
+  <div class="row m-2">
+    <div class="col-sm-12 mt-2">
+      <h3><b>Others</b></h3>
+    </div>
     
+    <div class="container-fluid my-4 mx-auto">
+    <div class="row d-flex flex-row justify-content-center mt-0 py-2">
+      {{#each others}}
+      <div class="card m-2" style='width: 270px'>
+        <img class="card-img-top w-100"
+          style="object-fit: cover; height: 140px;"
+          src="/p/imgs/courses/{{_id}}/thumbnail.jpg" 
+          alt="course image">
+        <div class="card-body p-3">
+          <h6 class="card-title mb-1">{{CourseName}}</h6>
+          <div class="card-text d-flex flex-column">
+            <small><i class="fa fa-graduation-cap" aria-hidden="true"></i>{{Teacher.Name}}</small>
+            <small class="font-weight-bold">
+              <a style="z-index: 500; position: relative;" href="/courses/{{Category._id}}">{{Category.CatName}}</a>
+            </small>
+            <a class="stretched-link" href="/course/{{_id}}"></a>
+            <div class="d-flex flex-row justify-content-end">
+              <button style="z-index: 500; position: relative;" type="button" onclick="toggleFavorite('{{_id}}')" class="btn btn-outline-danger">
+              <i class="fa fa-heart-o" aria-hidden="true"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{else}}
+      <div><p></p></div>
+      {{/each}}
+    </div>
     </div>
   </div>
   

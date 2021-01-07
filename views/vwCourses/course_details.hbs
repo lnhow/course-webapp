@@ -156,7 +156,7 @@ $('#previewModal').on('hidden.bs.modal', function (e) {
                 <form id="formFavorite" method="POST" action="/course/{{course._id}}/favorite">
                   {{#if user_course.favorite}}
                   <button type="submit" class="btn btn-danger w-100">
-                    <i class="fa fa-heart" aria-hidden="true"></i> Favorite</button>
+                    <i class="fa fa-heart" aria-hidden="true"></i> Unfavorite</button>
                   {{else}}
                   <button type="submit" class="btn btn-outline-danger w-100">
                     <i class="fa fa-heart-o" aria-hidden="true"></i> Favorite</button>
