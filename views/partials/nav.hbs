@@ -57,6 +57,16 @@
             <i class="fa fa-user mr-2" aria-hidden="true"></i>Profile
           </a>
           {{/if}}
+          {{#if (equals authUser.Permission 1)}}
+          <a class="dropdown-item text-center p-1" href="/teacher">
+            <i class="fa fa-graduation-cap mr-2" aria-hidden="true"></i>Teacher
+          </a>
+          {{/if}}
+          {{#if (equals authUser.Permission 0)}}
+          <a class="dropdown-item text-center p-1" href="/teacher">
+            <i class="fa fa-cubes mr-2" aria-hidden="true"></i>Admin
+          </a>
+          {{/if}}
           <a class="dropdown-item text-center p-1" href="/account/edit">
             <i class="fa fa-pencil mr-2" aria-hidden="true"></i>Edit Account
           </a>

@@ -68,6 +68,7 @@ module.exports = {
         Email: '$Email',
         Name: '$Name',
         Password: '$Password',
+        About: '$About',
         Permission: '$Permission',
         SecretOTP: '$SecretOTP'
       }
