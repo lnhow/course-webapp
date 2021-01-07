@@ -8,7 +8,6 @@
 {{!-- KaTex for formula formating, script have to at head else won't work --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
-
 {{/section}}
 {{#section 'js'}}
 {{!-- Videojs CDN --}}
@@ -24,7 +23,6 @@ let quillFullDes = new Quill('#editor-container', {
     toolbar: false
   }
 });
-
 let quillCurriculum = new Quill('#editor-container-curriculum', {
   theme: 'snow',
   placeholder: `The teacher haven't put anything in yet`,
@@ -37,11 +35,28 @@ let quillCurriculum = new Quill('#editor-container-curriculum', {
 
 {{!-- Star rating SVG setup --}}
 <script>
-$(".rating").starRating({
+$('.rating').starRating({
   totalStars: 5,
   readOnly: true,
   starSize: 15
 });
+$('#rater').starRating({
+  totalStars: 5,
+  readOnly: false,
+  starSize: 30
+});
+$('#formFeedback').on('submit', function(e) {
+  e.preventDefault();
+  const rating = $('#rater').starRating('getRating');
+
+  if (typeof(rating) === "string") {  //When 0.0: no rating, result is string
+    $('#feedbackHelper').show();
+    return false;
+  }
+
+  $('#rating').val(rating); //Set value
+  $('#formFeedback').off('submit').submit();
+})
 </script>
 <script>
 var player = videojs('previewVideo');
@@ -106,7 +121,7 @@ $('#previewModal').on('hidden.bs.modal', function (e) {
               <p class="mb-0 font-weight-bold">
                 <small>
                 <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                <a href="#teacher" class="text-info font-weight-bold">Teacher {{course.Teacher.Name}}</a>
+                <a href="#teacher" class="text-info font-weight-bold">{{course.Teacher.Name}}</a>
                 </small>
               </p>
               <p class="mb-0">
@@ -135,11 +150,25 @@ $('#previewModal').on('hidden.bs.modal', function (e) {
                 {{/if}}
               {{/if}}
             </h4>
-            {{#if authUser}}
-            <form id="formRegister" method="POST" action="">
-              <button type="submit" class="btn btn-success w-100">Register Course</button>
-            </form>
-            {{else}}
+            {{#if authUser}}    {{!-- Logged in --}}
+              {{#if (equals authUser.Permission 2)}} {{!-- Is Student --}}
+                {{#if user_course}} {{!-- Has registered --}}
+                <form id="formFavorite" method="POST" action="/course/{{course._id}}/favorite">
+                  {{#if user_course.favorite}}
+                  <button type="submit" class="btn btn-danger w-100">
+                    <i class="fa fa-heart" aria-hidden="true"></i> Favorite</button>
+                  {{else}}
+                  <button type="submit" class="btn btn-outline-danger w-100">
+                    <i class="fa fa-heart-o" aria-hidden="true"></i> Favorite</button>
+                  {{/if}}
+                </form>
+                {{else}}  {{!-- Hasn't registered --}}
+                <form id="formRegister" method="POST" action="/course/{{course._id}}/register">
+                  <button type="submit" class="btn btn-success w-100">Register Course</button>
+                </form>
+                {{/if}}
+              {{/if}} {{!-- Not Student --}}
+            {{else}}  {{!-- Not logged in --}}
               <button class="btn btn-success w-100" disabled>You must be logged in to register this course</button>
             {{/if}}
           </div>
@@ -150,7 +179,7 @@ $('#previewModal').on('hidden.bs.modal', function (e) {
 
   <div class="container mt-4">
     <div class="row">
-      <div class="col-lg-9">
+      <div class="col-md-9">
         <section id="full-description">
           <h4>Detail Description</h4>
           <div id="editor-container">
@@ -186,7 +215,6 @@ $('#previewModal').on('hidden.bs.modal', function (e) {
         <section id="curriculum" class="mb-2">
           <h4>Curriculum</h4>
           <div id="editor-container-curriculum">
-            {{!-- where the user enter the description --}}
             {{{course.Curriculum}}}
           </div>
         </section>
@@ -200,11 +228,49 @@ $('#previewModal').on('hidden.bs.modal', function (e) {
         <section id="reviews" class="mb-2">
           <h4>Reviews</h4>
           <div>
-            
+            {{#if authUser}}
+            {{#if user_course}}
+            <div class="card">
+              <div class="card-body">
+                <form id="formFeedback" action="/course/{{course._id}}/feedback" method="post">
+                  <small id="feedbackHelper" class="text-danger" style="display: none;">Please rate before submitting</small>
+                  <div class="m-2 d-flex justify-content-between">
+                    <span id="rater" class="mb-2" data-rating="{{user_course.rating.score}}"></span>
+                    <button class="btn btn-outline-primary" type="submit">Submit</button>
+                  </div>
+                  <input type="hidden" name="score" id="rating" required>
+                  <textarea name="feedback" style="resize: none;" class="form-control" type="text" placeholder="Review...">{{user_course.rating.feedback}}</textarea>
+                </form>
+              </div>
+            </div>
+            {{/if}}
+            {{/if}}
+            <div class="card">
+              <div class="card-body container-fluid">
+                {{#each feedbacks}}
+                <div class="row card">
+                  <div class="col-sm-12 card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0"><b>{{User}}</b></p>
+                      <span class="rating ml-2" data-rating="{{rating.score}}"></span>
+                    </div>
+                    {{#if rating.feedback}}
+                    <div>
+                      <p class="mb-0">{{rating.feedback}}</p>
+                    </div>
+                    {{/if}}
+                  </div>
+                </div>
+                {{else}}
+                <p class="text-center mb-0">There are no reviews yet</p>
+                {{/each}}           
+              </div>
+            </div>
           </div>
         </section>
       </div>
-      <div class="col-lg-3">
+
+      <div class="col-md-3">
         <section id="mores" class="mb-2">
           <h4>More in {{course.Category.CatName}}</h4>
           <div class="p-1">
@@ -217,6 +283,10 @@ $('#previewModal').on('hidden.bs.modal', function (e) {
     </div>
   </div>
 </div>
+
+
+
+
 <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">

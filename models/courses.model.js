@@ -475,6 +475,46 @@ module.exports = {
       }
     });
   },
+  patchRegisterCount: async function(courseID) {
+    return await Course.updateOne({
+      _id: mongoose.Types.ObjectId(courseID)
+    }, {
+      $inc: {
+        RegisterCount: 1
+      }
+    });
+  },
+  patchRating: async function(courseID) {
+    let course = await Course.aggregate([
+      { $match: {
+        _id: mongoose.Types.ObjectId(courseID)
+      }},
+      { $lookup: {
+        from: 'users_courses',
+        localField: '_id',
+        foreignField: 'Course',
+        as: 'register'
+      }},
+      { $unwind: '$register' },
+      { $match: {
+        'register.rating': {$ne: null}
+      }},
+      { $group: {
+        _id: '$_id',
+        total: {$sum: '$register.rating.score'},
+        count: {$sum: 1}
+      }}
+    ]);
+    course = course[0]; //result from aggregate is array
+    return await Course.updateOne({
+      _id: mongoose.Types.ObjectId(courseID)
+    }, {
+      $set: {
+        RatingAverage: (course.total /course.count),
+        RatingCount: course.count
+      }
+    });
+  },
   incViewCount: async function(courseID) {
     return await Course.updateOne({
       _id: mongoose.Types.ObjectId(courseID)
