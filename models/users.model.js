@@ -46,7 +46,7 @@ module.exports = {
         Name: '$Name',
         Password: '$Password',
         Permission: '$Permission',
-        Verified: {$eq: ['$SecretOTP', null]}
+        Verified: { $ifNull: [ "$SecretOTP", true ] }
       }
     }
     ]);
@@ -67,6 +67,7 @@ module.exports = {
         _id: '$_id',
         Email: '$Email',
         Name: '$Name',
+        Password: '$Password',
         Permission: '$Permission',
         SecretOTP: '$SecretOTP'
       }
@@ -112,6 +113,8 @@ module.exports = {
 
     return false;
   },
+
+  //Email, Name
   patchAccountInfo: async function(account) {
     const condition = account._id;
 

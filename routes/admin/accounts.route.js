@@ -23,6 +23,7 @@ router.post('/add', async function(req, res) {
   const user = {
     Email: req.body.Email,
     Name: req.body.Name,
+    SecretOTP: null,
     Password: hash,
     Permission: req.body.Permission,
   }

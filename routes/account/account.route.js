@@ -45,7 +45,7 @@ router.post('/login', authMdws.filterAuthed, async function (req, res){
     req.session.isAuth = true;
     req.session.authUser = user;
 
-    //console.log(user);
+    console.log(user);
 
     let url = req.session.retUrl || '/';
 
@@ -77,7 +77,7 @@ router.post('/register', authMdws.filterAuthed, async function (req, res){
     const temp = otpmailer.sendOTPMail(req.body.Email);   //Promise pending
     console.log(temp);
     const otp = temp.then(async (value)=>{
-        console.log(value);
+        //console.log(value);
         const user = {
             Email: req.body.Email,
             Password: hash,
@@ -97,7 +97,7 @@ router.post('/register', authMdws.filterAuthed, async function (req, res){
             req.session.authUser = result;
         }
 
-        console.log(result);
+        //console.log(result);
         
         res.redirect('/account/verify');
     })
@@ -126,9 +126,10 @@ router.get('/is-available', async function(req, res){
 
 router.get('/verify', authMdws.auth, async function (req, res){
     const account = await userModel.singleById(req.session.authUser._id);
+    //console.log(account)
 
     //Block verified users
-    if (account.SecretOTP === null) {
+    if (!account.SecretOTP) {
         res.redirect('/');
         return;
     }
@@ -163,13 +164,69 @@ router.post('/verify', authMdws.auth, async function (req, res){
 router.get('/edit', authMdws.auth, async function (req, res){
     const account = await userModel.singleById(req.session.authUser._id);
 
+    let message = null
+    if (req.query.success !== undefined) {
+        message = req.query.success === "true"?"Success":"Failed";
+    }
+
+    let backRoute = null; //path for the back button
+    if (account.Permission == 0) {
+        backRoute = '/admin';
+    }
+    else if (account.Permission == 1) {
+        backRoute = '/teacher';
+    }
+    else {
+        backRoute = '/'
+    }
+
     res.render('vwAccount/edit', {
-        account
+        account,
+        message,
+        backRoute
     });
 });
 
 
 router.post('/edit', async function (req, res){
+
+    const result = await userModel.patchAccountInfo(req.body);
+
+    if (result) {
+        //Update Success, reUpdate localuser to display
+        const update = await userModel.singleById(req.body._id);
+        update.Verified = (update.SecretOTP) ? false:true;
+        delete update.SecretOTP;
+
+        req.session.authUser = update;
+    }
+
+    res.redirect('/account/edit');
+});
+
+router.post('/reset', async function (req, res){
+    const account = req.body;
+    const user = await userModel.singleById(account._id);
+    //console.log(account);
+    //console.log(user);
+    const ret = bcrypt.compareSync(account.currentPassword, user.Password);
     
+    if (!ret) {
+        res.redirect('/account/edit?success=false');
+        return;
+    }
+
+    const hash = bcrypt.hashSync(account.Password,10, null);
+    const isPatched = await userModel.patchPassword({
+        _id: account._id,
+        Password: hash
+    });
+
+    if (isPatched) {
+        res.redirect('/account/edit?success=true');
+        return;
+    }
+
+    res.redirect('/account/edit?success=true');
 });
 module.exports = router;
