@@ -11,6 +11,7 @@ const userRoute = {
 };
 
 module.exports = {
+  //Authentication for admin routes
   adminAuth: function(req, res, next) {
     
     if (req.session.isAuth === false) {
@@ -18,6 +19,7 @@ module.exports = {
       return res.redirect('/account/login');
     }
     else if (
+      //Not auth or not having correct permission
       typeof(req.session.authUser) === 'undefined' 
       || req.session.authUser.Permission !== Permission['Admin']
       ) {
@@ -29,6 +31,38 @@ module.exports = {
       }
     }
   
+    next();
+  },
+  //Authentication for teacher route
+  teacherAuth: function(req, res, next) {
+    
+    if (req.session.isAuth === false) {
+      req.session.retUrl = req.originalUrl;
+      return res.redirect('/account/login');
+    }
+    else if (
+      //Not auth or not having correct permission
+      typeof(req.session.authUser) === 'undefined' 
+      || req.session.authUser.Permission !== Permission['Teacher']
+      ) {
+      if (req.session.authUser.Permission === Permission['Admin']) {
+        return res.redirect(userRoute['Admin']);
+      }
+      else {
+        return req.redirect(userRoute['Else']);
+      }
+    }
+  
+    next();
+  },
+
+  //Normal auth for anything that need it (profile)
+  auth: function(req, res, next) {
+    if (req.session.isAuth === false) {
+      req.session.retUrl = req.originalUrl;
+      return res.redirect('/account/login');
+    }
+
     next();
   }
 }

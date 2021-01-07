@@ -1,0 +1,45 @@
+<nav class="navbar navbar-dark bg-dark navbar-expand-md">
+    <a href="/teacher" title="teacher" class="navbar-brand" rel="home">Teacher</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topnavbar" aria-controls="topnavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>    
+    <div id="topnavbar" class="collapse navbar-collapse">
+      <ul id="menu-main-menu" class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="/teacher">Dashboard</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ml-auto">
+        {{#if isAuth}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{authUser.Name}}
+          </a>
+          <div class="dropdown-menu dropdown-menu-right my-2" aria-labelledby="userDropdown">
+            <a class="dropdown-item text-center p-1" href="/account/profile">
+              <i class="fa fa-user mr-2" aria-hidden="true"></i>Profile
+            </a>
+            <a class="dropdown-item text-center p-1" href="/account/logout">
+              <i class="fa fa-sign-out mr-2" aria-hidden="true"></i>Logout
+            </a>
+          </div>
+        </li>
+        {{else}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Account
+          </a>
+          <div class="dropdown-menu dropdown-menu-right my-2" aria-labelledby="userDropdown">
+            <a class="dropdown-item text-center p-1" href="/account/login">
+              <i class="fa fa-sign-in mr-2" aria-hidden="true"></i>Login
+            </a>
+            <a class="dropdown-item text-center p-1" href="/account/register">
+              <i class="fa fa-user-plus mr-2" aria-hidden="true"></i>Register
+            </a>
+          </div>
+        </li>
+        {{/if}}
+      </ul>
+    </div>
+  </nav>

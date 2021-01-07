@@ -11,9 +11,14 @@
   {{{_sections.css}}}
 </head>
 <body class="bg-light"> 
+  {{> special_user.nav}}
 
-  <div class="container-fluid">
-    {{{body}}}
+  <div class="container-fluid" style="min-height: 100vh;">
+    <div class="row min-vh-100">
+      <div class="col-lg">
+        {{{body}}}
+      </div>
+    </div>
   </div>
         
   <!-- jQuery -> then Popper.js -> then Bootstrap JS -->

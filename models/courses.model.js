@@ -40,20 +40,30 @@ module.exports = {
     }
 
     result = await Course.aggregate([
-      {
-        $match: {
+      { $match: {
           _id: mongoose.Types.ObjectId(id)
         }
       },
-      {
-        $lookup: {
+      { $lookup: {
           from: categoryModel.collectionName,
           localField: 'Category',
           foreignField: '_id',
           as: 'Category'
         }
-      }
-    ]).unwind('$Category');
+      },
+      { $lookup: {  //JOIN TEACHER
+          from: 'users',
+          localField: 'Teacher',
+          foreignField: '_id',
+          as: 'Teacher'
+        }
+      },
+      { $unwind: '$Category'},
+      { $unwind: {
+          path:'$Teacher', preserveNullAndEmptyArrays: true
+        }
+      },
+    ]);
 
     if (!result) { //err
       return null;
@@ -106,6 +116,57 @@ module.exports = {
 
     return result;
   },
+  allByTeacher: async function(TeacherUID) {
+    let result = await Course.aggregate([
+      { $match: {
+          Teacher: mongoose.Types.ObjectId(TeacherUID),
+        }
+      },
+      { $lookup: {
+          from: categoryModel.collectionName,
+          localField: 'Category',
+          foreignField: '_id',
+          as: 'Category'
+        }
+      },
+      { $lookup: {  //JOIN TEACHER
+          from: 'users',
+          localField: 'Teacher',
+          foreignField: '_id',
+          as: 'Teacher'
+        }
+      },
+      { $unwind: '$Category'},
+      { $unwind: {
+          path:'$Teacher', preserveNullAndEmptyArrays: true
+        }
+      },
+      { $project: {
+          _id: '$_id',
+          CourseName: '$CourseName',
+          RatingAverage: '$RatingAverage',
+          RatingCount: '$RatingCount',
+          RegisterCount: '$RegisterCount',
+          Price: '$Price',
+          Discount: '$Discount',
+          Category: '$Category',
+          Teacher: {
+            Name: '$Teacher.Name'
+          },
+          LastUpdate: '$LastUpdate',
+          Status: '$Status',
+        }
+      }  
+    ]).unwind('$Category');
+
+    //Format day time from DB's ISO string
+    result.forEach(row => {
+      row.LastUpdate = (datetime.FormatDate(row.LastUpdate));
+    });
+
+    return result;
+  },
+
   byCatMinus: async function(catID, courseID, findlimit) {
     let category = await categoryModel.singleCategory(catID);
 
@@ -131,6 +192,18 @@ module.exports = {
           as: 'Category'
         }
       },
+      { $lookup: {  //JOIN TEACHER
+          from: 'users',
+          localField: 'Teacher',
+          foreignField: '_id',
+          as: 'Teacher'
+        }
+      },
+      { $unwind: '$Category'},
+      { $unwind: {
+          path:'$Teacher', preserveNullAndEmptyArrays: true
+        }
+      },
       { $project: {
           _id: '$_id',
           CourseName: '$CourseName',
@@ -139,7 +212,9 @@ module.exports = {
           Price: '$Price',
           Discount: '$Discount',
           Category: '$Category',
-          Teacher: '$Teacher'
+          Teacher: {
+            Name: '$Teacher.Name'
+          }
         }
       },
       { $limit: findlimit}
@@ -188,7 +263,9 @@ module.exports = {
           Price: '$Price',
           Discount: '$Discount',
           Category: '$Category',
-          Teacher: '$Teacher'
+          Teacher: {
+            Name: '$Teacher.Name'
+          }
         }
       },
       { $skip: skip },
@@ -255,6 +332,11 @@ module.exports = {
           as: 'Teacher'
         }
       },
+      { $unwind: '$Category'},
+      { $unwind: {
+          path:'$Teacher', preserveNullAndEmptyArrays: true
+        }
+      },
       { $project: {   //Optimized for display in list
           _id: '$_id',
           CourseName: '$CourseName',
@@ -263,7 +345,9 @@ module.exports = {
           Price: '$Price',
           Discount: '$Discount',
           Category: '$Category',
-          Teacher: '$Teacher'
+          Teacher: {
+            Name: '$Teacher.Name'
+          }
         }
       },
       { $sort: sortObj},
@@ -296,6 +380,18 @@ module.exports = {
           as: 'Category'
         }
       },
+      { $lookup: {  //JOIN TEACHER
+          from: 'users',
+          localField: 'Teacher',
+          foreignField: '_id',
+          as: 'Teacher'
+        }
+      },
+      { $unwind: '$Category'},
+      { $unwind: {
+          path:'$Teacher', preserveNullAndEmptyArrays: true
+        }
+      },
       {$sort: sortObject},
       {$limit: findlimit},
       { $project: {
@@ -306,10 +402,12 @@ module.exports = {
           Price: '$Price',
           Discount: '$Discount',
           Category: '$Category',
-          Teacher: '$Teacher'
+          Teacher: {
+            Name: '$Teacher.Name'
+          }
         }
       },
-    ]).unwind('$Category');
+    ]);
 
     return result;
   },
@@ -350,7 +448,7 @@ module.exports = {
       Discount: 0,
       LastUpdate: datetime.ISODateNow(), //Save to db as ISO String
       Category: mongoose.Types.ObjectId(entity.CatID),
-      Teacher: null,
+      Teacher: mongoose.Types.ObjectId(entity.Teacher),
       Status: false
     }).save();
   },
@@ -362,7 +460,7 @@ module.exports = {
     entity.Discount = parseInt(entity.Discount);
     entity.Status = (entity.Status === 'true');
 
-    return await Course.updateOne({'_id': condition}, entity, function(err){
+    return await Course.updateOne({'_id': condition}, {$set: entity}, function(err){
       if (err) {
         console.log(err);
       }

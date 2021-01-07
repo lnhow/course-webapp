@@ -41,8 +41,8 @@ module.exports = {
       }
     }
     ]);
-    if(result.length >= 1)
-      {return result;}
+    if(result.length > 0)
+      {return result[0];}
     else
       {return null;}
   },

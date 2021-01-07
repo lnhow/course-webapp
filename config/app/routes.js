@@ -36,6 +36,12 @@ module.exports = function(app) {
   app.use('/search', require('../../routes/search.route'));
   app.use('/course', require('../../routes/course.route')); //Single course
   app.use('/courses', require('../../routes/courses.route'));
-  app.use('/teacher', require('../../routes/teacher/teacher.route'))
+
+  //Account login, logout, verify
+  app.use('/account', require('../../routes/account/account.route.js'));
+  //Account profile edit (require authentication)
+  app.use('/courses', authMdw.auth, require('../../routes/profile.route'));
+
+  app.use('/teacher', authMdw.teacherAuth, require('../../routes/teacher/teacher.route'));
   app.use('/admin',authMdw.adminAuth, require('../../routes/admin/admin.route'));
 }

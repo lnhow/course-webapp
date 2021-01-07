@@ -35,7 +35,7 @@ router.post('/login', async function (req, res){
     }
     console.log(user);
     console.log(req.body.Password)
-    console.log(user.password)
+    console.log(user.Password)
     const ret = bcrypt.compareSync(req.body.Password, user.Password);
     if(ret === false)
     {

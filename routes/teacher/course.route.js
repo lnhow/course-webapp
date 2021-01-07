@@ -81,7 +81,15 @@ router.post('/img', async function(req, res) {
 });
 router.post('/add', async function(req, res) {
   console.log(req.body);
-  const ret = await courseModel.add(req.body);
+  const course = req.body;
+  if (!req.session.authUser || req.session.authUser.Permission !== 1) {
+    res.redirect('/');    //Don't have permission to post this
+    return;
+  }
+
+  course.Teacher = req.session.authUser._id;
+
+  const ret = await courseModel.add(course);
   //Create a new directory for imgs
   const imgPath = `${fileUtils.coursesImgPath}${ret._id}`;
 
