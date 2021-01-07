@@ -1,3 +1,5 @@
+const { use } = require("../routes/teacher/course.route");
+
 const Permission = {
   'Admin': 0,
   'Teacher': 1,
@@ -27,7 +29,7 @@ module.exports = {
         return res.redirect(userRoute['Teacher']);
       }
       else {
-        return req.redirect(userRoute['Else']);
+        return res.redirect(userRoute['Else']);
       }
     }
   
@@ -49,7 +51,7 @@ module.exports = {
         return res.redirect(userRoute['Admin']);
       }
       else {
-        return req.redirect(userRoute['Else']);
+        return res.redirect(userRoute['Else']);
       }
     }
   
@@ -64,5 +66,27 @@ module.exports = {
     }
 
     next();
+  },
+
+  //Block already logged in user from accessing next()
+  filterAuthed: function(req, res, next) {
+    if (req.session.isAuth === true) {
+      //Block logged in user
+      if (req.session.authUser.Permission === Permission['Admin']) {
+        res.redirect(userRoute['Admin']);
+      }
+      else if (req.session.authUser.Permission === Permission['Teacher']) {
+        res.redirect(userRoute['Teacher']);
+      }
+      else {
+        console.log('else');
+        res.redirect(userRoute['Else'])
+      }
+      
+      return;
+    }
+
+    next();
   }
+
 }

@@ -33,23 +33,42 @@ module.exports = {
       SecretOTP: entity.SecretOTP
     }).save()
   },
+
   singleByEmail: async function(email){
     let result = await User.aggregate([
-    {
-      $match:{
+    { $match:{
         Email: email
+      }
+    },
+    { $project: {//For security purpose
+        _id: '$_id',
+        Email: '$_Email',
+        Name: '$Name',
+        Password: '$Password',
+        Permission: '$Permission',
+        Verified: {$eq: ['$SecretOTP', null]}
       }
     }
     ]);
-    if(result.length > 0)
-      {return result[0];}
-    else
-      {return null;}
+    if(result.length > 0) {
+      return result[0];
+    }
+    else {
+      return null;
+    }
   },
   singleById: async function(accountId){
     let result = await User.aggregate([
-    { $match:{
+    { $match: {
         _id: mongoose.Types.ObjectId(accountId)
+      }
+    },
+    { $project: {//For security purpose
+        _id: '$_id',
+        Email: '$_Email',
+        Name: '$Name',
+        Permission: '$Permission',
+        SecretOTP: '$SecretOTP'
       }
     }
     ]);
@@ -72,6 +91,7 @@ module.exports = {
       
     return result;
   },
+
   patchInfo: async function(account) {
     const condition = account._id;
 
@@ -100,6 +120,23 @@ module.exports = {
     }, {
       $set: {
         Password: account.Password
+      }
+    });
+
+    if (result.ok === 1) {
+      return true;
+    }
+
+    return false;
+  },
+  patchOTP: async function(accountId, newOTP) {
+    const condition = accountId;
+
+    let result = await User.updateOne({
+      '_id': mongoose.Types.ObjectId(condition)
+    }, {
+      $set: {
+        SecretOTP: newOTP
       }
     });
 
