@@ -42,7 +42,7 @@ module.exports = {
     },
     { $project: {//For security purpose
         _id: '$_id',
-        Email: '$_Email',
+        Email: '$Email',
         Name: '$Name',
         Password: '$Password',
         Permission: '$Permission',
@@ -65,7 +65,7 @@ module.exports = {
     },
     { $project: {//For security purpose
         _id: '$_id',
-        Email: '$_Email',
+        Email: '$Email',
         Name: '$Name',
         Permission: '$Permission',
         SecretOTP: '$SecretOTP'
@@ -102,6 +102,41 @@ module.exports = {
         Name: account.Name,
         Email: account.Email,
         Permission: parseInt(account.Permission),
+        About: account.About
+      }
+    });
+
+    if (result.ok === 1) {
+      return true;
+    }
+
+    return false;
+  },
+  patchAccountInfo: async function(account) {
+    const condition = account._id;
+
+    let result = await User.updateOne({
+      '_id': mongoose.Types.ObjectId(condition)
+    }, {
+      $set: {
+        Name: account.Name,
+        Email: account.Email,
+      }
+    });
+
+    if (result.ok === 1) {
+      return true;
+    }
+
+    return false;
+  },
+  patchAboutInfo: async function(account) {
+    const condition = account._id;
+
+    let result = await User.updateOne({
+      '_id': mongoose.Types.ObjectId(condition)
+    }, {
+      $set: {
         About: account.About
       }
     });

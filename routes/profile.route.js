@@ -1,7 +1,9 @@
 const router = require('express').Router();
+const authMdws = require('../middlewares/auth.mdw');
 
-router.get('/', function(req, res){
-
+//Only students can access this
+router.get('/', async function(req, res){
+  res.render('vwProfile/index.hbs')
 });
 
 module.exports = router;

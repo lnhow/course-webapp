@@ -87,6 +87,26 @@ module.exports = {
     }
 
     next();
+  },
+
+  //Block already admin, teacher from accessing next()
+  filterSpecialUser: function(req, res, next) {
+    if (req.session.isAuth === false) {
+      req.session.retUrl = req.originalUrl;
+      return res.redirect('/account/login');
+    }
+
+    //Block logged in user
+    if (req.session.authUser.Permission === Permission['Admin']) {
+      res.redirect(userRoute['Admin']);
+      return;
+    }
+    else if (req.session.authUser.Permission === Permission['Teacher']) {
+      res.redirect(userRoute['Teacher']);
+      return;
+    }
+
+    next();
   }
 
 }

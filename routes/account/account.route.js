@@ -160,8 +160,12 @@ router.post('/verify', authMdws.auth, async function (req, res){
     res.redirect(req.session.retUrl || '/');
 })
 
-router.get('/edit', async function (req, res){
-    res.render('vwAccount/edit');
+router.get('/edit', authMdws.auth, async function (req, res){
+    const account = await userModel.singleById(req.session.authUser._id);
+
+    res.render('vwAccount/edit', {
+        account
+    });
 });
 
 

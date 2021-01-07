@@ -1,14 +1,14 @@
 const nodeMailer = require('nodemailer');
 const gmailHost = 'smtp.gmail.com';
 const office365Host = 'smtp.office365.com';
-const mailOtp = require('../config/mailerOtp');
+const mailAccount = require('../config/keys.json').mail_account;
 
 const mail = {
   //The account MUST enable 'Quyền truy cập của ứng dụng kém an toàn' - Less secure app access
   //Should probably put in config/keys.json and .gitignore keys.json
   account: {
-    user: mailOtp.User,
-    pass: mailOtp.Pass,
+    user: mailAccount.user,
+    pass: mailAccount.pass,
   },
   host: gmailHost,  //Host of the mail account 
   port: 587         //Secure SMTP port

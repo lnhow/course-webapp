@@ -1,67 +1,104 @@
-<div class="container">
-    <h1>Edit Profile</h1>
-  	<hr>
+{{#section 'title'}}
+<title>Account: Edit</title>
+{{/section}}
+{{#section 'js'}}
+<script>
+{{!-- Form validation --}}
+$('#formReset').on('submit', function(e) {
+  e.preventDefault();
+
+  const txtPassword = $('#txtPassword').val();
+  const txtConfirm = $('#txtPasswordConfirm').val();
+  if (txtPassword !== txtConfirm) {
+    alert('Password does not match');
+  }
+  else {
+    $('#formReset').off('submit').submit();
+  }
+});
+</script>
+{{/section}}
+
+<div class="container min-vh-100">
+  <div style="height: 10vh;" class="d-flex align-items-center">
+    <h1 class="mb-0">Edit Account Info</h1>
+  </div>
+  <hr>
 	<div class="row">
       <!-- left column -->
-      <div class="col-md-3">
+      {{!-- <div class="col-md-3">
         <div class="text-center">
           <img src="//placehold.it/100" class="avatar img-circle" alt="avatar">
           <h6>Upload a different photo...</h6>
           
           <input type="file" class="form-control">
         </div>
-      </div>
+      </div> --}}
       
       <!-- edit form column -->
-      <div class="col-md-9 personal-info">
-        <div class="alert alert-info alert-dismissable">
+      <div class="col-md-8">
+
+        {{!-- <div class="alert alert-info alert-dismissable">
           <a class="panel-close close" data-dismiss="alert">×</a> 
           <i class="fa fa-coffee"></i>
           <strong>Edit Profile</strong>
-        </div>
-        <h3>Personal info</h3>
-        
-        <form class="form-horizontal" role="form">
-          <div class="form-group">
-            <label class="col-lg-3 control-label">Name:</label>
-            <div class="col-lg-8">
-              <input class="form-control" type="text" value="Jane">
-            </div>
-          </div>
+        </div> --}}
+        <div class="card">
+          <form id="formEdit" method="POST" action="">
+          <div class="card-body">
+            <h5 class="card-title">Account Info</h5>
+            
+            <input type="hidden" name="_id" value="{{account._id}}" required>
             <div class="form-group">
-              <label class="col-lg-3 control-label">Email:</label>
-              <div class="col-lg-8">
-              <input class="form-control" type="text" value="janesemail@gmail.com">
+              <label for="txtEmail"><b>Email</b></label>
+              <input type="text" class="form-control" id="txtEmail" name="Email" placeholder="New email" value="{{account.Email}}" autofocus required>
             </div>
-          <div class="form-group">
-            <label class="col-lg-3 control-label">About:</label>
-            <div class="col-lg-8">
-              <input class="form-control" type="text" value="">
+            <div class="form-group">
+              <label for="txtName"><b>Name</b></label>
+              <input type="text" class="form-control" id="txtName" name="Name" placeholder="New name" value="{{account.Name}}">
             </div>
           </div>
+          <div class="card-footer text-muted">
+            <button type="submit" class="btn btn-outline-success">
+              <i class="fa fa-check" aria-hidden="true"></i>
+              Save
+            </button>
           </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label">New Password:</label>
-            <div class="col-md-8">
-              <input class="form-control" type="password" value="11111122333">
+          </form>
+        </div>        
+      </div>
+
+      <div class="col-md-4">
+        <div class="card">
+          <form id="formReset" method="POST" action="/account/reset">
+            <div class="card-body">
+              <h5 class="card-title">Reset Password</h5>
+              <input type="hidden" name="_id" value="{{account._id}}" required>
+              <div class="form-group">
+                <label for="txtOldPassword"><b>Password</b></label>
+                <input type="password" class="form-control" id="txtOldPassword" 
+                        name="Password" placeholder="Current password"
+                        required>
+              </div>
+              <div class="form-group">
+                <label for="txtPassword"><b>Password</b></label>
+                <input type="password" class="form-control" id="txtPassword" 
+                        name="Password" placeholder="New Password"
+                        required>
+              </div>
+              <div class="form-group">
+                <label for="txtPasswordConfirm"><b>Confirm Password</b></label>
+                <input type="password" class="form-control" id="txtPasswordConfirm" 
+                        placeholder="Confirm new password" 
+                        required>
+              </div>
+              <button type="submit" class="btn btn-outline-danger">
+                  <i class="fa fa-refresh" aria-hidden="true"></i>
+                  Reset password
+              </button>
             </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label">Confirm password:</label>
-            <div class="col-md-8">
-              <input class="form-control" type="password" value="11111122333">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label"></label>
-            <div class="col-md-8">
-              <input type="button" class="btn btn-primary" value="Save Changes">
-              <span></span>
-              <input type="reset" class="btn btn-default" value="Cancel">
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
   </div>
 </div>
-<hr>

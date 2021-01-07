@@ -39,8 +39,9 @@ module.exports = function(app) {
 
   //Account login, logout, verify
   app.use('/account', require('../../routes/account/account.route.js'));
-  //Account profile edit (require authentication)
-  app.use('/courses', authMdw.auth, require('../../routes/profile.route'));
+  
+  //Account student profile only
+  app.use('/profile', authMdw.filterSpecialUser, require('../../routes/profile.route'));
 
   app.use('/teacher', authMdw.teacherAuth, require('../../routes/teacher/teacher.route'));
   app.use('/admin',authMdw.adminAuth, require('../../routes/admin/admin.route'));
