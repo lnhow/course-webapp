@@ -1,0 +1,75 @@
+{{#section 'title'}}
+
+{{/section}}
+{{#section 'css'}}
+<link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" /> {{!-- Videojs CDN --}}
+{{/section}}
+{{#section 'js'}}
+{{!-- Videojs CDN --}}
+<script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+{{/section}}
+
+<div class="container min-vh-100">
+ <div class="row">
+   <div class="col-sm-1"></div>
+   <div class="col-sm-10">
+     
+      <div class="card">
+        <div class="card-header d-flex align-items-center">
+          <a class="btn btn-primary" href="/course/{{Chapter.Course._id}}" role="button"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+          <div class="ml-2">
+            <small>{{Chapter.Course.CourseName}}</small>
+            <h6 class="modal-title" id="previewLabel">{{Chapter.ChapterName}}</h6>
+          </div>
+        </div>
+        <div class="card-body">
+          {{#if Chapter.VideoLink}}
+          <div>
+            <video
+              id="my-video"
+              class="video-js vjs-16-9"
+              controls
+              preload="auto"
+              data-setup="{}">
+              <source src="{{Chapter.VideoLink}}" type="video/mp4"/>
+              <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a
+                web browser that
+                <a href="https://videojs.com/html5-video-support/" target="_blank"
+                  >supports HTML5 video</a>
+              </p>
+            </video>
+          </div>
+          {{else}}
+          <div class="text-center">The teacher hasn't uploaded this chapter yet</div>
+          {{/if}}
+        </div>
+        <div class="card-footer d-flex">
+          <a class="btn btn-primary text-nowrap {{#unless CanGoPrev}}disabled{{/unless}}"
+            href="/course/{{Chapter.Course._id}}/{{Prev}}" role="button" 
+            {{#unless CanGoPrev}}disabled{{/unless}}>
+            <i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+          <form class="flex-fill mx-2" method="post">
+            {{#if Chapter.completed}}
+            {{!-- Dummy button --}}
+            <a class="btn btn-primary disabled w-100" href="#" role="button" disabled>Completed</a>
+            {{else}}
+            {{#if Chapter.VideoLink}} {{!-- Teacher has uploaded chapter--}}
+            <button type="submit" class="btn btn-primary w-100">Complete</button>
+            {{else}}
+            {{!-- Dummy button --}}
+            <button class="btn btn-primary w-100" disabled>Not uploaded</button>
+            {{/if}}
+            {{/if}}
+          </form>
+          <a class="btn btn-primary text-nowrap {{#unless CanGoNext}}disabled{{/unless}} {{#unless Chapter.completed}}disabled{{/unless}}" 
+            href="/course/{{Chapter.Course._id}}/{{Next}}" role="button" 
+            {{#unless CanGoNext}}disabled{{/unless}} {{#unless Chapter.completed}}disabled{{/unless}}>
+            <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+      
+   </div>
+   <div class="col-sm-1"></div>
+ </div>
+</div>

@@ -3,8 +3,25 @@
 {{/section}}
 {{#section 'css'}}
 <style>
-.card:hover{
+.card-hover:hover{
   transform: scale(1.05);
+}
+.glass-morphism{
+  background: rgba( 255, 255, 255, 0.3 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  border-radius: 5px;
+}
+#favorite {
+  background: rgb(246,0,23);/*Incase incompatible with gradient*/
+  background: radial-gradient(circle, rgba(246,0,23,1) 0%, rgba(224,46,46,1) 46%, rgba(255,110,110,1) 100%);
+}
+#others {
+  background: rgb(1,156,47);/*Incase incompatible with gradient*/
+  background: radial-gradient(circle, rgba(1,156,47,1) 0%, rgba(68,172,54,1) 37%, rgba(0,193,145,1) 100%);
+}
+#welcome {
+  background: rgb(58,194,196);/*Incase incompatible with gradient*/
+  background: linear-gradient(270deg, rgba(58,194,196,1) 0%, rgba(0,126,186,1) 100%);
 }
 </style>
 {{/section}}
@@ -23,10 +40,10 @@ function toggleFavorite(id) {
 </form>
 
 <div class="container-fluid min-vh-100">
-  <div class="row bg-primary">
+  <div class="row" id="welcome">
     <div class="col-1"></div>
-    <div class="col-lg p-2 d-flex align-items-center text-light" style="min-height: 30vh;">
-      <div>
+    <div class="col-lg p-2 d-flex align-items-center text-light" style="min-height: 20vh;">
+      <div class="ml-2">
         <h4>Welcome back,</h4>
         <h3 class="font-weight-bold">{{authUser.Name}}</h3>
         <p>{{authUser.Email}}</p>
@@ -38,15 +55,15 @@ function toggleFavorite(id) {
     <h2>Registered Courses</h2>
   </div>
 
-  <div class="row m-2">
-    <div class="col-sm-12 mt-2">
-      <h3><b>Watch list</b></h3>
+  <div class="card row m-2" id="favorite">
+    <div class="col-sm-12 mt-4">
+      <h3 class="text-light text-center mb-0"><b>Your Favorites</b></h3>
     </div>
     
     <div class="container-fluid my-4 mx-auto">
-    <div class="row d-flex flex-row justify-content-center mt-0 py-2">
+    <div class="row d-flex flex-row justify-content-center mt-0 py-2 mx-1 glass-morphism">
       {{#each favorites}}
-      <div class="card m-2" style='width: 270px'>
+      <div class="card card-hover m-2" style='width: 270px'>
         <img class="card-img-top w-100"
           style="object-fit: cover; height: 140px;"
           src="/p/imgs/courses/{{_id}}/thumbnail.jpg" 
@@ -67,21 +84,21 @@ function toggleFavorite(id) {
         </div>
       </div>
       {{else}}
-      <div><p></p></div>
+      <div><p class="text-center text-light mb-0">There is no course yet</p></div>
       {{/each}}
     </div>
     </div>
   </div>
 
-  <div class="row m-2">
-    <div class="col-sm-12 mt-2">
-      <h3><b>Others</b></h3>
+  <div class="card row m-2 mt-4" id="others">
+    <div class="col-sm-12 mt-4">
+      <h3 class="text-center text-light mb-0"><b>Courses</b></h3>
     </div>
     
     <div class="container-fluid my-4 mx-auto">
-    <div class="row d-flex flex-row justify-content-center mt-0 py-2">
+    <div class="row d-flex flex-row justify-content-center mt-0 py-2 text-dark mx-1 glass-morphism">
       {{#each others}}
-      <div class="card m-2" style='width: 270px'>
+      <div class="card card-hover m-2" style='width: 270px'>
         <img class="card-img-top w-100"
           style="object-fit: cover; height: 140px;"
           src="/p/imgs/courses/{{_id}}/thumbnail.jpg" 
@@ -102,7 +119,7 @@ function toggleFavorite(id) {
         </div>
       </div>
       {{else}}
-      <div><p></p></div>
+      <div><p class="text-center text-light mb-0">There is no course yet</p></div>
       {{/each}}
     </div>
     </div>

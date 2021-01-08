@@ -204,6 +204,21 @@ module.exports = {
     }
     return false;
   },
+  updateLastChapter: async function(userId, courseId) {
+    const result = await users_course.updateOne({
+      User: mongoose.Types.ObjectId(userId),
+      Course: mongoose.Types.ObjectId(courseId)
+    }, {
+      $inc: {
+        chapter: 1
+      }
+    });
+
+    if (result.ok === 1) {
+      return true;
+    }//else
+    return false;
+  }
 
 }
 

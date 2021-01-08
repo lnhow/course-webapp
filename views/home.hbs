@@ -8,9 +8,6 @@
   background-color: rgba(0,0,0,0.7);
   margin-top: 1rem;
 }
-.bg-dark{ 
-  background-color: black;
- }
 .card-body{
   padding: 0.75rem;
 }
@@ -21,6 +18,14 @@
 .card-title{
   margin-bottom: 0.25rem;
 }
+.bg-gradient-top {
+  background: #0F2027;
+}
+.bg-gradient {
+  background: #0F2027;/*Incase incompatible with gradient*/
+  background: linear-gradient(#0F2027, #203A43, #323A40);
+}
+
 </style>
 {{/section}}
 
@@ -56,23 +61,23 @@
 {{!-- carousel --}}
 
 <div class="container-fluid my-4">
-  <div class="row pt-2 pl-2">
-    <h5 class="mx-auto mb-0 py-2 px-4 text-light text-center bg-dark">Lĩnh vực đăng ký nhiều nhất</h5>
+  <div class="row pt-2">
+    <h6 class="mx-auto mb-0 py-2 px-4 text-light text-center bg-gradient-top rounded-top">Most registered categories</h6>
   </div>
-  <div class="row bg-dark mt-0">
-    <div class="d-flex flex-nowrap mx-auto overflow-auto px-2 py-3">
+  <div class="row bg-gradient mt-0 mx-1 rounded">
+    <div class="d-flex flex-wrap mx-auto px-2 py-2 justify-content-center">
       {{#each highlightCats}}
-      <a class="btn btn-light mx-2 text-nowrap text-center" href="/courses/{{_id}}" role="button">{{CatName}}</a>
+      <a class="btn btn-light m-2 text-nowrap text-center" href="/courses/{{_id}}" role="button">{{CatName}}</a>
       {{/each}}
     </div>
   </div>
 </div>
 
-<div class="container-fluid my-4 mx-auto">
-  <div class="row pt-2 pl-2">
-    <h5 class="mx-auto mb-0 py-2 px-4 text-light bg-dark">Xem nhiều nhất</h5>
+<div class="container-fluid my-4">
+  <div class="row pt-2">
+    <h4 class="mx-auto mb-0 py-2 px-4 text-light bg-gradient-top rounded-top">Most Viewed</h4>
   </div>
-  <div class="row d-flex flex-row justify-content-center bg-dark mt-0 py-2">
+  <div class="row d-flex flex-row justify-content-center mt-0 py-2 bg-gradient rounded mx-1">
     {{#each mostViewed}}
     {{> card_course_home}}
     {{/each}}
@@ -80,10 +85,10 @@
   </div>
 </div>
 <div class="container-fluid my-4">
-  <div class="row pt-2 pl-2">
-    <h5 class="mx-auto mb-0 py-2 px-4 text-light bg-dark">Mới nhất</h5>
+  <div class="row pt-2">
+    <h4 class="mx-auto mb-0 py-2 px-4 text-light bg-gradient-top rounded-top">Lastest update</h4>
   </div>
-  <div class="row d-flex flex-row justify-content-center bg-dark mt-0 py-2">
+  <div class="row d-flex flex-row justify-content-center bg-gradient mt-0 py-2 rounded mx-1">
 
     {{#each newest}}
     {{> card_course_home}}

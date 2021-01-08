@@ -351,7 +351,7 @@ module.exports = {
         }
       },
       { $sort: sortObj},
-      { $facet:{  //Group count all result then skip limit
+      { $facet:{  //Group count all result in 1 branch and skip limit in the other
         "stage1" : [ {"$group": {_id: null, count: {$sum: 1}}} ],
         "stage2" : [ {"$skip": skip}, {"$limit": config.app.pagination.limit} ]
       }},

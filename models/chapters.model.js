@@ -34,6 +34,48 @@ module.exports = {
     ]);
     return result[0];
   },
+  //Order: Position of chapter in course, orderID > 0
+  singleInCourse: async function(courseID, order) {
+    if (order <= 0) {
+      return null;
+    }
+
+    const result = await Chapter.aggregate([
+      { $match: {
+          Course: mongoose.Types.ObjectId(courseID)
+      }}, 
+      { $facet:{  //Group count all result in 1 branch and skip limit in the other
+        "stage1" : [ {"$group": {_id: null, count: {$sum: 1}}} ],
+        "stage2" : [ {"$skip": order - 1}, {"$limit": 1} ]  //get single chapter by limit 1
+      }},
+      { $unwind: '$stage1'},
+      { $unwind: '$stage2'},
+      { $lookup: {
+        from: 'courses',
+        localField: 'stage2.Course',
+        foreignField: '_id',
+        as: 'stage2.Course'
+      }},
+      { $unwind: '$stage2.Course'},
+      { $project: {
+        count: '$stage1.count',
+        Chapter: {
+          _id: '$stage2._id',
+          ChapterName: '$stage2.ChapterName',
+          VideoLink: '$stage2.VideoLink',
+          Course: {
+            _id: '$stage2.Course._id',
+            CourseName: '$stage2.Course.CourseName'
+          }
+        }
+      }}
+    ]);
+
+    if (result.length > 0) {
+      return result[0];
+    } //else
+    return null;
+  },
 
 
   add: async function(entity) {
