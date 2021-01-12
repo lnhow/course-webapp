@@ -5,17 +5,7 @@
 {{#section 'css'}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
 <style>
-  .form-group{
-    width: 55%;
-    margin: auto;
-    margin-bottom: 20px;
-  }
-.main-form{
-  width: 500px;
-  margin: 10px auto;
-  background: mintcream;
-  border-radius: 20px;
-}
+
 </style>
 {{/section}}
 
@@ -24,12 +14,25 @@
 src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 <script>
 
-  $('#frmRegister').on('submit', function(e){ //lỗi
-
+  $('#frmRegister').on('submit', function(e){
+    e.preventDefault();
 
     const email=$('#txtEmail').val();
-    if(email.length===0){
+    if(email.length === 0){
       alert('Please fill in your Email.');
+      return;
+    }
+
+    const password=$('#txtPassword').val();
+    const confirm=$('txtPasswordConfirm').val();
+    if(password !== confirm){
+      alert('Password do not match');
+      return;
+    }
+
+    const name=$('#txtName').val();
+    if(name.length===0){
+      alert('Please fill in your name');
       return;
     }
 
@@ -42,76 +45,47 @@ src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.
       }
     });
 
-    e.preventDefault();
-  });
-
-  $('#frmRegister').on('submit', function(e){
-    const password=$('#txtPassword').val();
-    const confirm=$('txtPasswordConfirm').val();
-    if(password!== confirm){
-      alert('Check out your password.');
-      e.preventDefault();
-    }
-  });
-  
-  $('#frmRegister').on('submit', function(e){
-    const password=$('#txtPassword').val();
-    const confirm=$('txtPasswordConfirm').val();
-    if(password!== confirm){
-      alert('Check out your password.');
-      e.preventDefault();
-    }
-  });
-
-  $('#frmRegister').on('submit', function(e){
-    const name=$('#txtName').val();
-    if(name.length===0){
-      alert('Please fill in your name.');
-      e.preventDefault();
-    }
-  });
-
-  $('#frmRegister').on('submit', function(e){
-    const email=$('#txtEmail').val();
-    if(email.length===0){
-      alert('Please fill in your email.');
-      e.preventDefault();
-    }
+    return false;
   });
 </script>
 {{/section}}
 
-<div class="card">
-  {{#if message}}
-  <div class="alert alert-warning alert-dismissible mb-0 fade show" role="alert">
-    {{message}}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  {{/if}}
-  <h5 class="card-header text-center" ><b>Register</b></h5>
-  <div class="card-body">
-    <form class ="main-form" action="" method="post" id="frmRegister">
-      <div class="form-group">
-        <label for="txtEmail"><b>Email</b></label>
-        <input type="text" class="form-control" id="txtEmail" name="Email" placeholder="Enter your email">
-      </div>
-      <div class="form-group">
-        <label for="txtPassword"><b>Password</b></label>
-        <input type="password" class="form-control" id="txtPass" name="Password" placeholder="Enter your Password">
-      </div>
-      <div class="form-group">
-        <label for="txtPasswordConfirm"><b>Confirm password</b></label>
-        <input type="password" class="form-control" id="txtPassConfirm" placeholder="Enter your Password again">
-      </div>
-      <div class="form-group">
-        <label for="txtName"><b>Name</b></label>
-        <input type="text" class="form-control" id="txtName" name="Name" placeholder="Enter your Name">
-      </div>
-      <button type="submit" class="btn btn-outline-sucess text-center" style="width:100%; text-align:center">
-        <aname="" id="" class="btn btn-primary mt-3" href="" role="button">Register</a>
+<div class="container" style="min-height: 80vh;">
+<div class="row d-flex justify-content-center align-items-center">
+  <div class="card col-sm-6 p-0 mt-4">
+    {{#if message}}
+    <div class="alert alert-warning alert-dismissible mb-0 fade show" role="alert">
+      {{message}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
       </button>
-    </form>
+    </div>
+    {{/if}}
+    
+    <div class="card-body">
+      <h3><b>Register</b></h3>
+      <form class="main-form" action="" method="post" id="frmRegister">
+        <div class="form-group">
+          <label for="txtEmail"><b>Email</b></label>
+          <input type="email" class="form-control" id="txtEmail" name="Email" placeholder="Enter your Email" required>
+        </div>
+        <div class="form-group">
+          <label for="txtName"><b>Name</b></label>
+          <input type="text" class="form-control" id="txtName" name="Name" placeholder="Enter your Name" required>
+        </div>
+        <div class="form-group">
+          <label for="txtPassword"><b>Password</b></label>
+          <input type="password" class="form-control" id="txtPass" name="Password" placeholder="Enter your Password" required>
+        </div>
+        <div class="form-group">
+          <label for="txtPasswordConfirm"><b>Confirm password</b></label>
+          <input type="password" class="form-control" id="txtPassConfirm" placeholder="Enter your Password again" required>
+        </div>
+        <button type="submit" class="btn btn-primary text-center" style="width:100%; text-align:center">
+          Register
+        </button>
+      </form>
+    </div>
   </div>
+</div>
 </div>

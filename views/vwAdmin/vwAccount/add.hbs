@@ -15,7 +15,7 @@ $('#formNew').on('submit', function(e) {
   $.getJSON(`/account/is-available?Email=${txtEmail}`, function(data){
     console.log(data);
     if(data === false){
-      alert('There is already an account using this email');
+      alert('There is already an account using this email/username');
     }
     else if (txtPassword !== txtConfirm) {
       alert('Password does not match');
@@ -42,7 +42,7 @@ $('#formNew').on('submit', function(e) {
 
           <div class="col-lg-9">
             <div class="form-group">
-              <label for="txtEmail"><b>Email</b></label>
+              <label for="txtEmail"><b>Email/Username</b></label>
               <input type="text" class="form-control" id="txtEmail" name="Email" placeholder="Email for this account" autofocus required>
             </div>
             <div class="form-group">
@@ -50,8 +50,8 @@ $('#formNew').on('submit', function(e) {
               <input type="text" class="form-control" id="txtName" name="Name" placeholder="Fullname of this account">
             </div>
             <div class="form-group">
-              <label for="txtPassword"><b>Default Password</b></label>
-              <input type="password" class="form-control" id="txtPassword" name="Password" placeholder="Enter Password for this account" required>
+              <label for="txtPassword"><b>Default Password (minlength = 6)</b></label>
+              <input type="password" class="form-control" id="txtPassword" name="Password" minlength="6" placeholder="Enter Password for this account" required>
             </div>
             <div class="form-group">
               <label for="txtPasswordConfirm"><b>Confirm password</b></label>
