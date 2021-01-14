@@ -34,7 +34,19 @@ router.post('/img', async function(req, res) {
     }
   });
 
-  const upload = multer({storage});
+  const upload = multer({
+    storage,
+    fileFilter: function(req, file, cb) {
+      const ext = path.extname(file.originalname);
+      if(ext === '.jpg') {//Only accept .jpg
+        return cb(null, true);
+      }
+      cb(new Error(`File type blocked ${ext}`), false);
+    },
+    limits: {
+      fileSize: 512 * 1024, //Max image size: 512 KB (in bytes)
+    }
+  });
   upload.single('imgTitle')(req, res, async function(err) {
     const id = req.body._id;
 
@@ -144,6 +156,12 @@ router.get('/:id', async function (req, res) {
     })
   }
   else {
+    //Block teachers who are not the author of this course from accessing
+    if (result.Teacher._id.toString() !== req.session.authUser._id) {
+      res.redirect('/teacher');
+      return;
+    }
+
     //Set the current category to default in page
     resultCategory.forEach(mainCat => {
       mainCat.SubCats.forEach(subcat => {
@@ -194,6 +212,13 @@ router.get('/:id/:chapterId', async function (req, res) {
     })
   }
   else {
+    console.log(resultCourse.Teacher);
+    //Block teachers who are not the author of this course from accessing
+    if (resultCourse.Teacher._id.toString() !== req.session.authUser._id) {
+      res.redirect('/teacher');
+      return;
+    }
+
     res.render('vwCourses/vwChapter/editSingleChapter', {
       layout: 'special_user.layout.hbs',
       course: resultCourse,

@@ -10,6 +10,8 @@
 
 </style>
 
+{{!-- hightlight.js theme --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/androidstudio.min.css" integrity="sha512-fQ4lpATmIhg+bWdSwJNk8wzrQTQUQXFhlD/h3U1ApeI4xrIByljrsUQKHetxejU0JWwJuIGZmHknQOWqj4FMSA==" crossorigin="anonymous" />
 
 {{!-- KaTex for formula formating, script have to at head else won't work --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
@@ -20,6 +22,9 @@
 
 
 {{#section "js"}}
+{{!-- hightlight.js for Code formating --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+
 {{!-- Bootstrap fileinput --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/js/fileinput.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/themes/fa/theme.min.js"></script>
@@ -44,6 +49,7 @@ let quillFullDes = new Quill('#editor-container', {
   theme: 'snow',
   placeholder: 'Put your description here in its full glory',
   modules: {
+    syntax: true, //use highlight.js code format
     toolbar: [
       [
         { 'font': [] }, 
@@ -225,7 +231,7 @@ $('#form').on('submit', function(e) {
                   </div>
                   <div class="form-group">
                     <label for="Category">Category</label>
-                    <select class="form-control" id="Category" name="CatID" required>
+                    <select class="form-control" id="Category" name="Category" required>
                       {{#each this.categories}}
                       <optgroup label="{{CatName}}">
                         {{#each SubCats}}

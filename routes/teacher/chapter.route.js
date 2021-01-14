@@ -52,7 +52,21 @@ router.post('/video', function(req, res) {
     }
   });
 
-  const upload = multer({storage});
+
+  const upload = multer({
+    storage,
+    fileFilter: function(req, file, cb) {
+      const ext = path.extname(file.originalname);
+      if(ext === '.mp4') {//Only accept .mp4
+        return cb(null, true);
+      }
+      cb(new Error(`File type blocked ${ext}`), false);
+    },
+    limits: {
+      fileSize: 100 * 1024 * 1024, //Max video size: 100 MB (in bytes)
+    }
+  });
+
   upload.single('vidChapter')(req, res, async function(err) {
     console.log("Video started uploading");
     const id = req.body._id;
