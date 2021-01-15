@@ -20,6 +20,9 @@
       <div class="card-body col-sm-10 p-1">
         <h5 class="card-title mb-1">{{CourseName}}</h5>
         <div class="d-flex flex-row flex-wrap">
+          {{#if IsDisabled}}
+          <span class="badge badge-secondary">Disabled</span>
+          {{/if}}
           <small class="mr-1 font-weight-bold">{{Category.CatName}}</small>
           <small class="mr-1 font-weight-bold">
             <i class="fa fa-user" aria-hidden="true"></i>
@@ -41,9 +44,15 @@
         </div>
       </div>
       <div class="col-sm-1 d-flex flex-row justify-content-center p-1">
-        <a class="btn btn-danger my-auto" href="javascript:ConfirmDelete('{{_id}}', '{{CourseName}}');" role="button">
-          <i class="fa fa-trash" aria-hidden="true"></i>
+        {{#if IsDisabled}}
+        <a class="btn btn-success my-auto" href="javascript:ToggleDisable('{{_id}}', '{{CourseName}}', false);" role="button" data-toggle="tooltip" title="ReEnable this course">
+          <i class="fa fa-check" aria-hidden="true"></i>
+        </a>  
+        {{else}}    
+        <a class="btn btn-danger my-auto" href="javascript:ToggleDisable('{{_id}}', '{{CourseName}}', true);" role="button" data-toggle="tooltip" title="Disable this course">
+          <i class="fa fa-times" aria-hidden="true"></i>
         </a>
+        {{/if}}
       </div>
     </div>
     </div>
@@ -66,13 +75,17 @@ $(".rating").starRating({
 });
 </script>
 <script>
-function ConfirmDelete(courseId, courseName) {
+function ToggleDisable(courseId, courseName, isDisable) {
+  const textSet = {
+    disable: ['Disable', `<i class="fa fa-times" aria-hidden="true"></i> Disable`, '#DE001F'],
+    enable: ['Enable', `<i class="fa fa-check" aria-hidden="true"></i> Enable`, '#00CB5D'],
+  }
   swal.fire({
     title: `Are you sure?`,
-    text: `Delete ${courseName}?`,
+    text: (isDisable? textSet.disable[0] : textSet.enable[0]) + ` ${courseName}?`,
     showCancelButton: true,
-    confirmButtonText: `<i class="fa fa-trash" aria-hidden="true"></i> Delete`,
-    confirmButtonColor: '#DE001F',
+    confirmButtonText: isDisable? textSet.disable[1] : textSet.enable[1],
+    confirmButtonColor: isDisable? textSet.disable[2] : textSet.enable[2],
     }).then((result) => {
       if (result.isConfirmed) {
         $('#formDelete #deleteChapterId').val(courseId);

@@ -15,6 +15,7 @@ const courseSchema = new mongoose.Schema({
   RegisterCount: 0,
   Price: 0,
   Discount: 0,
+  IsDisabled: false,
   LastUpdate: String,
   Category: {
     type: mongoose.Schema.Types.ObjectId,
@@ -105,6 +106,7 @@ module.exports = {
           Teacher: '$Teacher',
           LastUpdate: '$LastUpdate',
           Status: '$Status',
+          IsDisabled: '$IsDisabled'
         }
       }  
     ]).unwind('$Category');
@@ -155,6 +157,7 @@ module.exports = {
           },
           LastUpdate: '$LastUpdate',
           Status: '$Status',
+          IsDisabled: '$IsDisabled'
         }
       }  
     ]).unwind('$Category');
@@ -182,7 +185,8 @@ module.exports = {
     let result = await Course.aggregate([
       { $match: {
           'Category': { $in: category},
-          '_id': {$ne: mongoose.Types.ObjectId(courseID)}
+          '_id': {$ne: mongoose.Types.ObjectId(courseID)},
+          'IsDisabled': {$ne: true}
         }
       },
       { $lookup: {
@@ -272,7 +276,6 @@ module.exports = {
       { $limit: config.app.pagination.limit}
     ]);
 
-    let resultCount = Course.countDocuments()
 
     return result;
   },
@@ -317,7 +320,11 @@ module.exports = {
     }
 
     let result = await Course.aggregate([
-      { $match: {$text: { $search: keyword } } },
+      { $match: {
+          $text: { $search: keyword },
+          'IsDisabled': {$ne: true}
+        } 
+      },
       { $lookup: {  //JOIN CATEGORY
           from: categoryModel.collectionName,
           localField: 'Category',
@@ -373,6 +380,10 @@ module.exports = {
 
   get: async function(sortObject, findlimit) {
     let result = await Course.aggregate([
+      { $match: {
+         'IsDisabled': {$ne: true}
+        }
+      },
       { $lookup: {
           from: categoryModel.collectionName,
           localField: 'Category',
@@ -525,23 +536,43 @@ module.exports = {
     });
   },
 
-  delete: async function(id) {
+  toggleDisable: async function(id) {
     const condition = id;
 
-    //TODO: Delete all chapter in this course
-    const ret = await require('./chapters.model').deleteAllInCourse(condition);
-    console.log(ret);
-
-    if (!ret.ok) {
-      return null;
-    }
-
-    return await Course.deleteOne({
-      '_id': condition,
-    }, function(err){
-      if (err) {
-        console.log(err);
-      }
+    const course = await Course.findOne({
+      _id: mongoose.Types.ObjectId(condition)
+    }); //Really dump, but... the simpliest way
+    let toggle = (course.IsDisabled !== true);
+    const result = await Course.updateOne({
+      _id: course._id
+    }, {
+      $set: { IsDisabled: toggle }
     });
+
+    if (result.ok === 1) {
+      return true;
+    }
+    return false;
   },
+
+  // delete: async function(id) {
+  //   const condition = id;
+
+  //   //Delete this course
+  //   //Delete all chapter in this course
+  //   const ret = await require('./chapters.model').deleteAllInCourse(condition);
+  //   console.log(ret);
+
+  //   if (!ret.ok) {
+  //     return null;
+  //   }
+
+  //   return await Course.deleteOne({
+  //     '_id': condition,
+  //   }, function(err){
+  //     if (err) {
+  //       console.log(err);
+  //     }
+  //   });
+  // },
 }

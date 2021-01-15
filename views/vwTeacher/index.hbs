@@ -32,7 +32,7 @@
       </div>
 
       <div class="card-body p-1">
-        <h5 class="card-title mb-1">{{CourseName}}</h5>
+        <h5 class="card-title mb-1">{{CourseName}} {{#if IsDisabled}}<span class="badge badge-pill badge-secondary">Disabled</span>{{/if}}</h5>
         <div class="d-flex flex-row flex-wrap">
           <small class="mr-1 font-weight-bold">{{Category.CatName}}</small>
 

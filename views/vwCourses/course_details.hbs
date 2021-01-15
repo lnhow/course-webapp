@@ -158,6 +158,9 @@ $('#previewModal').on('hidden.bs.modal', function (e) {
                 {{/if}}
               {{/if}}
             </h4>
+            {{#if course.IsDisabled}}
+            <button class="btn btn-warning w-100" disabled>This course is disabled</button>
+            {{else}}
             {{#if authUser}}    {{!-- Logged in --}}
               {{#if (equals authUser.Permission 2)}} {{!-- Is Student --}}
                 {{#if user_course}} {{!-- Has registered --}}
@@ -179,6 +182,7 @@ $('#previewModal').on('hidden.bs.modal', function (e) {
             {{else}}  {{!-- Not logged in --}}
               <button class="btn btn-success w-100" disabled>You must be logged in to register this course</button>
             {{/if}}
+            {{/if}}   {{!-- Course Disabled --}}
           </div>
         </div>
       </div>

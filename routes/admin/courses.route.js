@@ -14,15 +14,14 @@ router.get('/', async function(req, res) {
 
 router.post('/delete', async function (req, res) {
   const id = req.body._id;
-  const result = await courseModel.delete(id);
-  console.log(result.ok);
-  console.log(req.body);
+  const result = await courseModel.toggleDisable(id);
   
-  if (result.ok === 1) {
-    //Remove image
-    fileUtils.remove(`${fileUtils.coursesImgPath}${id}/`);
-    fileUtils.remove(`${fileUtils.coursesVidPath}${id}/`);
-  }
+  // Remove all course uploaded resourses (ID DELETE COURSE)
+  // if (result.ok === 1) {
+  //   //Remove image
+  //   fileUtils.remove(`${fileUtils.coursesImgPath}${id}/`);
+  //   fileUtils.remove(`${fileUtils.coursesVidPath}${id}/`);
+  // }
   
   res.redirect(req.headers.referer);
 })

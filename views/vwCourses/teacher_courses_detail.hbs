@@ -128,7 +128,10 @@ $('#form').on('submit', function(e) {
     <i class="fa fa-backward" aria-hidden="true"></i>
     Back
   </a>
-  <h3> Course: {{course.CourseName}} </h3>
+  <h3>Course: {{course.CourseName}}</h3>
+  {{#if course.IsDisabled}}
+  <span class="badge badge-pill badge-secondary">Course Disabled</span>
+  {{/if}}
 </div>
 <nav>
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
