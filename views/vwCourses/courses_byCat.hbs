@@ -1,5 +1,5 @@
 {{#section 'title'}}
-<title>Admin: Courses</title>
+<title>Courses</title>
 {{/section}}
 {{#section 'css'}}
 {{/section}}
@@ -22,7 +22,7 @@
           <small class="mr-1 font-weight-bold">
             <a style="z-index: 500;position: relative;" href="/courses/{{Category._id}}">{{Category.CatName}}</a>
           </small>
-          <h5 class="card-title mb-1">{{CourseName}}</h5>
+          <h5 class="card-title mb-1">{{CourseName}} {{#if IsDisabled}}<span class="badge badge-pill badge-secondary">Disabled</span>{{/if}}</h5>
           <div>
             <small>
               <span class="rating" data-rating="{{RatingAverage}}"></span>

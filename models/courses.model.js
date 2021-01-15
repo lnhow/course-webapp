@@ -269,7 +269,8 @@ module.exports = {
           Category: '$Category',
           Teacher: {
             Name: '$Teacher.Name'
-          }
+          },
+          IsDisabled: '$IsDisabled'
         }
       },
       { $skip: skip },
