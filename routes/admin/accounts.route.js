@@ -3,11 +3,21 @@ const bcrypt = require('bcryptjs');
 const userModel = require('../../models/users.model');
 
 router.get('/', async function(req, res) {
-  const result = await userModel.allNonAdmin();
+  const type = (+req.query.type) || 1;
+
+  //Block accessing to admin accounts
+  if (type === 0) {
+    res.redirect('/admin/accounts');
+    return;
+  }
+
+  const result = await userModel.allUserWithPermission(type);
 
   res.render('vwAdmin/vwAccount/admin_accounts', {
     layout: 'admin.layout.hbs',
-    accounts: result
+    accounts: result,
+    teacher_active: type === 1, //For teacher btn state
+    student_active: type === 2  //For student btn state
   });
 });
 

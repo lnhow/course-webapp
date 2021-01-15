@@ -11,6 +11,16 @@
       <i class="fa fa-plus mr-2" aria-hidden="true"></i>New account
     </a>
   </div>
+  <div class="card-body">
+    <a class="btn btn-outline-dark {{#if teacher_active}}active{{/if}}"
+      href="accounts?type=1" 
+      role="button"
+      {{#if teacher_active}}disabled{{/if}}><i class="fa fa-graduation-cap" aria-hidden="true"></i> Teachers</a>
+    <a class="btn btn-outline-dark {{#if student_active}}active{{/if}}"
+      href="accounts?type=2"
+      role="button"
+      {{#if student_active}}disabled{{/if}}><i class="fa fa-users" aria-hidden="true"></i> Students</a>
+  </div>
   <div class="card-body p-1 overflow-auto">
     <table class="table table-hover" style="min-width: 35rem;">
       <thead>

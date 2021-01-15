@@ -85,11 +85,11 @@ module.exports = {
     return null;  
   },
 
-  allNonAdmin: async function() {
+  allUserWithPermission: async function(user_permission) {
     //Get all user that is not admin
     let result = await User.aggregate([
       { $match:{
-          Permission: {$ne: 0}
+          Permission: user_permission
         }
       }
     ]);

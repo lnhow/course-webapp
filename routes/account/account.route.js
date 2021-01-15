@@ -52,7 +52,7 @@ router.post('/login', authMdws.filterAuthed, async function (req, res){
     req.session.isAuth = true;
     req.session.authUser = user;
 
-    console.log(user);
+    //console.log(user);
 
     let url = req.session.retUrl || '/';
 
@@ -82,7 +82,7 @@ router.post('/register', authMdws.filterAuthed, async function (req, res){
 
     const hash = bcrypt.hashSync(req.body.Password,10, null);
     const temp = otpmailer.sendOTPMail(req.body.Email);   //Promise pending
-    console.log(temp);
+    //console.log(temp);
     const otp = temp.then(async (value)=>{
         //console.log(value);
         const user = {
@@ -127,7 +127,7 @@ router.get('/is-available', async function(req, res){
     if(user === null){
         return res.json(true);
     }
-    console.log(user);
+    //console.log(user);
     res.json(false);
 })
 
@@ -149,21 +149,21 @@ router.post('/verify', authMdws.auth, async function (req, res){
 
     const account = await userModel.singleById(req.session.authUser._id);
     if(secretToken !== account.SecretOTP) {
-        console.log('false');
+        //console.log('false');
         res.render('vwAccount/verify', {
             message: 'Incorrect code',
         });
         return;
     }
 
-    console.log('true');
+    //console.log('true');
     await userModel.patchOTP(account._id, null);
     //Re-update session user
     const update = await userModel.singleById(account._id);
     update.Verified = (update.SecretOTP === null) ? true: false;
     delete update.SecretOTP;
     req.session.authUser = update;
-    console.log(req.session.authUser);
+    //console.log(req.session.authUser);
 
     res.redirect(req.session.retUrl || '/');
 })
