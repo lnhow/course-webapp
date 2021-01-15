@@ -10,9 +10,9 @@ router.get('/', async function(req, res) {
 
   const skip = (page - 1) * config.app.pagination.limit;
 
-  console.log(keyword);
+  //console.log(keyword);
   const result = await courseModel.search(keyword, sort, skip);
-  console.log(result);
+  //console.log(result);
 
   //For pagination links
   //Replace all ' ' in keyword

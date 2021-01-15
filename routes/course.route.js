@@ -20,7 +20,7 @@ router.get('/:id', async function (req, res) {
     const userID = req.session.authUser._id;
     //Get User-course
     resultUserCourse = await users_courseModel.singleUserCourse(userID, courseId);
-    console.log(resultUserCourse);
+    //console.log(resultUserCourse);
 
     if (resultUserCourse !== null) {
       //User has registed to this course
@@ -108,7 +108,7 @@ router.post('/:id/feedback', authMdws.auth, async function(req, res){
   const userID = req.session.authUser._id;
   const courseID = req.params.id;
   const form = req.body;
-  console.log(form);
+  //console.log(form);
   const ret = await users_courseModel.feedback(userID, courseID, {
     score: parseFloat(form.score),
     feedback: form.feedback

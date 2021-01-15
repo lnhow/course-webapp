@@ -92,7 +92,7 @@ router.post('/img', async function(req, res) {
   });
 });
 router.post('/add', async function(req, res) {
-  console.log(req.body);
+  //console.log(req.body);
   const course = req.body;
   if (!req.session.authUser || req.session.authUser.Permission !== 1) {
     res.redirect('/');    //Don't have permission to post this

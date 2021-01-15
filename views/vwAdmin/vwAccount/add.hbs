@@ -13,7 +13,7 @@ $('#formNew').on('submit', function(e) {
   const txtConfirm = $('#txtPasswordConfirm').val();
 
   $.getJSON(`/account/is-available?Email=${txtEmail}`, function(data){
-    console.log(data);
+    //console.log(data);
     if(data === false){
       alert('There is already an account using this email/username');
     }

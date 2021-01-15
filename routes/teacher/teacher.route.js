@@ -16,7 +16,7 @@ router.use('/course', require('./course.route'));
 router.get('/about-me', async function(req, res) {
   const result = await userModel.singleById(req.session.authUser._id);
 
-  console.log(result);
+  //console.log(result);
 
   res.render('vwTeacher/about', {
     account: result,
@@ -26,7 +26,7 @@ router.get('/about-me', async function(req, res) {
 
 router.post('/about-me', async function(req, res) {
 
-  console.log(req.body);
+  //console.log(req.body);
   const ret = await userModel.patchAboutInfo(req.body);
 
   res.redirect('/teacher/about-me');

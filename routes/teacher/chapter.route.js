@@ -80,7 +80,6 @@ router.post('/video', function(req, res) {
     else {
       const ret = await chapterModel.singleByID(id); //Check ID existence
       if (ret !== null) {
-        console.log()
         const tmpPath = `${fileUtils.tmpVidPath}${filename}`;
         const fileDirPath = path.join(`${fileUtils.coursesVidPath}`, `${ret.Course}/`);
         const filePath = path.join(fileDirPath, `${ret._id}${path.extname(filename)}`);

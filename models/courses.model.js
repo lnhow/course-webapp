@@ -344,6 +344,8 @@ module.exports = {
         sortObj = {'_id': 1};
     }
 
+    sortObj._id = 1;
+
     let result = await Course.aggregate([
       { $match: {
           $text: { $search: keyword },

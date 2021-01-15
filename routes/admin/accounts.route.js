@@ -67,7 +67,7 @@ router.get('/:id', async function(req, res) {
 });
 
 router.post('/patch', async function(req, res) {
-  console.log(req.body);
+  //console.log(req.body);
 
   const user = {
     _id: req.body._id,

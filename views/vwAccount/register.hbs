@@ -37,7 +37,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.
     }
 
     $.getJSON(`/account/is-available?Email=${txtEmail}`, function(data){
-      console.log(data)
+      //console.log(data)
       if(data === true){
         $('#frmRegister').off('submit').submit();
       }else{
