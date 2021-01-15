@@ -5,8 +5,25 @@
 {{/section}}
 
 <div class="card mt-4">
-  <div class="card-header bg-primary text-light">
+  <div class="card-header bg-dark text-light">
     Courses
+    <form class="mx-auto my-auto w-100" action="">
+        <div class="input-group">
+          <select class="form-control" type="text" placeholder="Search" aria-label="Search" name="cat">
+            <option value="0">All Categories</option>
+            {{#each this.categories}}
+            <optgroup label="{{CatName}}">
+              {{#each SubCats}}
+              <option value="{{CatID}}" {{#if selected}}selected{{/if}}>{{CatName}}</option>
+              {{/each}}
+            </optgroup>
+            {{/each}}
+          </select>
+          <span class="input-group-append">
+            <button class="btn btn-success" type="submit">Filter</button>
+          </span>
+        </div>
+    </form>
   </div>
   <div class="card-body p-0 overflow-auto my-1 p-1">
 
@@ -23,10 +40,10 @@
           {{#if IsDisabled}}
           <span class="badge badge-secondary">Disabled</span>
           {{/if}}
-          <small class="mr-1 font-weight-bold">{{Category.CatName}}</small>
+          <small class="mr-1 font-weight-bold"> {{Category.CatName}}</small>
           <small class="mr-1 font-weight-bold">
             <i class="fa fa-user" aria-hidden="true"></i>
-            <a href="/admin/user/{{Teacher._id}}">{{Teacher.Name}}</a>
+            {{Teacher.Name}}
           </small>
 
           <small class="ml-auto mx-1">
@@ -45,7 +62,7 @@
       </div>
       <div class="col-sm-1 d-flex flex-row justify-content-center p-1">
         {{#if IsDisabled}}
-        <a class="btn btn-success my-auto" href="javascript:ToggleDisable('{{_id}}', '{{CourseName}}', false);" role="button" data-toggle="tooltip" title="ReEnable this course">
+        <a class="btn btn-success my-auto" href="javascript:ToggleDisable('{{_id}}', '{{CourseName}}', false);" role="button" data-toggle="tooltip" title="Re-Enable this course">
           <i class="fa fa-check" aria-hidden="true"></i>
         </a>  
         {{else}}    
@@ -58,7 +75,7 @@
     </div>
 
     {{else}}
-    <p class="text-center">Không có dữ liệu</p>
+    <p class="text-center">No data</p>
     {{/each}}
   </div>
 </div>

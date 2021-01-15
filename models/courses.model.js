@@ -83,18 +83,24 @@ module.exports = {
     return result > 1;
   },
 
-  all: async function() {
-    let result = await Course.aggregate([
-      {
-        $lookup: {
+  all: async function(filterId) {
+    const aggregateArr = [
+      { $lookup: {
           from: categoryModel.collectionName,
           localField: 'Category',
           foreignField: '_id',
           as: 'Category'
         }
       },
-      {
-        $project: {
+      { $lookup: {
+          from: 'users',
+          localField: 'Teacher',
+          foreignField: '_id',
+          as: 'Teacher'
+        }
+      },
+      { $unwind: "$Teacher"},
+      { $project: {
           _id: '$_id',
           CourseName: '$CourseName',
           RatingAverage: '$RatingAverage',
@@ -103,13 +109,31 @@ module.exports = {
           Price: '$Price',
           Discount: '$Discount',
           Category: '$Category',
-          Teacher: '$Teacher',
+          Teacher: {
+            _id: '$Teacher._id',
+            Name: '$Teacher.Name'
+          },
           LastUpdate: '$LastUpdate',
           Status: '$Status',
           IsDisabled: '$IsDisabled'
         }
       }  
-    ]).unwind('$Category');
+    ];
+
+    if (filterId !== 0) {//Filter by cat => add match on top of aggregateArr
+      if (
+        !mongoose.Types.ObjectId.isValid(filterId)
+        || filterId !== String(new mongoose.Types.ObjectId(filterId))
+      ) {//Filter non valid ids
+        return [];
+      }
+      aggregateArr.unshift({
+        $match: {
+          'Category': mongoose.Types.ObjectId(filterId),
+        }
+      })
+    }
+    let result = await Course.aggregate(aggregateArr).unwind('$Category');
 
     //Format day time from DB's ISO string
     result.forEach(row => {
