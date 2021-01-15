@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   Name: String,
   SecretOTP: {type: Number},   //For register
   About: String,      //Teacher description
+  IsDisabled: false
 });
 
 userSchema.methods.encryptPassword = function(Password){
@@ -46,6 +47,7 @@ module.exports = {
         Name: '$Name',
         Password: '$Password',
         Permission: '$Permission',
+        IsDisabled: '$IsDisabled',
         Verified: { $ifNull: [ "$SecretOTP", true ] }
       }
     }
@@ -70,6 +72,7 @@ module.exports = {
         Password: '$Password',
         About: '$About',
         Permission: '$Permission',
+        IsDisabled: '$IsDisabled',
         SecretOTP: '$SecretOTP'
       }
     }
@@ -185,17 +188,36 @@ module.exports = {
 
     return false;
   },
-  del: async function(accountId) {
-    const condition = accountId;
-    
-    let result = await User.deleteOne({
-      '_id': mongoose.Types.ObjectId(condition)
+
+  toggleDisable: async function(uid) {
+    const condition = uid;
+
+    const user = await User.findOne({
+      _id: mongoose.Types.ObjectId(condition)
+    }); //Really dump, but... the simpliest way
+    let toggle = (user.IsDisabled !== true);
+    const result = await User.updateOne({
+      _id: condition
+    }, {
+      $set: { IsDisabled: toggle }
     });
 
     if (result.ok === 1) {
       return true;
     }
-
     return false;
-  }
+  },
+  // del: async function(accountId) {
+  //   const condition = accountId;
+    
+  //   let result = await User.deleteOne({
+  //     '_id': mongoose.Types.ObjectId(condition)
+  //   });
+
+  //   if (result.ok === 1) {
+  //     return true;
+  //   }
+
+  //   return false;
+  // }
 }

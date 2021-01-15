@@ -25,7 +25,7 @@
       <tbody>
         {{#each accounts}}
         <tr>
-          <td>{{Email}}</td>
+          <td>{{#if IsDisabled}}<span class="badge badge-pill badge-secondary">Disabled</span>{{/if}} {{Email}}</td>
           <td>{{Name}}</td>
           <td>
             {{#if SecretOTP}}

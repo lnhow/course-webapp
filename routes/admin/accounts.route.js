@@ -93,14 +93,9 @@ router.post('/reset', async function(req, res) {
 router.post('/delete', async function(req, res) {
   const id = req.body._id;
 
-  const result = await userModel.del(id);
+  const result = await userModel.toggleDisable(id);
 
-  if (result) {
-    res.redirect('/admin/accounts');
-  }
-  else {
-    res.redirect(req.headers.referer);
-  }
+  res.redirect(req.headers.referer);
 });
 
 module.exports = router;

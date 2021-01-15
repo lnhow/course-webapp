@@ -30,6 +30,13 @@ router.post('/login', authMdws.filterAuthed, async function (req, res){
         });
         return;
     }
+    if(user.IsDisabled)
+    {
+        res.render('vwAccount/login', {
+            err_message: 'This account is currently disabled'
+        });
+        return;
+    }
     //console.log(user);
     //console.log(user.Password);
     const ret = bcrypt.compareSync(req.body.Password, user.Password);
