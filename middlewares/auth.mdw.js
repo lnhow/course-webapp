@@ -79,7 +79,7 @@ module.exports = {
         res.redirect(userRoute['Teacher']);
       }
       else {
-        console.log('else');
+        //console.log('else');
         res.redirect(userRoute['Else'])
       }
       
