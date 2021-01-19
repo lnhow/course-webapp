@@ -31,7 +31,8 @@ router.post('/patch', async function(req, res) {
 router.post('/del', async function(req, res) {
   const entity = req.body;
   const result = await categoriesModel.del(entity);
-  if (result === null) {
+
+  if (result === false) {
     res.redirect(req.headers.referer);
   }
   else {

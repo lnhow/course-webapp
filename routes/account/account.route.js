@@ -15,7 +15,6 @@ router.get('/login', authMdws.filterAuthed, async function (req, res){
 router.get('/logout', function (req, res) {
     req.session.isAuth = false;
     req.session.authUser = null;
-    req.session.cart = [];
     res.redirect('/');
 })
 

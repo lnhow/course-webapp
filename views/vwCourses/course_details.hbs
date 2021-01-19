@@ -179,6 +179,10 @@ $('#previewModal').on('hidden.bs.modal', function (e) {
                 </form>
                 {{/if}}
               {{/if}} {{!-- Not Student --}}
+              
+              {{#if (equals authUser.Permission 1)}}  {{!-- Is Teacher --}}
+              <a class="btn btn-primary" href="/teacher" role="button">Back to your courses</a>
+              {{/if}}
             {{else}}  {{!-- Not logged in --}}
               <button class="btn btn-success w-100" disabled>You must be logged in to register this course</button>
             {{/if}}

@@ -107,7 +107,7 @@ module.exports = {
     });
     if (numSubcats !== 0) {
       console.log('Attempted to delete cat that have ref to it')
-      return null;
+      return false;
     }
     //Block category which has courses
     const dontHaveCourse = await Category.aggregate([
@@ -128,16 +128,18 @@ module.exports = {
     ]);
     if (dontHaveCourse.length < 1) {
       //Have courses in this category
-      return null;
+      return false;
     }
 
-    return await Category.deleteOne({
+    const result = await Category.deleteOne({
       '_id': condition,
     }, function(err){
       if (err) {
         console.log(err);
       }
     });
+
+    return (result.ok==1);
   },
   patch: async function(entity) {
     const condition = entity.CatID;
