@@ -28,7 +28,7 @@ const courseSchema = new mongoose.Schema({
   Status: Boolean,
 });
 
-//courseSchema.index({CourseName: 'text'});
+courseSchema.index({CourseName: 'text'});
 const Course = mongoose.model('courses', courseSchema);
 
 module.exports = {
@@ -106,6 +106,7 @@ module.exports = {
           RatingAverage: '$RatingAverage',
           RatingCount: '$RatingCount',
           RegisterCount: '$RegisterCount',
+          Status: '$Status',
           Price: '$Price',
           Discount: '$Discount',
           Category: '$Category',
@@ -347,11 +348,21 @@ module.exports = {
     sortObj._id = 1;
 
     let result = await Course.aggregate([
+      // USING MONGODB ATLAS SEARCH
+      // If not, comment out this block v
+      { $search: {
+        index: 'text',
+        text: {
+          query: keyword,
+          path: 'CourseName'
+        }
+      }},
+      // If not, comment out this block ^
       { $match: {
-          $text: { $search: keyword },
-          'IsDisabled': {$ne: true}
-        } 
-      },
+        // IF NOT USING MONGODB ATLAS SEARCH, UNCOMMENT THE FOLLOWING LINE
+        // $text: { $search: keyword },
+        'IsDisabled': {$ne: true}
+      }},
       { $lookup: {  //JOIN CATEGORY
           from: categoryModel.collectionName,
           localField: 'Category',

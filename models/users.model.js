@@ -1,7 +1,6 @@
   const mongoose = require('mongoose');
 //not done
 const bcrypt = require('bcryptjs');
-const e = require('express');
 const userSchema = new mongoose.Schema({
   Email: {type: String, required : true},
   Password: {type: String, required : true},

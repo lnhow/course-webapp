@@ -34,6 +34,11 @@
       <div class="card-body p-1">
         <h5 class="card-title mb-1">{{CourseName}} {{#if IsDisabled}}<span class="badge badge-pill badge-secondary">Disabled</span>{{/if}}</h5>
         <div class="d-flex flex-row flex-wrap">
+          {{#if Status}}
+          <span class="badge badge-success">Completed</span>
+          {{else}}
+          <span class="badge badge-secondary">Incompleted</span>
+          {{/if}}
           <small class="mr-1 font-weight-bold">{{Category.CatName}}</small>
 
           <small class="ml-auto mx-1">
@@ -59,6 +64,9 @@
     <p class="text-center">There isn't any course yet</p>
     {{/each}}
   </div>
+</div>
+<div style="height: 20vh;">
+  
 </div>
 
 {{#section 'js'}}

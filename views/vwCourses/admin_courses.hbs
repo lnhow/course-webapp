@@ -40,6 +40,11 @@
           {{#if IsDisabled}}
           <span class="badge badge-secondary">Disabled</span>
           {{/if}}
+          {{#if Status}}
+          <span class="badge badge-success">Completed</span>
+          {{else}}
+          <span class="badge badge-secondary">Incompleted</span>
+          {{/if}}
           <small class="mr-1 font-weight-bold"> {{Category.CatName}}</small>
           <small class="mr-1 font-weight-bold">
             <i class="fa fa-user" aria-hidden="true"></i>

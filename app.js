@@ -1,5 +1,6 @@
 const config = require('./config/config.json');
-const keys = require('./config/keys.json');
+const dotenv = require('dotenv');
+dotenv.config();
 
 //Dependencies
 const express = require('express');
@@ -18,7 +19,8 @@ app.use(express.urlencoded({
 }));
 
 //Connect to DB
-mongoose.connect(keys.mongodb.dbURI, { 
+mongoose.connect(process.env.dbURI, { 
+  useCreateIndex: true,
   useNewUrlParser: true, 
   useUnifiedTopology: true 
 }, function(err) {
