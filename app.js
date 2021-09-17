@@ -5,6 +5,7 @@ dotenv.config();
 //Dependencies
 const express = require('express');
 const mongoose = require('mongoose');
+const PORT = (process.env.PORT) ? process.env.PORT : config.app.PORT;
 require('express-async-errors');    //Async error handling
 
 //Dependencies
@@ -40,6 +41,6 @@ require('./config/app/routes')(app);    //Where all routes are
 //Error handling: LAST
 require('./config/app/errorhandler')(app);
 
-app.listen(config.app.PORT, _ => {
-  console.log(`App listening on PORT ${config.app.PORT}`)
+app.listen(PORT, _ => {
+  console.log(`App listening on PORT ${PORT}`)
 });
